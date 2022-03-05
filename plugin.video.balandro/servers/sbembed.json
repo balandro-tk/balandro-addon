@@ -1,0 +1,29 @@
+{
+  "id": "sbembed",
+  "name": "Sbembed",
+
+  "active": true,
+
+  "find_videos": {
+    "ignore_urls": [],
+    "patterns": [
+      {
+        "pattern": "http(?:s|)://sbembed.com/(?:embed-|d/|e/|)([A-z0-9]+)",
+        "url": "https://sbembed.com/play/\\1"
+      },
+      {
+        "pattern": "http(?:s|)://sbembed1.com/(?:embed-|d/|e/|)([A-z0-9]+)",
+        "url": "https://sbvideo.net/play/\\1"
+      },
+      {
+        "pattern": "http(?:s|)://sbembed2.com/(?:embed-|d/|e/|)([A-z0-9]+)",
+        "url": "https://sbvideo.net/play/\\1"
+      },
+      {
+        "pattern": "http(?:s|)://sbvideo.net/(?:embed-|d/|e/|)([A-z0-9]+)",
+        "url": "https://sbvideo.net/play/\\1"
+      }
+    ]
+  }
+
+}

@@ -1,0 +1,17 @@
+{
+  "id": "gnula24",
+  "name": "Gnula24",
+  "thumbnail": "gnula24.png",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["tvshow"],
+
+  "categories": ["tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["lasts", "lists", "producers", "kids", "vos"],
+
+  "notes": "Series por Géneros."
+}

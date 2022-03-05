@@ -1,0 +1,17 @@
+{
+  "id": "kindor",
+  "name": "Kindor",
+  "thumbnail": "kindor.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["news", "rankings", "lasts", "producers", "docs", "kids", "vos"],
+
+  "notes": "Películas y Series por géneros, año."
+}

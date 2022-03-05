@@ -1,0 +1,18 @@
+{
+  "id": "repelis24",
+  "name": "RePelis24",
+  "thumbnail": "repelis24.png",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["news", "languages", "rankings", "years", "lists", "producers", "kids", "docs", "vos"],
+
+  "notes": "Películas y Series por idioma, géneros y año."
+
+}

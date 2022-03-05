@@ -1,0 +1,18 @@
+{
+  "id": "repelishd",
+  "name": "RePelisHd",
+  "thumbnail": "repelishd.png",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["languages", "rankings", "years", "producers", "kids", "docs", "vos"],
+
+  "notes": "Películas y Series por idioma, géneros y año. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
+
+}

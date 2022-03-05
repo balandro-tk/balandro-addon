@@ -1,0 +1,17 @@
+{
+  "id": "pelisplus",
+  "name": "PelisPlus",
+  "thumbnail": "pelisplus.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["news", "years", "kids", "docs", "vos"],
+
+  "notes": "Películas y Series por géneros y año."
+}

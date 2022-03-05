@@ -1,0 +1,17 @@
+{
+  "id": "anibox",
+  "name": "AniBox",
+  "thumbnail": "anibox.jpg",
+
+  "active": true,
+
+  "searchable": false,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["lat", "cast", "vose"],
+
+  "clusters": ["anime"],
+
+  "notes": "Web dedicada exclusivamente al anime"
+}

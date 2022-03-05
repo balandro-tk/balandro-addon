@@ -1,0 +1,17 @@
+{
+  "id": "mejortorrentla",
+  "name": "MejortorrentLa",
+  "thumbnail": "mejortorrentla.jpg",
+
+  "active": false,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["torrent", "movie", "tvshow"],
+  "language": ["cast", "last", "vose"],
+
+  "clusters": ["temporary", "torrents", "qualityes", "languages", "years", "kids", "docs", "vos"],
+
+  "notes": "Películas y Series con enlaces torrent exclusivamente, por géneros, calidad, idioma y año."
+}

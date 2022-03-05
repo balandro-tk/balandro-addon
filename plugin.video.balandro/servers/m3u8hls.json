@@ -1,0 +1,17 @@
+{
+  "id": "m3u8hls",
+  "name": "M3u8hls",
+
+  "active": true,
+
+  "find_videos": {
+    "ignore_urls": [],
+    "patterns": [
+      {
+        "pattern": "no_pattern_enabled_manually",
+        "url": ""
+      }
+    ]
+  }
+
+}

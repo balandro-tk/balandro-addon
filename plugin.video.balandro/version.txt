@@ -1,0 +1,102 @@
+[COLOR coral]Balandro[/COLOR]
+
+Version 2.2.4  [COLOR darkorange]Marzo 2022[/COLOR]
+
+   [COLOR yellow]INCIDENCIAS CORREGIDAS:[/COLOR]
+      Bugs de la version anterior
+
+   [COLOR yellow]MODIFICACIONES:[/COLOR]
+      Configuracion:
+        Sin novedades
+
+      Menus:
+         Generos: Re-configurados
+
+      Canales:
+         Revision generalizada
+      Canales anulados:
+         SeriesFlixIo
+
+      Servidores:
+         Revision generalizada
+
+   [COLOR yellow]NOVEDADES:[/COLOR]
+      Canales:
+        Sin novedades
+
+      Servidores:
+        Sin novedades
+
+   [COLOR yellow]SITUACION CANALES Y SERVIDORES:[/COLOR]
+      [B][COLOR plum]Inestables:[/COLOR][/B] Dilo
+
+      [B][COLOR teal]Requieren Cuenta:[/COLOR][/B] HdFull, PlayDede
+
+      [B][COLOR moccasin]Sugeridos:[/COLOR][/B] CineCalidad, CineDeAntes, CineTux, ClubCine, Cuevana3,
+         Dilo, DocumaniaTv, EntrePeliculasySseries, EstrenosCinesaa,
+         EstrenosPapaya, HdFull, InkaPelis, PlayDede, SeriesLan, SeoDiv,
+         SigloXX, Tekilaz, TvSeries, VerDocumentalesOnline, ZoowoManiacos
+
+      [B][COLOR cyan]Temporalmente Inactivos:[/COLOR][/B] DocumaniaTv, MejorTorrentLa,
+         PelisPedia2, VerPeliculasGratis
+
+      [B][COLOR red]Pueden usar proxies (Bloqueo Operadoras):[/COLOR][/B]
+         - [B][COLOR deepskyblue]Películas[/COLOR][/B]: CineTux, Cliver, EstrenosCinesaa, Gnula, PelisGratis,
+           PelisPlanet, PelisXd
+
+         - [B][COLOR hotpink]Series[/COLOR][/B]: Dilo, PelisPedia2
+
+         - [B][COLOR yellow]Peliculas y Series[/COLOR][/B]: CineCalidad, CliverSite, Cuevana3, Cuevana3Video,
+           EntrePeliculasySseries, HdFull, HdFullCom, HdFullSe, Megadede2,
+           MegaSerie, MovidyTv, PelisHouse, PelisPedia, PelisPedia2,
+           PelisPlay, PlayDede, PlayView, Ppeliculas, RepelisHd, SeriesYonkis
+
+         - [B][COLOR cyan]Documentales[/COLOR][/B]: DocumaniaTv
+
+         - [B][COLOR blue]Torrents[/COLOR][/B]: DonTorrents, DonTorrentsIn, GranTorrent, MejorTorrents,
+           Newpct1, SubTorrents. TorrentDivx
+
+         - [B][COLOR orange]Adultos[/COLOR][/B]: PornHub, XVideos
+
+      [B][COLOR fuchsia]Cuales nunca intervendran en las busquedas:[/COLOR][/B]
+         - [B][COLOR deepskyblue]Películas[/COLOR][/B]: CineDeAntes, CineLibreOnline, SigloXX
+
+         - [B][COLOR hotpink]Series[/COLOR][/B]: SeoDiv, TvSeries
+
+         - Todos los canales con contenido exclusivo de [B][COLOR firebrick]Doramas[/COLOR][/B]
+         - Todos los canales con contenido exclusivo de [B][COLOR springgreen]Animes[/COLOR][/B]
+         - Todos los canales con contenido exclusivo de [B][COLOR orange]Adultos[/COLOR][/B]
+
+      [B][COLOR tan]Servidores con vias alternativas:[/COLOR][/B]
+         Doodstream, Streamsb, Uptobox, Youtube
+
+   [COLOR yellow]RESUMEN CANALES Y SERVIDORES:[/COLOR]
+      Totales Canales:
+       181 Canales
+         36 Inactivos
+           1 Inestables
+           2 Requieren Cuenta
+           1 Con varios dominios
+           4 Temporalmente Inactivos
+         36 Pueden Usar Proxies
+         28 No intervendran en busquedas
+       141 Disponibles
+
+      Distribucion Canales Disponibles:
+         19 de Sugeridos
+         92 de Peliculas
+         67 de Series
+         56 de Peliculas y Series
+           9 de Documentales
+         20 de Torrents
+           6 de Doramas
+           8 de Animes
+           9 de Adultos
+           1 de Privados
+
+      Totales Servidores:
+       147 Servidores
+         53 Inactivos
+         18 Sin Soporte
+           4 Con Vias alternativas
+         94 Disponibles

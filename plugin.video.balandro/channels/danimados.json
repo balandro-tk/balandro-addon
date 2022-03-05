@@ -1,0 +1,17 @@
+{
+  "id": "danimados",
+  "name": "Danimados",
+  "thumbnail": "danimados.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["lat"],
+
+  "clusters": ["classic", "kids"],
+
+  "notes": "Series y Películas infantiles clásicas en idioma orignal de emisión."
+}

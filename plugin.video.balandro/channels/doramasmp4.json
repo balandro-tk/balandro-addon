@@ -1,0 +1,17 @@
+{
+  "id": "doramasmp4",
+  "name": "DoramasMp4",
+  "thumbnail": "doramasmp4.png",
+
+  "active": true,
+
+  "searchable": false,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["lat", "vose"],
+
+  "clusters": ["dorama"],
+
+  "notes": "Web dedicada exclusivamente al dorama"
+}

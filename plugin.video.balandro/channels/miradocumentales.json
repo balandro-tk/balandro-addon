@@ -1,0 +1,17 @@
+{
+  "id": "miradocumentales",
+  "name": "MiraDocumentales",
+  "thumbnail": "miradocumentales.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["documentary"],
+
+  "categories": ["documentary"],
+  "language": ["cast"],
+
+  "clusters": ["categories", "docs"],
+
+  "notes": "Documentales en castellano."
+}

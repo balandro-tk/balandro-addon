@@ -1,0 +1,57 @@
+# Created By Marvin & Roman Miroshnychenko
+name: Create Release Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'Name of version '
+        required: true
+
+# Set permissions for GitHub key 
+permissions: write-all
+
+jobs:
+  deploy:
+    name: Deploy Job
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      ADDON: 'plugin.video.balandro'
+
+    steps:
+      - name: Setting-up environment
+        run: sudo snap install --classic hub
+
+      - name: Set-up Python version 
+        uses: actions/setup-python@v2
+        with:
+          python-version: '2.7'
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Start deployment
+        run: |
+          echo "Entering Git repo directory"
+          cd ${{ github.workspace }}
+          echo "Downloading deployment script"
+          wget https://raw.githubusercontent.com/balandro-tk/addon_updates/main/deploy_addon.py
+          echo "Preparing ZIP"
+          python deploy_addon.py -z
+      - name: Release on GitHub
+        run: |
+          echo "Entering Git repo directory"
+          cd ${{ github.workspace }}
+          echo "Getting assets"
+          assets=()
+          for asset in ./*.zip; do
+            assets+=("-a" "${asset}")
+          done
+          echo "Getting addon version"
+          python deploy_addon.py -v
+          git_tag="$(cat version)"
+          echo "Releasing the kraken"
+          hub release create "${assets[@]}" -m "${{ github.event.inputs.versionName }}" "${{ github.event.inputs.versionName }}"
