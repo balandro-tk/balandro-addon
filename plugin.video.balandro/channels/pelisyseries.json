@@ -1,0 +1,17 @@
+{
+  "id": "pelisyseries",
+  "name": "PelisySeries",
+  "thumbnail": "pelisyseries.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["movie"],
+
+  "categories": ["movie", "torrent"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["torrents", "rankings", "years", "qualityes", "countries", "kids", "vos"],
+
+  "notes": "Canal con enlaces Streaming y Torrent. Películas por géneros, año."
+}
