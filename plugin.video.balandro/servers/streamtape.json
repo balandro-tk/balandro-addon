@@ -1,0 +1,17 @@
+{
+  "id": "streamtape",
+  "name": "Streamtape",
+
+  "active": true,
+
+  "find_videos": {
+    "ignore_urls": [],
+    "patterns": [
+      {
+        "pattern": "http(?:s|)://(?:streamtape.com|streamtape.site|streamtape.cc|streamta.pe|strtapeadblock.me|strtapeadblock.club|streamtapeadblock.art|streamadblockplus.com|adblockstrtech.link|adblockstrtape.link|adblockstreamtape.art|strcloud.link|strtape.cloud|strtpe.link|scloud.online|stape.fun)/(?:v|e)/([A-z0-9]+)",
+        "url": "https://streamtape.com/v/\\1/"
+      }
+    ]
+  }
+
+}

@@ -1,0 +1,17 @@
+{
+  "id": "srnovelas",
+  "name": "SrNovelas",
+  "thumbnail": "srnovelas.png",
+
+  "active": false,
+
+  "searchable": true,
+  "search_types": ["tvshow"],
+
+  "categories": ["tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["temporary", "suggested", "lasts", "producers", "vos", "tales"],
+
+  "notes": "Series por Géneros."
+}

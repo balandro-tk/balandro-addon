@@ -1,0 +1,17 @@
+{
+  "id": "pelispediaio",
+  "name": "PelisPediaIo",
+  "thumbnail": "pelispediaio.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["news", "years", "docs", "kids", "vos"],
+
+  "notes": "Películas por géneros, año y tambien Series"
+}

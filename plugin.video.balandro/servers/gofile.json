@@ -1,0 +1,17 @@
+{
+  "id": "gofile",
+  "name": "Gofile",
+
+  "active": true,
+
+  "find_videos": {
+    "ignore_urls": [],
+    "patterns": [
+      {
+        "pattern": "https://gofile.io/d/[a-zA-Z0-9]",
+        "url": "\\1"
+      }
+    ]
+  }
+
+}

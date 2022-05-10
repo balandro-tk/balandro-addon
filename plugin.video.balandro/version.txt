@@ -1,0 +1,121 @@
+[COLOR coral]Balandro[/COLOR]
+
+[COLOR yellow][B]Version 2.3.2  [/B][/COLOR][COLOR darkorange]Mayo 2022[/COLOR]
+
+   [COLOR yellow]INCIDENCIAS CORREGIDAS:[/COLOR]
+      Bugs de la version anterior
+
+   [COLOR yellow]MODIFICACIONES:[/COLOR]
+      Generos: Re-configurados
+      Canales: Revision generalizada y Anulados las webs cerradas
+      Servidores: Revision generalizada
+
+   [COLOR yellow]NOVEDADES:[/COLOR]
+      Canales: Sin novedades
+      Servidores: Sin novedades
+
+   [COLOR yellow]CANALES SUGERIDOS:[/COLOR]
+      CineCalidad,  CineDeAntes,  CineTux,  Cuevana3,  Dilo,  EntrePeliculasySeries,
+      EstrenosCinesaa,  EstrenosPapaya,  HdFull,  Ievenn,  InkaPelis,  LaCartoons,
+      PeliculasFlv,  PelisEnCastellano,  PlayDede,  SeriesLan,  SeoDiv,  Series24,
+      SeriesYonkis,  SigloXX,  Tekilaz,  TvSeries,  VerDocumentalesOnline,
+      ZoowoManiacos
+
+   [COLOR yellow]BUSCAR:[/COLOR]
+      [B][COLOR fuchsia]Que canales que Nunca Intervendran en las busquedas:[/COLOR][/B]
+         - [B][COLOR deepskyblue]De Peliculas:[/B][/COLOR]
+           CineDeAntes,  CineLibreOnline,  SigloXX
+
+         - [B][COLOR hotpink]De Series:[/B][/COLOR]
+           SeoDiv,  TvSeries
+
+         - [B][COLOR yellow]De Peliculas y Series:[/B][/COLOR]
+           MovidyTv
+
+         - [B][COLOR crimson]Todos los canales con contenido Exclusivo de:[/B][/COLOR]
+           Doramas,  Animes,  Adultos
+
+   [COLOR yellow]CANALES QUE REQUIEREN REGISTRARSE:[/COLOR]
+      [B][COLOR teal]Que canales Requieren Registrarse (Cuenta):[/B][/COLOR]
+         HdFull,  PlayDede
+
+   [COLOR yellow]CANALES QUE PUEDEN USAR PROXIES:[/COLOR]
+      [B][COLOR red]Que canales Pueden Usar Proxies (Bloqueo Operadoras):[/B][/COLOR]
+         - [B][COLOR deepskyblue]De Peliculas[/COLOR][/B]:
+           CineTux,  Cliver,  EstrenosCinesaa,  Gnula,  PelisGratis,  PelisPlanet,  PelisXd
+
+         - [B][COLOR hotpink]De Series:[/B][/COLOR]
+           Dilo
+
+         - [B][COLOR yellow]De Peliculas y Series[/B][/COLOR]:
+           CineCalidad,  CliverSite,  Cuevana3,  Cuevana3Video,  DivxTotal,
+           EntrePeliculasySeries,  HdFull,  HdFullSe,  MegaSerie,  MovidyTv,  PelisHouse,
+           PelisPedia,  PelisPedia2,  PelisPlay,  PlayDede,  PlayView,  Ppeliculas,
+           RepelisHd,  SeriesYonkis
+
+         - [B][COLOR blue]De Torrents:[/B][/COLOR]
+           DonTorrents,  DonTorrentsIn,  GranTorrent,  MejorTorrentNz,  MejorTorrents,
+           Newpct1,  SubTorrents,  TorrentDivx,  VerdeTorrent
+
+         - [B][COLOR orange]De Adultos:[/B][/COLOR]
+           PornHub,  XVideos
+
+   [COLOR yellow]CANALES INESTABLES:[/COLOR]
+      [B][COLOR plum]Que canales estan Inestables:[/COLOR][/B]
+         [COLOR coral]Son los pendientes de su evolucion, para evaluar su situacion definitiva.[/COLOR]
+         Gnula
+
+   [COLOR yellow]CANALES TEMPORALMENTE DESACTIVADOS:[/COLOR]
+      [B][COLOR cyan]Que canales estan Temporalmente Inactivos:[/COLOR][/B]
+         [COLOR coral]Son los pendientes de su evolucion, para evaluar su re-activacion o anulacion.[/COLOR]
+         AniBox,  DocumaniaTv,  HdFullCom,  MovidyTv,  PanDrama,  PeliSeries,  SeriesKao,  SrNovelas
+
+   [COLOR yellow]SERVIDORES CON VIAS ALTERNATIVAS:[/COLOR]
+      [B][COLOR tan]Servidores con Vias Alternativas:[/COLOR][/B]
+         Doodstream,  Sbembed,  Streamsb,  Uptobox,  Various,  Youtube
+
+      [B][COLOR goldenrod]Que Vias Alternativas pueden necesitarse:[/COLOR][/B]
+         plugin.video.youtube
+         script.module.resolveurl
+
+   [COLOR yellow]RESUMEN DE LOS CANALES:[/COLOR]
+      Totales Canales:
+       217 [COLOR darkorange]Canales[/COLOR]
+
+           7 [COLOR cyan]Temporalmente Inactivos[/COLOR]
+           2 [COLOR plum]Inestables[/COLOR]
+         38 [COLOR red]Pueden Usar Proxies[/COLOR]
+           2 [COLOR teal]Requieren Cuenta[/COLOR]
+           1 [COLOR green]Con varios dominios[/COLOR]
+         33 [COLOR fuchsia]No Intervendran en busquedas[/COLOR]
+         45 [COLOR coral]Inactivos[/COLOR]
+
+       160 [COLOR gold]Disponibles[/COLOR]
+
+      Distribucion Canales Disponibles:
+         24 de [COLOR moccasin]Sugeridos[/COLOR]
+
+       111 de [COLOR deepskyblue]Peliculas[/COLOR]
+         78 de [COLOR hotpink]Series[/COLOR]
+         68 de [COLOR yellow]Peliculas y Series[/COLOR]
+
+         27 de [COLOR thistle]Generos[/COLOR]
+           8 de [COLOR cyan]Documentales[/COLOR]
+           8 de [COLOR lightyellow]Infantiles[/COLOR]
+           5 de [COLOR limegreen]Novelas[/COLOR]
+         40 de [COLOR blue]Torrents[/COLOR]
+           6 de [COLOR firebrick]Doramas[/COLOR]
+           9 de [COLOR springgreen]Animes[/COLOR]
+         11 de [COLOR orange]Adultos[/COLOR]
+
+           1 de [COLOR grey]Privado[/COLOR]
+
+   [COLOR yellow]RESUMEN DE LOS SERVIDORES:[/COLOR]
+      Totales Servidores:
+       150 [COLOR darkorange]Servidores[/COLOR]
+
+         18 [COLOR fuchsia]Sin Soporte[/COLOR]
+           6 [COLOR green]Con Vias alternativas[/COLOR]
+         53 [COLOR coral]Inactivos[/COLOR]
+
+         97 [COLOR gold]Disponibles[/COLOR]

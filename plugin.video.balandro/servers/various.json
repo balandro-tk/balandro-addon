@@ -1,0 +1,34 @@
+{
+  "id": "various",
+  "name": "Various",
+
+  "active": true,
+  "notes": "Alternative vía: Script.Module.ResolveUrl (Mvidoo, Ninjastream, Tubeload)",
+
+  "find_videos": {
+    "ignore_urls": [],
+    "patterns": [
+      {
+        "pattern": "(https://tubeload.co/(?:e|f|)/[A-z0-9]+)",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(?:mvidoo.com)/(?:embed-|)([A-z0-9]+).html",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(?:mvidoo.com)/(?:embed-|)/([A-z0-9]+).html",
+        "url": "\\1"
+      },
+      {
+        "pattern": "https://mvidoo.com/(.*?)/([A-z0-9]+).mp4.html",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(https://ninjastream.to/watch/[A-z0-9]+)",
+        "url": "\\1"
+      }
+    ]
+  }
+
+}

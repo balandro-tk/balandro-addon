@@ -1,0 +1,17 @@
+{
+  "id": "newpct1",
+  "name": "NewPct1",
+  "thumbnail": "newpct1.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow", "torrent"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["torrents", "news", "lists", "vos", "3d"],
+
+  "notes": "Canal con enlaces Streaming y Torrent. Clones: Atomix y Descargas2020. Películas y Series. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
+}

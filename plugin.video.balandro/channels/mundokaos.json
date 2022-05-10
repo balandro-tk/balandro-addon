@@ -1,0 +1,17 @@
+{
+  "id": "mundokaos",
+  "name": "MundoKaos",
+  "thumbnail": "mundokaos.png",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["all", "movie", "tvshow"],
+
+  "categories": ["movie", "tvshow"],
+  "language": ["cast", "lat", "vose"],
+
+  "clusters": ["lists", "kids", "docs", "vos"],
+
+  "notes": "Películas y Series por géneros, año."
+}

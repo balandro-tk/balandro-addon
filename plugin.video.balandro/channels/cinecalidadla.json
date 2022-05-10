@@ -1,0 +1,17 @@
+{
+  "id": "cinecalidadla",
+  "name": "CineCalidadLa",
+  "thumbnail": "cinecalidadla.jpg",
+
+  "active": true,
+
+  "searchable": true,
+  "search_types": ["movie"],
+
+  "categories": ["movie", "torrent"],
+  "language": ["lat"],
+
+  "clusters": ["torrents", "rankings", "years", "kids", "docs"],
+
+  "notes": "Canal con enlaces Streaming y Torrent. Películas por géneros y año."
+}
