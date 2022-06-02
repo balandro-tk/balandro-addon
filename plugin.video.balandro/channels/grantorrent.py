@@ -14,9 +14,9 @@ from core import httptools, scrapertools, tmdb
 from lib import decrypters
 
 
-host = 'https://grantorrent.re/'
+host = 'https://grantorrent.si/'
 
-b64_host = 'grantorrent.re'
+b64_host = 'grantorrent.si'
 
 
 def item_configurar_proxies(item):
@@ -34,7 +34,8 @@ def do_downloadpage(url, post=None):
     ant_hosts = ['http://grantorrent.net/', 'https://grantorrent1.com/', 'https://grantorrent.one/',
                  'https://grantorrent.tv/', 'https://grantorrent.la/', 'https://grantorrent.io/', 'https://grantorrent.eu/',
                  'https://grantorrent.cc/', 'https://grantorrent.li/', 'https://grantorrent.online/', 'https://grantorrentt.com/',
-                 'https://grantorrent.nl/', 'https://grantorrent.ch/', 'https://grantorrent.ac/']
+                 'https://grantorrent.nl/', 'https://grantorrent.ch/', 'https://grantorrent.ac/', 'https://grantorrent.re/'
+                 'https://grantorrent.se/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

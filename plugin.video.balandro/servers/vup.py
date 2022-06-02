@@ -10,7 +10,6 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     if 'no longer exists' in data or 'to copyright issues' in data or "We can't find the file" in data:
         return 'El archivo ha sido eliminado o no existe'
@@ -21,7 +20,6 @@ def get_video_url(page_url, url_referer=''):
             return video_urls
 
         data = jsunpack.unpack(packed)
-        # ~ logger.debug(data)
 
     data = scrapertools.find_single_match(data, 'sources:\s*\[(.*?)\]')
 

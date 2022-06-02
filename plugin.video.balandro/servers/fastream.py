@@ -6,6 +6,7 @@ from platformcode import logger
 from core import httptools, scrapertools, servertools
 from lib import jsunpack
 
+
 def resolve_patterns(page_url):
     if '/embed-' in page_url:
         return page_url

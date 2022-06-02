@@ -7,10 +7,16 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://pelis28.vip/'
+host = 'https://pelis28.lol/'
 
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['https://pelis28.vip/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
     if '/fecha-estreno/' in url: raise_weberror = False
 
     data = httptools.downloadpage(url, post=post, headers=headers, raise_weberror=raise_weberror).data
@@ -53,6 +59,7 @@ def news(item):
 
     if url:
         item.url = host + 'categoria/estrenos' + url
+
         return list_all(item)
 
     return itemllist
@@ -148,7 +155,7 @@ def list_all(item):
         next_url = scrapertools.find_single_match(data, '<link rel="next" href="(.*?)"')
         if next_url:
             if '/page/' in next_url:
-               itemlist.append(item.clone( title = 'Siguientes ...', url = next_url, action = 'list_all', text_color = 'coral' ))
+                itemlist.append(item.clone( title = 'Siguientes ...', url = next_url, action = 'list_all', text_color = 'coral' ))
 
     return itemlist
 
@@ -159,7 +166,7 @@ def findvideos(item):
 
     data = do_downloadpage(item.url)
 
-    _id = scrapertools.find_single_match(data, '<div class="movieplay">.*?src="(.*?)"')
+    _id = scrapertools.find_single_match(data, '<div class="movieplay">.*?data-lazy-src="(.*?)"')
 
     if not _id: return itemlist
 
@@ -188,6 +195,7 @@ def findvideos(item):
 
         if servidor == 'pouvideo': continue
         elif servidor == 'stemplay': continue
+        elif servidor == 'servidor vip': continue
 
         if servidor == 'dood': servidor = 'doodstream'
 
@@ -211,8 +219,10 @@ def play(item):
         h =  scrapertools.find_single_match(item.url, '.*?h=(.*?)$')
         post = {'h': h}
 
-        resp = httptools.downloadpage('https://pelisflix.link/sc/r.php', post = post, follow_redirects=False, only_headers=True)
-        url = resp.headers['location']
+        resp = httptools.downloadpage('https://pelis28.click/sc/r.php', post = post, follow_redirects=False, only_headers=True)
+
+        try: url = resp.headers['location']
+        except: url = ''
 
     if url:
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:

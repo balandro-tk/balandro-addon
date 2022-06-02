@@ -108,11 +108,11 @@ def list_all(item):
     for article in matches[item.page * perpage:]:
         url = scrapertools.find_single_match(article, '<a href="(.*?)"')
 
-        title = scrapertools.find_single_match(article, '<h2 class="entry-title">(.*?)</h2>')
+        title = scrapertools.find_single_match(article, '<div class="entry-title">(.*?)</div>')
 
         if not url or not title: continue
 
-        thumb = scrapertools.find_single_match(article, 'src="(.*?)"')
+        thumb = scrapertools.find_single_match(article, '-src="(.*?)"')
 
         itemlist.append(item.clone( action='findvideos', url=url, title = title, thumbnail = thumb,
                                     contentType='movie', contentTitle=title, infoLabels={'year': '-'} ))
@@ -143,7 +143,7 @@ def list_all(item):
 
                next_pagina = int(next_pagina)
                next_pagina +=1
-			   
+
            next_page = current_url + '/page/' + str(next_pagina) + '/' 
 
            itemlist.append(item.clone( title='Siguientes ...', url = next_page, action='list_all', page=0, text_color='coral' ))
@@ -156,13 +156,13 @@ def findvideos(item):
     logger.info()
     itemlist = []
 
-    IDIOMAS = {'Castellano': 'Esp', 'Latino': 'Lat', 'Sub Español': 'Vose'}
-
     data = do_downloadpage(item.url)
 
-    matches = scrapertools.find_multiple_matches(data, '<li data-playerid="(.*?)"')
+    matches = scrapertools.find_multiple_matches(data, '<li data-playerid=(.*?)</a></li>')
 
-    for url in matches:
+    for match in matches:
+        url = scrapertools.find_single_match(match, '"(.*?)"')
+
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url: continue
         elif 'embed.' in url: continue
 
@@ -171,14 +171,21 @@ def findvideos(item):
 
         url = servertools.normalize_url(servidor, url)
 
-        lang = 'Lat'
+        if 'Castellano' in match: lang = 'Esp'
+        elif 'Latino"' in match: lang = 'Lat'
+        elif 'Subtitulado' in match:  lang = 'Vose'
+        else: lang = 'Lat'
+
+        qlty = 'HD'
 
         other = ''
         if servidor == 'directo':
-         if '//pelistop' in url: other = 'Pelistop'
-         elif '/dood.' in url: other = 'Dood'
-        
-        itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url, language = lang, other = other ))
+            if '//pelistop' in url: other = 'Pelistop'
+            elif '/fembed/?h=' in url: other = 'Fembed'
+            elif '/dood.' in url: other = 'Dood'
+
+        itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url,
+                              language = lang, quality = qlty, other = other ))
 
     # ~ downloads recatpcha
 
@@ -195,12 +202,36 @@ def play(item):
     url = item.url
 
     if item.other == 'Pelistop':
-        data = do_downloadpage(item.url)
+        if 'url=' in item.url:
+            fid = scrapertools.find_single_match(item.url, "url=(.*?)$")
+            api_url = 'https://api.cuevana3.me/ir/redirect_ddh.php'
+            api_post = 'url=' + fid
 
-        url = scrapertools.find_single_match(data, '>Ver ahora<.*?src="(.*?)"')
-        url = url.replace('//pelistop.co/', '//streamsb.net/')
+            resp = httptools.downloadpage(api_url, post=api_post, headers={'Referer': item.url}, follow_redirects=False, only_headers=True)
+
+            url = ''
+
+            if 'location' in resp.headers: 
+                url = resp.headers['location']
+
+                if url.startswith('//'): url = 'https:' + url
+
+        else:
+            data = do_downloadpage(item.url)
+
+            url = scrapertools.find_single_match(data, '>Ver ahora<.*?src="(.*?)"')
+            url = url.replace('//pelistop.co/', '//streamsb.net/')
+
+    elif item.other == 'Fembed':
+        hash = scrapertools.find_single_match(item.url, "h=(.*?)$")
+
+        data = do_downloadpage('https://api.cuevana3.me/fembed/api.php', post={'h': hash})
+
+        url = scrapertools.find_single_match(data, '"url":"(.*?)"')
 
     if url:
+        url = url.replace('\\/', '/')
+
         servidor = servertools.get_server_from_url(url)
         servidor = servertools.corregir_servidor(servidor)
 

@@ -7,6 +7,7 @@ from platformcode import logger
 
 from lib import hunterdecode
 
+
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []

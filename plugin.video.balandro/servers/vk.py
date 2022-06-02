@@ -7,9 +7,11 @@ if sys.version_info[0] < 3:
 else:
     import urllib.parse as urllib
 
+
+import base64, time
+
 from core import httptools, scrapertools
 from platformcode import logger
-import base64, time
 
 
 def normalizar_url(page_url):
@@ -26,11 +28,10 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     page_url = normalizar_url(page_url)
-    
+
     url_savevk = 'https://savevk.com/' + page_url.replace('https://vk.com/', '')
-    
+
     data = httptools.downloadpage(url_savevk).data
-    # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, 'window\.videoParams = \{(.*?)\};')
 
@@ -51,7 +52,6 @@ def get_video_url(page_url, url_referer=''):
         (base64.b64decode(p_server[::-1]), p_credentials, p_token, p_id, p_e_key, p_c_key)
 
     data = httptools.downloadpage(url, headers={'Referer': url_savevk}).data.replace('\\/', '/')
-    # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, '"files":\{(.*?)\}')
 
@@ -67,10 +67,10 @@ def get_video_url_ant(page_url, url_referer=''):
     video_urls = []
 
     page_url = normalizar_url(page_url)
-    
+
     data = httptools.downloadpage('https://getvideo.org/en').data
     token = scrapertools.find_single_match(data, '<meta name="csrf-token" content="([^"]+)')
-    
+
     time.sleep(1)
 
     post = {'ajax': '1', 'token': token, 'url': page_url}

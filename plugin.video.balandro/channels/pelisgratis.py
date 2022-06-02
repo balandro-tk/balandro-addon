@@ -144,8 +144,7 @@ def list_all(item):
         thumb = re.sub('p/w\d+', "p/original", thumb)
 
         year = scrapertools.find_single_match(url, '-(\d{4})')
-        if not year:
-            year ='-'
+        if not year: year ='-'
 
         title = title
         _title = re.sub(' \((.*?)\)$', '', title)
@@ -202,8 +201,7 @@ def findvideos(item):
     for lang, data in matches:
         ses += 1
 
-        if 'trailer' in lang.lower():
-            continue
+        if 'trailer' in lang.lower(): continue
 
         matches_langs = scrapertools.find_multiple_matches(data, '<a id="enlace".*?data-href="([^"]+)">.*?<img src.*?>([^<])')
 
@@ -220,7 +218,6 @@ def findvideos(item):
                 url = base64.urlsafe_b64decode(url).decode('utf-8')
 
                 if '/hqq.' in url or '/waaw.' in url or '/netu' in url: url = ''
-                elif '/ninjastream.to/' in url: url = ''
                 elif '/gounlimited.to/' in url: url = ''
 
                 if url:
@@ -241,6 +238,30 @@ def findvideos(item):
         if not ses == 0:
             platformtools.dialog_notification(config.__addon_name, '[COLOR tan][B]Sin enlaces Soportados[/B][/COLOR]')
             return
+
+    return itemlist
+
+
+def play(item):
+    logger.info()
+    itemlist = []
+
+    url = item.url
+
+    if '/player.repro.live' in item.url:
+         data = do_downloadpage(item.url)
+         url =  scrapertools.find_single_match(data, '"url": "(.*?)"')
+
+    if url:
+        if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+
+        servidor = servertools.get_server_from_url(url)
+        servidor = servertools.corregir_servidor(servidor)
+
+        url = servertools.normalize_url(servidor, url)
+
+        itemlist.append(item.clone(server = servidor, url = url))
 
     return itemlist
 

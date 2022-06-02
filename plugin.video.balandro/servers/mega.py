@@ -8,6 +8,7 @@ from lib.megaserver import Client
 
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
+    video_urls = []
 
     if page_url:
         try:
@@ -52,14 +53,10 @@ def get_video_url(page_url, url_referer=''):
             elif resp.data == '[-4]':
                  return 'Excedida cuota transferiencia. Intentelo más tarde'
 
-
     page_url = page_url.replace('/embed#!', '/embed#')
     page_url = page_url.replace('/embed/', '/embed#')
     page_url = page_url.replace('/file/', '/embed#')
     page_url = page_url.replace('/embed#', '/#')
-
-
-    video_urls = []
 
     try:
        c = Client(url=page_url, is_playing_fnc=platformtools.is_playing)

@@ -3,7 +3,7 @@
   "name": "PeliSeries",
   "thumbnail": "peliseries.jpg",
 
-  "active": true,
+  "active": false,
 
   "searchable": true,
   "search_types": ["all", "movie", "tvshow"],
@@ -11,7 +11,7 @@
   "categories": ["movie", "tvshow"],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["inestable", "news", "rankings", "lists", "anime", "lasts", "vos", "tales"],
+  "clusters": ["temporary", "news", "rankings", "lists", "anime", "lasts", "vos", "tales"],
 
   "notes": "Películas y Series"
 }

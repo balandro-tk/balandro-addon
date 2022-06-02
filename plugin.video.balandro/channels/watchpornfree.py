@@ -205,6 +205,14 @@ def play(item):
             servidor = servertools.get_server_from_url(url)
             servidor = servertools.corregir_servidor(servidor)
 
+    else:
+       if '/drivevideo.' in url:
+           if '?link=' in url:
+               url = scrapertools.find_single_match(url, '.*?link=(.*?)$')
+
+               servidor = servertools.get_server_from_url(url)
+               servidor = servertools.corregir_servidor(servidor)
+
     itemlist.append(item.clone(server = servidor, url = url))
 
     return itemlist

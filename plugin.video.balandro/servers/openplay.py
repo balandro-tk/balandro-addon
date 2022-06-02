@@ -3,12 +3,12 @@
 from core import httptools, scrapertools
 from platformcode import logger, platformtools
 
+
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, '"sources":\s*\[(.*?)\]')
     url = scrapertools.find_single_match(bloque, '"file":\s*"(http[^"]+)')
@@ -20,7 +20,6 @@ def get_video_url(page_url, url_referer=''):
 
     if url:
         data = httptools.downloadpage(url).data
-        # ~ logger.debug(data)
 
         matches = scrapertools.find_multiple_matches(data, 'RESOLUTION=\d+x(\d+).*?\n(url_[^\s]+)')
         if matches:

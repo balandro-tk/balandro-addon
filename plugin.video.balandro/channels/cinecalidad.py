@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://v3.cine-calidad.com/'
+host = 'https://www.cinecalidad.lat/'
 
 
 # ~ 04/2022 la web da error en temporadas de series y animes 
@@ -28,7 +28,8 @@ def do_downloadpage(url, post=None, headers=None):
     ant_hosts = ['https://www.cinecalidad.eu/', 'https://www.cinecalidad.im/', 'https://www.cinecalidad.is/',
                  'https://www.cinecalidad.li/', 'https://www.cine-calidad.com/',
                  'https://cinecalidad.website/', 'https://www.cinecalidad.lat/',
-                 'https://cinecalidad3.com/', 'https://www5.cine-calidad.com/']
+                 'https://cinecalidad3.com/', 'https://www5.cine-calidad.com/',
+                 'https://v3.cine-calidad.com/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
@@ -452,6 +453,9 @@ def play(item):
 
             url = scrapertools.find_single_match(data, '<iframe.*?src="(.*?)"')
             if not url: url = scrapertools.find_single_match(data, 'id="btn_enlace">.*?<a href="(.*?)"')
+            if not url: url = scrapertools.find_single_match(data, '<a id="some_link">.*?value="(.*?)"')
+
+            url = url.replace('&amp;', '&')
 
             if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
                 return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'

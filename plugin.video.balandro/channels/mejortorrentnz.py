@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os, re
+import sys
+
+PY3 = False
+if sys.version_info[0] >= 3: PY3 = True
+
+
+import re
 
 from platformcode import logger, config
 from core.item import Item
@@ -46,6 +52,7 @@ def mainlist(item):
 
     itemlist.append(item.clone( title = 'Películas', action = 'mainlist_pelis', text_color = 'deepskyblue' ))
     itemlist.append(item.clone( title = 'Series', action = 'mainlist_series', text_color = 'hotpink' ))
+
     itemlist.append(item.clone( title = 'Documentales', action = 'list_all', url = host + '/documentales-3/',
 	                            search_type = 'documentary', text_color = 'cyan' ))
 
@@ -62,7 +69,7 @@ def mainlist_pelis(item):
 
     itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + '/peliculas-13/', search_type = 'movie' ))
 
-    itemlist.append(item.clone( title = 'Últimas', action = 'list_last', url = host + '/ultimos-torrents-4-x/', search_type = 'movie' ))
+    itemlist.append(item.clone( title = 'Últimas', action = 'list_last', url = host + '/ultimos-torrents-3/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = 'En HD', action = 'list_all', url = host + '/peliculas-hd-3/', search_type = 'movie' ))
 
@@ -81,7 +88,7 @@ def mainlist_series(item):
 
     itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + '/series-3/', search_type = 'tvshow' ))
 
-    itemlist.append(item.clone( title = 'Últimas', action = 'list_last', url = host + '/ultimos-torrents-4-x/', search_type = 'tvshow' ))
+    itemlist.append(item.clone( title = 'Últimas', action = 'list_last', url = host + '/ultimos-torrents-3/', search_type = 'tvshow' ))
 
     itemlist.append(item.clone( title = 'En HD', action = 'list_all', url = host + '/series-hd-2/', search_type = 'tvshow' ))
 
@@ -170,7 +177,7 @@ def list_last(item):
 
         titulo = title.split('-')[0].strip()
         if item.search_type == 'tvshow': 
-           if '&#' in titulo: titulo = scrapertools.find_single_match(titulo, '(.*?) ')
+            if '&#' in titulo: titulo = scrapertools.find_single_match(titulo, '(.*?) ')
 
         title = re.sub(r' \(.*?\)', '', title)
 
@@ -226,7 +233,7 @@ def list_alfa(item):
 
         titulo = title.split('-')[0].strip()
         if item.search_type == 'tvshow': 
-           if '&#' in titulo: titulo = scrapertools.find_single_match(titulo, '(.*?) ')
+            if '&#' in titulo: titulo = scrapertools.find_single_match(titulo, '(.*?) ')
 
         title = re.sub(r' \(.*?\)', '', title)
 
@@ -262,7 +269,7 @@ def episodios(item):
     i = 0
 
     if item.search_type == 'documentary':
-         bloque = scrapertools.find_single_match(data, 'Listado de los episodios(.*)Marcar/Desmarcar Todos')
+         bloque = scrapertools.find_single_match(data, 'Listado de los episodios(.*?)Marcar/Desmarcar Todos')
 
          matches = scrapertools.find_multiple_matches(bloque, "bgcolor='#C8DAC8'.*?</td>.*?'>(.*?)</td>.*?name='(.*?)'.*?value='(.*?)'")
 
@@ -278,7 +285,7 @@ def episodios(item):
          return itemlist
 
 
-    bloque = scrapertools.find_single_match(data, 'Listado de los episodios(.*)Descargar Seleccionados')
+    bloque = scrapertools.find_single_match(data, 'Listado de los episodios(.*?)Descargar Seleccionados')
 
     matches = scrapertools.find_multiple_matches(bloque, "bgcolor='#C8DAC8'.*?" + '<a href="(.*?)">(.*?)</a>.*?' + "name='(.*?)'.*?value='(.*?)'")
 
@@ -315,7 +322,7 @@ def findvideos(item):
 
         post = {item.id : item.value}
 
-        data = do_downloadpage( host + '/download_tv.php', post = post, headers = {'Referer': item.ref}, raise_weberror = False)
+        data = do_downloadpage(host + '/download_tv.php', post = post, headers = {'Referer': item.ref})
 
     hash = scrapertools.find_single_match(data, '<input type="hidden".*?<input type="hidden".*?value="(.*?)"')
     if not hash: hash = scrapertools.find_single_match(data, '<a class="opcion.*?u=(.*?)"')
@@ -330,8 +337,8 @@ def findvideos(item):
     size = scrapertools.find_single_match(data, "<b>Tamaño.*?</b>(.*?)<br>").strip()
     size = size.replace('&nbsp;', '').strip()
 
-    itemlist.append(Item( channel = item.channel, action = 'play', title = '', hash = hash, server = 'torrent', language = lang, quality = qlty,
-                          other = size ))
+    itemlist.append(Item( channel = item.channel, action = 'play', title = '', hash = hash, server = 'torrent', language = lang,
+                          quality = qlty, other = size ))
 
     return itemlist
 
@@ -345,11 +352,17 @@ def play(item):
     if item.hash:
         url = host + '/torrent_dmbk.php?u=' + item.hash
 
-        data = do_downloadpage(url)
+        if PY3:
+            from core import requeststools
+            data = requeststools.read(url, 'mejortorrentnz')
+        else:
+            data = do_downloadpage(url)
 
         if data:
             if '<h1>Not Found</h1>' in str(data) or '<!DOCTYPE html>' in str(data) or '<!DOCTYPE>' in str(data):
                 return 'Archivo [COLOR red]Inexistente[/COLOR]'
+
+            import os
 
             file_local = os.path.join(config.get_data_path(), "temp.torrent")
             with open(file_local, 'wb') as f: f.write(data); f.close()

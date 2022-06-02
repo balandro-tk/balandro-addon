@@ -12,7 +12,8 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://nucleohd.com/'
+host = 'https://atomohd.org/'
+
 
 clon_name = 'Atomix'
 
@@ -51,7 +52,8 @@ def do_downloadpage(item, url, post=None, headers=None):
     ant_hosts = ['https://pctmix.com/', 'https://pctmix1.com/',
                  'https://pctreload.com/', 'https://pctreload1.com/',
                  'https://maxitorrent.com/',
-                 'https://atomixhq.com/', 'https://atomixhq.one/', 'https://atomixhq.net/', 'https://atomixhq.top/', 'https://atomixhq.art/', 'https://atomixhq.link/', 'https://atomixhq.club/']
+                 'https://atomixhq.com/', 'https://atomixhq.one/', 'https://atomixhq.net/', 'https://atomixhq.top/', 'https://atomixhq.art/', 'https://atomixhq.link/', 'https://atomixhq.club/',
+                 'https://nucleohd.com/', 'https://atomixhq.tel/', 'https://atomixhq.xyz/', 'https://atomohd.com/', 'https://atomohd.net/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
@@ -62,14 +64,11 @@ def do_downloadpage(item, url, post=None, headers=None):
     if not headers: headers = {'Referer': url}
 
     # ~ 2022/03/19 atomix en k17 y k18 (HTTP Error 403: Forbidden, salta >Attention Required! | Cloudflare)
-    try:
-       data = httptools.downloadpage(url, post=post, headers=headers).data
-    except:
-       pass
+    try: data = httptools.downloadpage(url, post=post, headers=headers).data
+    except: pass
 
     if not data:
-        if config.get_setting('proxies', item.channel, default=''):
-            data = httptools.downloadpage_proxy('newpct1', url, post=post, headers=headers).data
+        if config.get_setting('proxies', item.channel, default=''): data = httptools.downloadpage_proxy('newpct1', url, post=post, headers=headers).data
 
     return data
 
@@ -198,7 +197,7 @@ def mainlist_series_clon(item):
         ['Catálogo', 'series/'],
         ['En HD', 'series-hd/'],
         ['Subtituladas', 'series-vo/']
-    ]
+        ]
 
     if 'descargas2020' in item.url: del enlaces[1:]
 
@@ -495,10 +494,8 @@ def findvideos(item):
        else:
           return itemlist
 
-    try:
-        matches = re.compile(patron, re.DOTALL).findall(data)
-    except:
-        return itemlist
+    try: matches = re.compile(patron, re.DOTALL).findall(data)
+    except: return itemlist
 
     for servidor, idioma, calidad, url in matches:
         ses += 1

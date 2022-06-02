@@ -14,7 +14,7 @@ from core import httptools, scrapertools, tmdb
 from lib import decrypters
 
 
-host = 'https://www.subtorrents.do/'
+host = 'https://www.subtorrents.re/'
 
 
 def item_configurar_proxies(item):
@@ -27,27 +27,16 @@ def configurar_proxies(item):
     return proxytools.configurar_proxies_canal(item.channel, host)
 
 
-def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
+def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://www.subtorrents.nl/', 'https://www.subtorrents.ch/', 'https://www.subtorrents.nz/', 
-                 'https://www.subtorrents.in/', 'https://www.subtorrents.li/']
+    ant_hosts = ['https://www.subtorrents.nl/', 'https://www.subtorrents.ch/', 'https://www.subtorrents.nz/',
+                 'https://www.subtorrents.in/', 'https://www.subtorrents.li/', 'https://www.subtorrents.do/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
 
-    # ~ 2021-12-12  SIN PROXIES
-	# ~ resp.code == 404
-    timeout = 30
-    raise_weberror = False
-
-    # ~ resp = httptools.downloadpage(url, post=post, headers=headers, timeout=timeout, raise_weberror=raise_weberror)
-    resp = httptools.downloadpage_proxy('subtorrents', url, post=post, headers=headers, timeout=timeout, raise_weberror=raise_weberror)
-
-    data = ''
-    if resp.data: data = resp.data
-
-    # ~ data = httptools.downloadpage(url, post=post, headers=headers, timeout=timeout, raise_weberror=raise_weberror).data
-    # ~ data = httptools.downloadpage_proxy('subtorrents', url, post=post, headers=headers, timeout=timeout, raise_weberror=raise_weberror).data
+    # ~ data = httptools.downloadpage(url, post=post, headers=headers).data
+    data = httptools.downloadpage_proxy('subtorrents', url, post=post, headers=headers).data
 
     return data
 

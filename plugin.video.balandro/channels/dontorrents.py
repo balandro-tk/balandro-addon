@@ -12,7 +12,7 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb
 
 
-host = 'https://dontorrent.cx/'
+host = 'https://dontorrent.fi/'
 
 
 # ~ por si viene de enlaces guardados
@@ -24,7 +24,8 @@ ant_hosts = ['https://dontorrents.org/', 'https://dontorrents.net/', 'https://do
              'https://dontorrent.it/', 'https://dontorrent.red/', 'https://dontorrent.nu/', 'https://dontorrent.si/',
              'https://dontorrent.sk/', 'https://dontorrent.eu/', 'https://dontorrent.top/', 'https://dontorrent.pm/',
              'https://dontorrent.re/', 'https://dontorrent.wf/', 'https://dontorrent.run/', 'https://dontorrent.cat/'
-             'https://dontorrent.pl/', 'https://dontorrent.tel/', 'https://dontorrent.nl/']
+             'https://dontorrent.pl/', 'https://dontorrent.tel/', 'https://dontorrent.nl/', 'https://dontorrent.cx/'
+             'https://dontorrent.bet/', 'https://dontorrent.cab/', 'https://dontorrent.wtf/']
 
 domain = config.get_setting('dominio', 'dontorrents', default='')
 
@@ -36,7 +37,7 @@ if domain:
 def item_configurar_proxies(item):
     plot = 'Es posible que para poder utilizar este canal necesites configurar algún proxy, ya que no es accesible desde algunos países/operadoras.'
     plot += '[CR]Si desde un navegador web no te funciona el sitio ' + host + ' necesitarás un proxy.'
-    return item.clone( title = 'Configurar proxies a usar ... [COLOR plum](si no hay resultados)[/COLOR]', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
+    return item.clone( title = 'Configurar proxies a usar ...', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
 
 def configurar_proxies(item):
     from core import proxytools
@@ -53,14 +54,29 @@ def do_downloadpage(url, post=None, headers=None):
     return data
 
 
+def acciones(item):
+    logger.info()
+    itemlist = []
+
+    domain_memo = config.get_setting('dominio', 'dontorrents', default='')
+
+    if domain_memo:
+        itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test web del canal [COLOR yellow][B]' + domain_memo + '[/B][/COLOR]',
+                                    from_channel='dontorrents', folder=False, text_color='chartreuse' ))
+
+    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente',
+                          thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+
+    itemlist.append(item_configurar_proxies(item))
+
+    return itemlist
+
+
 def mainlist(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente [COLOR plum](si no hay resultados)[/COLOR]',
-                          thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
-
-    itemlist.append(item_configurar_proxies(item))
+    itemlist.append(item.clone( action='acciones', title= '[B]Acciones[/B] [COLOR plum](si no hay resultados)[/COLOR]', text_color='goldenrod' ))
 
     itemlist.append(item.clone( title = 'Buscar ...', action = 'search', search_type = 'all', text_color = 'yellow' ))
 
@@ -75,10 +91,7 @@ def mainlist_pelis(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente [COLOR plum](si no hay resultados)[/COLOR]',
-                          thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
-
-    itemlist.append(item_configurar_proxies(item))
+    itemlist.append(item.clone( action='acciones', title= '[B]Acciones[/B] [COLOR plum](si no hay resultados)[/COLOR]', text_color='goldenrod' ))
 
     itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
 
@@ -101,10 +114,7 @@ def mainlist_series(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente [COLOR plum](si no hay resultados)[/COLOR]',
-                          thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
-
-    itemlist.append(item_configurar_proxies(item))
+    itemlist.append(item.clone( action='acciones', title= '[B]Acciones[/B] [COLOR plum](si no hay resultados)[/COLOR]', text_color='goldenrod' ))
 
     itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
@@ -123,10 +133,7 @@ def mainlist_documentary(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente [COLOR plum](si no hay resultados)[/COLOR]',
-                          thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
-
-    itemlist.append(item_configurar_proxies(item))
+    itemlist.append(item.clone( action='acciones', title= '[B]Acciones[/B] [COLOR plum](si no hay resultados)[/COLOR]', text_color='goldenrod' ))
 
     itemlist.append(item.clone( title = 'Buscar documental ...', action = 'search', search_type = 'documentary', text_color='cyan' ))
 

@@ -134,7 +134,10 @@ def decode_streamcrypt(url):
 def decode_url_base64(url, host_torrent):
     logger.info()
 
-    host_list = ['mediafire.com']
+    host_list = [
+        ('mediafire.com'),
+        ('adfly.mobi')
+        ]
 
     domain = scrapertools.find_single_match(url, patron_domain)
 
@@ -202,6 +205,8 @@ def sorted_urls(url, url_base64, host_torrent):
             'short-info.link': [None, [64, 123 ,77, 91, 96, 109, 13, 13], 0, 0, False],
             'desbloqueador.site': [None, [64, 123 ,77, 91, 96, 109, 13, 13], 0, 0, False],
             'ttlinks.live': [None, [64, 123 ,77, 91, 96, 109, 13, 13], 0, 0, False],
+            'enlace-directo.com': [None, [64, 123 ,77, 91, 96, 109, 13, 13], 0, 0, False],
+            'linkup.wf': ['linkser=uggcf%3A%2F%2Flrfgbeerag.arg', "TTTOzBmk\s*=\s*'(.*?)'", 14, 8, False]
             }
 
     if not url_base64 or url_base64.startswith('magnet') or url_base64.endswith('.torrent'): return url_base64
@@ -238,8 +243,9 @@ def sorted_urls(url, url_base64, host_torrent):
 
     if host_name and not host_name.endswith('/'): host_name += '/'
 
-    resp = httptools.downloadpage(url_base64, only_headers=True)
-    if resp.sucess: return url_base64
+    if url_base64.startswith('http'):
+        resp = httptools.downloadpage(url_base64, only_headers=True)
+        if resp.sucess: return url_base64
 
     data_new = httptools.downloadpage(url, headers={'Referer': host_torrent}, raise_weberror=False).data
     data_new = re.sub(r'\n|\r|\t', '', data_new)

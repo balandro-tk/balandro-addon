@@ -22,10 +22,14 @@
         <setting id="mnu_doramas" type="bool" label="Añadir la opción Doramas" default="true" visible="eq(-13,true)"/>
         <setting id="mnu_animes" type="bool" label="Añadir la opción Animes" default="true" visible="eq(-14,true)"/>
         <setting id="mnu_adultos" type="bool" label="Añadir la opción Adultos" default="true" visible="eq(-15,true)"/>
-        <setting id="mnu_preferidos" type="bool" label="Añadir la opción Preferidos" default="true" visible="eq(-16,true)"/>
-        <setting id="mnu_desargas" type="bool" label="Añadir la opción Descargas" default="true" visible="eq(-17,true)"/>
+        <setting id="mnu_desactivados" type="bool" label="Añadir la opción Desactivados" default="false" visible="eq(-16,true)"/>
+        <setting id="mnu_preferidos" type="bool" label="Añadir la opción Preferidos" default="true" visible="eq(-17,true)"/>
+        <setting id="mnu_desargas" type="bool" label="Añadir la opción Descargas" default="true" visible="eq(-18,true)"/>
 
-        <setting label="Opciones para los Sub-Menús:" type="lsep"/>
+        <setting label="Opciones para el Menú y los Sub-Menús:" type="lsep"/>
+        <setting id="mnu_search_proxy_channels" type="bool" label="Añadir acceso al detalle de Buscar Nuevos Proxies" default="false"/>
+
+        <setting type="sep"/>
         <setting id="sub_mnu_cfg_search" type="bool" label="Añadir acceso al detalle de Personalizar Búsquedas" default="true"/>
 
         <setting type="sep"/>
@@ -37,6 +41,7 @@
 
     <category label="Canales">
         <setting label="Opciones para las listas de Canales:" type="lsep"/>
+        <setting id="show_channels_parameters" type="action" label="Información sobre sus Parámetros Actuales" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_channels_parameters)"/>
         <setting id="channels_list_status" type="enum" label="Qué canales se mostrarán" values="Todos|Preferidos y Activos|Sólo Preferidos" default="0"/>
 
         <setting type="sep"/>
@@ -49,7 +54,7 @@
         <setting id="no_channels_inestables" type="action" label="Qué canales están Inestables" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_inestables)"/>
 
         <setting label="Opciones para los canales Preferidos:" type="lsep"/>
-        <setting id="channels_list_order" type="bool" label="Ordenar los canales preferidos al principio" default="true"/>
+        <setting id="channels_list_order" type="bool" label="Presentar los canales preferidos al principio de las listas" default="true"/>
         <setting id="channels_prefered" type="action" label="Qué canales tiene marcados como preferidos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_prefered)"/>
         <setting id="top_channels" type="action" label="Personalizar canales preferidos (Marcar o Des-marcar)" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_status)"/>
 
@@ -69,10 +74,16 @@
 
         <setting label="Control parental canales de Animes:" type="lsep"/>
         <setting id="channels_only_anime" type="action" label="Qué canales pueden tener contenido de animes" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_only_animes)"/>
+
+        <setting type="sep"/>
+        <setting id="channels_exclusively_anime" type="action" label="Qué canales tienen contenido Exclusivamente de animes" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_exclusively_animes)"/>
         <setting id="descartar_anime" type="bool" label="Descartar canales exclusivos de animes" default="false"/>
 
         <setting label="Control parental canales de Adultos:" type="lsep"/>
         <setting id="channels_only_adults" type="action" label="Qué canales pueden tener contenido para adultos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_only_adults)"/>
+
+        <setting type="sep"/>
+        <setting id="channels_exclusively_adults" type="action" label="Qué canales tienen contenido Exclusivamente para adultos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_exclusively_adults)"/>
         <setting id="descartar_xxx" type="bool" label="Descartar canales exclusivos adultos y listas/géneros con ese contenido" default="false"/>
     </category>
 
@@ -86,13 +97,13 @@
 
         <setting type="sep"/>
         <setting id="show_credenciales_hdfull" type="action" label="Credenciales cuenta" action="RunPlugin(plugin://plugin.video.balandro/?channel=submnuctext&action=_credenciales_hdfull)"/>
-        <setting id="del_credenciales_hdfull" type="action" label="Pulsar para eliminar las credenciales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=del_datos_hdfull)"/>
+        <setting id="del_credenciales_hdfull" type="action" label="Pulsar para Eliminar las credenciales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=del_datos_hdfull)"/>
 		<setting id="channel_hdfull_hdfull_username" type="text" label="Usuario HdFull" enable="false" visible="true" default=""/>
 		<setting id="channel_hdfull_hdfull_password" type="text" label="Contraseña HdFull" option="hidden" enable="false" visible="true" default=""/>
 
         <setting label="Cuenta para el canal PlayDede:" type="lsep"/>
         <setting id="show_credenciales_playdede" type="action" label="Credenciales cuenta" action="RunPlugin(plugin://plugin.video.balandro/?channel=submnuctext&action=_credenciales_playdede)"/>
-        <setting id="del_credenciales_playdede" type="action" label="Pulsar para eliminar las credenciales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=del_datos_playdede)"/>
+        <setting id="del_credenciales_playdede" type="action" label="Pulsar para Eliminar las credenciales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=del_datos_playdede)"/>
 		<setting id="channel_playdede_playdede_username" type="text" label="Usuario PlayDede" enable="false" visible="true" default=""/>
 		<setting id="channel_playdede_playdede_password" type="text" label="Contraseña PlayDede" option="hidden" enable="false" visible="true" default=""/>
     </category>
@@ -147,10 +158,11 @@
         <setting id="providers_preferred" label="Proveedores Preferidos (separados por comas)" type="text" default=""/>
 
         <setting label="Opciones para configurar proxies a usar en los Canales:" type="lsep"/>
-        <setting id="global_proxies" type="action" label="Pulsar para Obtener proxies (en los canales que los necesiten)" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=global_proxies)"/>
-        <setting id="memorize_channels_proxies" type="bool" label="Memorizar para Próximas busquedas (los canales que necesiten proxies)" default="true"/>
         <setting id="channels_with_proxies_memorized" type="action" label="Qué canales tiene con proxies Memorizados" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_with_proxies_memorized)"/>
         <setting id="manto_proxies" type="action" label="Pulsar para eliminar los proxies en Todos los canales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_proxies)"/>
+        <setting type="sep"/>
+        <setting id="global_proxies" type="action" label="Pulsar para Obtener proxies (en los canales que los necesiten)" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=global_proxies)"/>
+        <setting id="memorize_channels_proxies" type="bool" label="Memorizar para Próximas busquedas (los canales que necesiten proxies)" default="true"/>
 
         <setting label="Opciones para el proceso de Búsquedas en configurar proxies a usar:" type="lsep"/>
         <setting id="proxies_limit" type="bool" label="Si se encontraron Suficientes proxies válidos dejar de buscar más" default="false"/>
@@ -349,7 +361,7 @@
                  default="[COLOR cyan]cyan[/COLOR]"/>
 
         <setting label="Opciones para las acciones en los Menús Contextuales:" type="lsep"/>
-        <setting id="context_tracking_color" type="labelenum" label="Color para Guardar Enlaces"
+        <setting id="context_tracking_color" type="labelenum" label="Color para Guardar Enlaces en Preferidos"
                  values="[COLOR blue]blue[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR pink]pink[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR red]red[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR green]green[/COLOR]|[COLOR gray]gray[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR violet]violet[/COLOR]|[COLOR teal]teal[/COLOR]|[COLOR dodgerblue]dodgerblue[/COLOR]|[COLOR powderblue]powderblue[/COLOR]|[COLOR khaki]khaki[/COLOR]"
                  default="[COLOR blue]blue[/COLOR]"/>
 
@@ -396,23 +408,23 @@
 
         <setting label="Opciones para los enlaces al seleccionar Servidores:" type="lsep"/>
         <setting id="colorear_enlaces_play" type="bool" label="Asignar color en los enlaces a servidores" default="true"/>
-        <setting id="play_server_color" type="labelenum" label="Color Servidor"
+        <setting id="play_server_color" type="labelenum" label="Color para el Servidor"
                  values="[COLOR white]white[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR deepskyblue]deepskyblue[/COLOR]|[COLOR firebrick]firebrick[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR goldenrod]goldenrod[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR limegreen]limegreen[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR orchid]orchid[/COLOR]|[COLOR red]red[/COLOR]|[COLOR salmon]salmon[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR crimson]crimson[/COLOR]|[COLOR darkorange]darkorange[/COLOR]|[COLOR turquoise]turquoise[/COLOR]|[COLOR aquamarine]aquamarine[/COLOR]|[COLOR magenta]magenta[/COLOR]|[COLOR thistle]thistle[/COLOR]"
                  default="[COLOR gold]gold[/COLOR]" visible="eq(-1,true)"/>
 
-        <setting id="play_quality_color" type="labelenum" label="Color Calidad"
+        <setting id="play_quality_color" type="labelenum" label="Color para la Calidad"
                  values="[COLOR white]white[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR deepskyblue]deepskyblue[/COLOR]|[COLOR firebrick]firebrick[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR goldenrod]goldenrod[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR limegreen]limegreen[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR orchid]orchid[/COLOR]|[COLOR red]red[/COLOR]|[COLOR salmon]salmon[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR crimson]crimson[/COLOR]|[COLOR darkorange]darkorange[/COLOR]|[COLOR turquoise]turquoise[/COLOR]|[COLOR aquamarine]aquamarine[/COLOR]|[COLOR magenta]magenta[/COLOR]|[COLOR thistle]thistle[/COLOR]"
                  default="[COLOR limegreen]limegreen[/COLOR]" visible="eq(-2,true)"/>
 
-        <setting id="play_language_color" type="labelenum" label="Color Idioma"
+        <setting id="play_language_color" type="labelenum" label="Color para el Idioma"
                  values="[COLOR white]white[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR deepskyblue]deepskyblue[/COLOR]|[COLOR firebrick]firebrick[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR goldenrod]goldenrod[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR limegreen]limegreen[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR orchid]orchid[/COLOR]|[COLOR red]red[/COLOR]|[COLOR salmon]salmon[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR crimson]crimson[/COLOR]|[COLOR darkorange]darkorange[/COLOR]|[COLOR turquoise]turquoise[/COLOR]|[COLOR aquamarine]aquamarine[/COLOR]|[COLOR magenta]magenta[/COLOR]|[COLOR thistle]thistle[/COLOR]"
                  default="[COLOR red]red[/COLOR]" visible="eq(-3,true)"/>
 
-        <setting id="play_age_color" type="labelenum" label="Color Antiguedad/fecha"
+        <setting id="play_age_color" type="labelenum" label="Color para la Antiguedad/fecha"
                  values="[COLOR white]white[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR deepskyblue]deepskyblue[/COLOR]|[COLOR firebrick]firebrick[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR goldenrod]goldenrod[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR limegreen]limegreen[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR orchid]orchid[/COLOR]|[COLOR red]red[/COLOR]|[COLOR salmon]salmon[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR crimson]crimson[/COLOR]|[COLOR darkorange]darkorange[/COLOR]|[COLOR turquoise]turquoise[/COLOR]|[COLOR aquamarine]aquamarine[/COLOR]|[COLOR magenta]magenta[/COLOR]|[COLOR thistle]thistle[/COLOR]"
                  default="[COLOR deepskyblue]deepskyblue[/COLOR]" visible="eq(-4,true)"/>
 
-        <setting id="play_other_color" type="labelenum" label="Color Otros datos"
+        <setting id="play_other_color" type="labelenum" label="Color para Otros datos"
                  values="[COLOR white]white[/COLOR]|[COLOR cyan]cyan[/COLOR]|[COLOR deepskyblue]deepskyblue[/COLOR]|[COLOR firebrick]firebrick[/COLOR]|[COLOR gold]gold[/COLOR]|[COLOR goldenrod]goldenrod[/COLOR]|[COLOR hotpink]hotpink[/COLOR]|[COLOR limegreen]limegreen[/COLOR]|[COLOR orange]orange[/COLOR]|[COLOR orchid]orchid[/COLOR]|[COLOR red]red[/COLOR]|[COLOR salmon]salmon[/COLOR]|[COLOR yellow]yellow[/COLOR]|[COLOR crimson]crimson[/COLOR]|[COLOR darkorange]darkorange[/COLOR]|[COLOR turquoise]turquoise[/COLOR]|[COLOR aquamarine]aquamarine[/COLOR]|[COLOR magenta]magenta[/COLOR]|[COLOR thistle]thistle[/COLOR]"
                  default="[COLOR white]white[/COLOR]" visible="eq(-5,true)"/>
     </category>
@@ -423,7 +435,7 @@
 
         <setting type="sep"/>
         <setting id="tmdb_threads" type="labelenum" label="Número de Búsquedas Simultáneas (puede causar Inestabilidad)" values="5|10|15|20|25|30" default="20"/>
-        <setting id="tmdb_plus_info" type="bool" label="Buscar información Extendida (Duración, Actores, etc.)" default="false"/>
+        <setting id="tmdb_plus_info" type="bool" label="Localizar información Extendida (Duración, Actores, etc.)" default="false"/>
 
         <setting type="sep"/>
         <setting id="tmdb_cache" type="bool" label="Usar la Caché TMDB (incide/mejora en las búsquedas Recurrentes)" default="true"/>
@@ -446,6 +458,9 @@
         <setting id="show_advs" type="action" label="Pulsar para Visualizar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_advs)"/>
 
         <setting label="Opciones para el Evaluar el Estado del Sistema:" type="lsep"/>
+        <setting id="show_plataforma" type="action" label="Información Plataforma" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_plataforma)"/>
+
+        <setting type="sep"/>
         <setting id="manto_internet" type="action" label="Pulsar para Comprobar el Estado de su Internet" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=test_internet)"/>
         <setting id="show_test" type="action" label="Pulsar para Efectuar Test Status del sistema" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_test)"/>
 
@@ -463,6 +478,9 @@
         <setting id="manto_params" type="action" label="Pulsar para Restablecer a sus Valores por Defecto los 'Parámetros Internos'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_params)"/>
 
         <setting type="sep"/>
+        <setting id="manto_last_fix" type="action" label="Pulsar para Eliminar el fichero de control 'Fix'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_last_fix)"/>
+
+        <setting type="sep"/>
         <setting id="manto_cookies" type="action" label="Pulsar para Eliminar su fichero de 'Cookies'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_cookies)"/>
         <setting id="manto_cache" type="action" label="Pulsar para Eliminar su carpeta 'Caché'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_folder_cache)"/>
 
@@ -478,9 +496,13 @@
 
     <category label="Ayuda">
         <setting label="Contacto:" type="lsep"/>
-        <setting label="Foro [COLOR plum][B][I] www.mimediacenter.info/foro/viewforum.php?f=44 [/I][/B][/COLOR] Instalaciones, Novedades, Sugerencias, etc." visible="true"/>
+        <setting label="Foro [COLOR plum][B][I] mimediacenter.info/foro/viewforum.php?f=44 [/I][/B][/COLOR] Instalaciones, Novedades, Sugerencias, etc." visible="true"/>
         <setting label="Fuente [COLOR coral][B][I] balandro-tk.github.io/balandro/ [/I][/B][/COLOR] Repositorio, Add-On, etc." visible="true"/>
         <setting label="Telegram [COLOR lightblue][B][I] t.me/@balandro_asesor [/I][/B][/COLOR] Asesoramiento, Dudas, Consultas, etc." visible="true"/>
+
+        <setting label="Versión:" type="lsep"/>
+        <setting id="show_version" type="action" label="Información versión" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_version)"/>
+        <setting id="show_changelog" type="action" label="Historial de versiones" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_changelog)"/>
 
         <setting label="Opciones Principales del Uso de Balandro:" type="lsep"/>
         <setting id="show_help_tips" type="action" label="Trucos y Consejos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_tips)"/>
@@ -489,10 +511,6 @@
 
         <setting type="sep"/>
         <setting id="show_help_settings" type="action" label="Notas sobre ciertos Parámetros de la Configuración" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_settings)"/>
-
-        <setting label="Versión:" type="lsep"/>
-        <setting id="show_version" type="action" label="Información versión" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_version)"/>
-        <setting id="show_changelog" type="action" label="Historial de versiones" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_changelog)"/>
 
         <setting label="Desarrollo Balandro:" type="lsep"/>
         <setting label="Team [COLOR hotpink][B][I] t.me/Balandro_team [/I][/B][/COLOR] Unirse al Equipo de Desarrollo" visible="true"/>

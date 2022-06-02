@@ -18,12 +18,10 @@ def get_video_url(page_url, url_referer=''):
 
     unpacked = ""
     data = resp.data
-    # ~ logger.debug(data)
 
     packed = scrapertools.find_single_match(data, "function\(p,a,c,k.*?</script>")
     if packed:
         unpacked = jsunpack.unpack(packed)
-        # ~ logger.debug(unpacked)
 
     media_url = scrapertools.find_single_match(unpacked, 'src"value="([^"]+)')
     if not media_url:
@@ -31,7 +29,7 @@ def get_video_url(page_url, url_referer=''):
         rand = scrapertools.find_single_match(data, 'name="rand" value="([^"]+)"')
         post = "op=download2&id=%s&rand=%s&referer=%s&method_free=&method_premium=" % (id_, rand, page_url)
         data = httptools.downloadpage(page_url, post).data
-        # ~ logger.debug(data)
+
         media_url = scrapertools.find_single_match(data, '<div id="dl_link".*?<a href="([^"]+)"')
         if not media_url: media_url = scrapertools.find_single_match(data, '<a href="([^"]+\.mp4)"')
         if not media_url: media_url = scrapertools.find_single_match(data, '<a href="([^"]+\.m3u8)"')

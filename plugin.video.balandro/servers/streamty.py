@@ -16,7 +16,7 @@ def get_video_url(page_url, url_referer=''):
 
     packed = scrapertools.find_single_match(data, "text/javascript'>(eval.*?)\s*</script>")
     unpacked = jsunpack.unpack(packed)
-    
+
     url = scrapertools.find_single_match(unpacked, 'file:"([^"]+)"')
 
     if url:

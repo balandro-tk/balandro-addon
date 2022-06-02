@@ -191,15 +191,15 @@ def _proxies(item):
         item.channel = 'hdfullse'
         hdfullse.configurar_proxies(item)
 
+    elif item.from_channel == 'lilatorrent':
+        from channels import lilatorrent
+        item.channel = 'lilatorrent'
+        lilatorrent.configurar_proxies(item)
+
     elif item.from_channel == 'megaserie':
         from channels import megaserie
         item.channel = 'megaserie'
         megaserie.configurar_proxies(item)
-
-    elif item.from_channel == 'mejortorrents':
-        from channels import mejortorrents
-        item.channel = 'mejortorrents'
-        mejortorrents.configurar_proxies(item)
 
     elif item.from_channel == 'mejortorrentnz':
         from channels import mejortorrentnz
@@ -273,6 +273,11 @@ def _proxies(item):
         from channels import repelishd
         item.channel = 'repelishd'
         repelishd.configurar_proxies(item)
+
+    elif item.from_channel == 'rojotorrent':
+        from channels import rojotorrent
+        item.channel = 'rojotorrent'
+        rojotorrent.configurar_proxies(item)
 
     elif item.from_channel == 'seriesyonkis':
         from channels import seriesyonkis

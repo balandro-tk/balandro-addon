@@ -47,7 +47,6 @@ def get_video_url(page_url, url_referer=''):
     page_url = page_url.replace('/d/', '/e/')
 
     data = httptools.downloadpage(page_url, headers={"Referer": host}).data
-    # ~ logger.debug(data)
 
     if '<title>Access denied' in data or '<title>Attention Required! | Cloudflare</title>' in data:
         if xbmc.getCondVisibility('System.HasAddon("script.module.resolveurl")'):
@@ -73,7 +72,7 @@ def get_video_url(page_url, url_referer=''):
     url = scrapertools.find_single_match(data, "get\('(/pass_md5/[^']+)")
     if url:
         data2 = httptools.downloadpage(host + url, headers={'Referer': page_url}).data
-        if not data2: return 'Vídeo sin resolver'
+        if not data2: data2 = '<title>Access denied' # ~ return 'Vídeo sin resolver'
 
         if '<title>Access denied' in data2 or '<title>Attention Required! | Cloudflare</title>' in data2:
             if xbmc.getCondVisibility('System.HasAddon("script.module.resolveurl")'):

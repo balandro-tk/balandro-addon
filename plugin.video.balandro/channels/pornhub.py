@@ -13,7 +13,7 @@ from platformcode import config, logger
 from core.item import Item
 from core import httptools, scrapertools, servertools, jsontools
 
-host = "https://pornhub.com/"
+host = "https://es.pornhub.com/"
 
 perpage = 30
 

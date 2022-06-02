@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools
 
 
-host = "https://tubehentai.com/"
+host = 'https://tubehentai.com/'
 
 perpage = 30
 
@@ -20,7 +20,6 @@ def mainlist_pelis(item):
     logger.info()
     itemlist = []
 
-
     descartar_xxx = config.get_setting('descartar_xxx', default=False)
 
     if descartar_xxx: return itemlist
@@ -32,6 +31,8 @@ def mainlist_pelis(item):
     itemlist.append(item.clone( title = 'Buscar vídeo ...', action = 'search', search_type = 'movie', text_color = 'orange' ))
 
     itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'most-recent/'))
+
+    itemlist.append(item.clone( title = 'Al azar', action = 'list_all', url = host + 'random/'))
 
     itemlist.append(item.clone( title = 'Más vistos', action = 'list_all', url = host + 'most-viewed/'))
     itemlist.append(item.clone( title = 'Más valorados', action = 'list_all', url = host + 'top-rated/'))
@@ -47,12 +48,21 @@ def list_all(item):
     itemlist = []
 
     data = httptools.downloadpage(item.url).data
+    data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
-    patron = '<a href="((?:http|https)://tubehentai.com/video/[^"]+)" title="([^"]+)".*?<span>([^<]+)</span>.*?<img src="([^"]+)"'
+    matches = re.compile('<div class="putvideo">(.*?)</div></div>', re.DOTALL).findall(data)
 
-    matches = re.compile(patron, re.DOTALL).findall(data)
+    for match in matches:
+        url = scrapertools.find_single_match(match, '<a href="(.*?)"')
 
-    for url, title, duration, thumb in matches:
+        title = scrapertools.find_single_match(match, 'title="(.*?)"')
+
+        if not url or not title: continue
+
+        thumb = scrapertools.find_single_match(match, '<img src="(.*?)"')
+
+        duration = scrapertools.find_single_match(match, '<div class="text-pink border border-pink px-2">(.*?)$')
+
         titulo = "[COLOR tan]%s[/COLOR] %s" % (duration, title)
                              
         itemlist.append(item.clone( action = 'findvideos', url = url, title = titulo, thumbnail = thumb, contentType = 'movie', contentTitle = title ))
@@ -72,12 +82,9 @@ def categorias(item):
     itemlist = []
 
     data = httptools.downloadpage(host + 'channels/').data
-
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
-    patron = '<div class="videobox.*?<a href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)".*?</div>'
-
-    matches = re.compile(patron).findall(data)
+    matches = re.compile('<div class="videobox.*?<a href="(.*?)".*?<img src="(.*?)".*?alt="(.*?)"').findall(data)
 
     for url, thumb, title in matches:
         if title == 'Photos': continue
@@ -95,8 +102,7 @@ def findvideos(item):
 
     data = httptools.downloadpage(item.url).data
     url = scrapertools.find_single_match(data, '<source src="([^"]+\.mp4)"')
-    if not url:
-        url = scrapertools.find_single_match(data, '<div class="videohere".*?src="([^"]+)"')
+    if not url: url = scrapertools.find_single_match(data, '<div class="videohere".*?src="([^"]+)"')
 
     if url:
         itemlist.append(Item( channel = item.channel, action = 'play', server = 'directo', url = url, language = 'VOS' ))

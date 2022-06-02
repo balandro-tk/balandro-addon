@@ -9,7 +9,7 @@
     "patterns": [
       {
         "pattern": "https://zplayer.live/(?:e|v|embed)/([A-z0-9]+)",
-        "url": "https://v2.zplayer.live/embed/\\12"
+        "url": "https://v2.zplayer.live/embed/\\1"
       },
       {
         "pattern": "https://v2.zplayer.live/(?:embed|video|download)/([A-z0-9]+)",

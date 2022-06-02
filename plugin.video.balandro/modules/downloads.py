@@ -73,7 +73,7 @@ def mainlist(item):
     if not itemlist:
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Descargas[/COLOR][/B]' % color_exec)
 
-    itemlist.append(item.clone( title = 'Ubicación de las descargas', action = 'show_folder_downloads',
+    itemlist.append(item.clone( title = '[B]Ubicación actual de las descargas[/B]', action = 'show_folder_downloads',
                                 thumbnail=config.get_thumb('downloads'), text_color='green' ))
 
     itemlist.append(item.clone( channel='actions', title= 'Ajustes categoría descargas', action = 'open_settings',

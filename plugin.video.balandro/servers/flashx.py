@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import base64
+
 from core import httptools, scrapertools
 from platformcode import config, logger
-import base64
 from lib import jsunpack
 
 
@@ -14,7 +15,6 @@ def get_video_url(page_url, url_referer=''):
 
     url = 'https://www.flashx.tv/playvideo-%s.html?playvid' % video_id
     data = httptools.downloadpage(url, headers={'Referer': 'https://www.flashx.tv/embed-%s.html' % video_id}).data
-    # ~ logger.debug(data)
 
     if 'Too many views' in data or 'NOT FOUND' in data:
         return 'Vídeo no encontrado'
@@ -25,7 +25,6 @@ def get_video_url(page_url, url_referer=''):
         httptools.downloadpage('https://www.flashx.to/counter.cgi?c2=%s&fx=%s' % (video_id, file_id))
         httptools.downloadpage('https://www.flashx.tv/flashx.php?ss=yes&f=fail&fxfx=6')
         data = httptools.downloadpage(url).data
-        # ~ logger.debug(data)
 
     # ~ packeds = scrapertools.find_multiple_matches(data, "<script type=[\"']text/javascript[\"']>(eval.*?)</script>")
     # ~ for packed in packeds:

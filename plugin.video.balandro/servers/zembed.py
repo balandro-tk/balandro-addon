@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from core import httptools, scrapertools, jsontools
 from platformcode import config, logger
-import os
 
 
 def get_video_url(page_url, url_referer=''):
@@ -13,8 +14,7 @@ def get_video_url(page_url, url_referer=''):
     if not vid: return video_urls
 
     data = httptools.downloadpage('https://www.zembed.to/vl/' + vid).data
-    # ~ logger.debug(data)
-    
+
     try:
         cache_path = os.path.join(config.get_data_path(), 'cache')
         if not os.path.exists(cache_path): os.makedirs(cache_path)
@@ -34,17 +34,17 @@ def get_video_url(page_url, url_referer=''):
 
     return video_urls
 
+
 def generar_m3u8(e):
     txt = "#EXTM3U\n"
     txt += "#EXT-X-VERSION:5\n"
     txt += "#EXT-X-TARGETDURATION:%s\n" % e['td']
     txt += "#EXT-X-MEDIA-SEQUENCE:0\n"
-    
-    for l in range(len(e['data'][0])):
 
+    for l in range(len(e['data'][0])):
         txt += "#EXTINF:%s\n" % e['data'][0][l]
         txt += "#EXT-X-BYTERANGE:%s\n" % e['data'][1][l]
-        
+
         r = e['data'][1][l].split("@")
         txt += "https://www.zembed.to/drive/hls/" + e['md5'] + "/" + e['md5'] + str(l) + ".html?ch=" + e['md5'] + "-chunk-" + e['data'][2][l] + ".txt&s=" + r[1] + "&l=" + r[0] + "\n"
 

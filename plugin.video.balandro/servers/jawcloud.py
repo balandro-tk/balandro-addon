@@ -9,11 +9,10 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     if 'The file you were looking for could not be found' in data:
         return 'El fichero no existe o ha sido borrado'
-    
+
     url = scrapertools.find_single_match(data, 'source src="([^"]+)')
     if url:
         video_urls.append(['mp4', url])

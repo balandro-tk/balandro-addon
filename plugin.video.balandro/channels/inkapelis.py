@@ -47,7 +47,6 @@ def mainlist_pelis(item):
     itemlist.append(item.clone( title = 'Más destacadas', action = 'list_all', url = host + 'genero/destacadas/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = 'En HD', action = 'list_all', url = host + 'calidad/hd/', search_type = 'movie' ))
-    itemlist.append(item.clone( title = 'En cines', action = 'list_all', url = host + 'genero/cine/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = 'Infantiles', action = 'list_all', url = host + 'seccion/infantil/', search_type = 'movie' ))
 
@@ -198,8 +197,7 @@ def list_all(item):
     data = do_downloadpage(item.url)
 
     patron = '<h2>Añadido recientemente(.*?)<div class="copy">'
-    if '/page/' in item.url:
-        patron = '(.*?)<div class="copy">'
+    if '/page/' in item.url: patron = '(.*?)<div class="copy">'
 
     bloque = scrapertools.find_single_match(data, patron)
 
@@ -208,6 +206,7 @@ def list_all(item):
     for article in matches:
         url = scrapertools.find_single_match(article, ' href="([^"]+)"')
         title = scrapertools.find_single_match(article, ' alt="([^"]+)"')
+
         if not url or not title: continue
 
         thumb = scrapertools.find_single_match(article, ' src="([^"]+)"')
@@ -485,9 +484,7 @@ def findvideos(item):
                 vurl = scrapertools.find_single_match(lnk, "go_to_player\('([^']+)")
                 if not vurl: continue
 
-                patron = ".*?'" + str(i_lang) + ".*?/assets/player/lang/(.*?).png"
-
-                lang2 = scrapertools.find_single_match(str(links), patron).lower()
+                lang2 = scrapertools.find_single_match(str(links), ".*?'" + str(i_lang) + ".*?/assets/player/lang/(.*?).png").lower()
 
                 if lang2: lang = lang2
 
@@ -501,6 +498,8 @@ def findvideos(item):
                 if servidor == 'meplay': continue
                 elif servidor == 'stream': continue
                 elif servidor == 'playsb': continue
+                elif servidor == 'stp': continue
+                elif servidor == 'str': continue
                 elif servidor == 'descargar': continue
 
                 if not lang2:
@@ -527,6 +526,8 @@ def findvideos(item):
                     if servidor == 'meplay': continue
                     elif servidor == 'playsb': continue
                     elif servidor == 'stream': continue
+                    elif servidor == 'stp': continue
+                    elif servidor == 'str': continue
 
                     servidor = corregir_servidor(servidor)
 
@@ -553,6 +554,8 @@ def findvideos(item):
 def play(item):
     logger.info()
     itemlist = []
+
+    vurl = ''
 
     if item.lembed and item.ltype and item.lurl:
         post = {'type': item.ltype, 'streaming': item.lembed}
@@ -644,6 +647,10 @@ def play(item):
 
         servidor = servertools.get_server_from_url(vurl)
         servidor = servertools.corregir_servidor(servidor)
+
+        if item.server == 'fembed':
+            if servidor == 'directo':
+                return 'Servidor erróneo [COLOR plum]No es Fembed[/COLOR]'
 
         if servidor == 'zplayer':
             player = 'https://player.inkapelis.in/'

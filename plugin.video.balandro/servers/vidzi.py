@@ -13,14 +13,14 @@ def get_video_url(page_url, url_referer=''):
         page_url = page_url.replace("http://vidzi.tv/", "http://vidzi.tv/embed-") + ".html"
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
+
     media_urls = scrapertools.find_multiple_matches(data, 'file\s*:\s*"([^"]+)"')
 
     if not media_urls:
         data = scrapertools.find_single_match(data, "<script type='text/javascript'>(eval\(function\(p,a,c,k,e,d.*?)</script>")
         if not data: return video_urls
+
         data = jsunpack.unpack(data)
-        # ~ logger.debug(data)
         media_urls = scrapertools.find_multiple_matches(data, 'file\s*:\s*"([^"]+)"')
 
     subtitle = ''
@@ -29,7 +29,6 @@ def get_video_url(page_url, url_referer=''):
             subtitle = 'http://vidzi.tv' + media_url
 
     for media_url in media_urls:
-        # ~ logger.debug(media_url)
         if not media_url.endswith('.vtt') and not media_url.endswith('.srt'):
             ext = scrapertools.get_filename_from_url(media_url)[-4:]
             video_urls.append([ext, media_url, 0, subtitle])

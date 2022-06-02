@@ -7,12 +7,12 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, jsontools, tmdb
 
 
-host = 'https://kindor.me/'
+host = 'https://kindor.vip/'
 
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://kindor.io/'] 
+    ant_hosts = ['https://kindor.io/', 'https://kindor.me/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

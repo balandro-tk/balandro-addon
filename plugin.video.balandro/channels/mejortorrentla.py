@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import re
 
 from platformcode import config, logger, platformtools
@@ -10,12 +9,13 @@ from core import httptools, scrapertools, servertools, tmdb
 from lib import decrypters
 
 
-host = 'https://www10.mejortorrent.ma/'
+host = 'https://ww22.mejortorrent.ma/'
 
 
 def do_downloadpage(url, post=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://mejortorrent.la/', 'https://mejortorrent.si/']
+    ant_hosts = ['https://mejortorrent.la/', 'https://mejortorrent.si/',
+                 'https://www10.mejortorrent.ma/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

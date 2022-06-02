@@ -250,7 +250,12 @@ def play(item):
 
     url = item.url
 
-    if '/?trdownload=' in url: url = httptools.downloadpage(url, follow_redirects=False).headers['location']
+    if '/?trdownload=' in url:
+        try:
+           url = httptools.downloadpage(url, follow_redirects=False).headers['location']
+        except:
+           url = ''
+
     else:
         data = httptools.downloadpage(url).data
 

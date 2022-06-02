@@ -119,6 +119,12 @@ def play(item):
         itemlist.append(item.clone( url = url, server = 'torrent' ))
 
     elif url.endswith(".torrent"):
+        data = do_downloadpage(item.url)
+
+        if data:
+            if '<h1>Not Found</h1>' in str(data) or '<!DOCTYPE html>' in str(data) or '<!DOCTYPE>' in str(data):
+               return 'Archivo [COLOR red]Inexistente[/COLOR]'
+
         itemlist.append(item.clone( url = url, server = 'torrent' ))
 
     else:

@@ -324,6 +324,11 @@ def play(item):
             elif 'hideload' in url: url = unhideload(url)
 
     if url:
+        if '123pelis' in url:
+            data = do_downloadpage(url)
+
+            url = scrapertools.find_single_match(data, '"url": "(.*?)"')
+
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
             return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
 
@@ -415,8 +420,7 @@ def list_search(item):
         thumb = scrapertools.find_single_match(match, ' src="(.*?)"')
 
         year = scrapertools.find_single_match(match, '</h3><span>(.*?)</span>')
-        if not year:
-            year = '-'
+        if not year: year = '-'
 
         plot = scrapertools.htmlclean(scrapertools.find_single_match(match, '<p>(.*?)</p>'))
 

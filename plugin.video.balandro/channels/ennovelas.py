@@ -9,7 +9,7 @@ from core import httptools, scrapertools, servertools, tmdb
 host = 'https://www.ennovelas.com/'
 
 
-perpage = 30
+perpage = 22
 
 
 def do_downloadpage(url, post=None, headers=None):
@@ -27,7 +27,7 @@ def mainlist_series(item):
 
     itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
-    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'novelas' ))
+    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + '?op=categories_all' ))
 
     itemlist.append(item.clone( title = 'Nuevos episodios', action = 'last_epis', url = host + 'just_added.html' ))
 

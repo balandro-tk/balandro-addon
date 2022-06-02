@@ -13,5 +13,5 @@
 
   "clusters": ["torrents", "classic", "news", "rankings", "qualityes", "years", "lasts", "kids", "docs"],
 
-  "notes": "Canal con enlaces Torrent exclusivamente. Películas y Series, por géneros, calidad y año. Tambien documentales."
+  "notes": "Canal con enlaces Torrent exclusivamente. Películas y Series, por géneros, calidad y año. También documentales."
 }

@@ -43,5 +43,8 @@ def hunter(h, n, t, e):
     return r
 
 def decode(source):
-    payload, n, t, e = re.search(argsregex, source, re.DOTALL).groups()
-    return hunter(payload, n, int(t), int(e))
+    try:
+       payload, n, t, e = re.search(argsregex, source, re.DOTALL).groups()
+       return hunter(payload, n, int(t), int(e))
+    except:
+       return source

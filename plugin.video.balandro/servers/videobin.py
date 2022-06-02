@@ -9,7 +9,6 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, 'sources\s*:\s*\[(.*?)\]')
     matches = scrapertools.find_multiple_matches(bloque, '(http.*?)"')

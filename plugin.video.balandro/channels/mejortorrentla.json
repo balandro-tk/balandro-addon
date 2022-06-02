@@ -11,7 +11,7 @@
   "categories": ["torrent", "movie", "tvshow"],
   "language": ["cast", "last", "vose"],
 
-  "clusters": ["torrents", "qualityes", "languages", "years", "kids", "docs", "vos"],
+  "clusters": ["inestable", "torrents", "qualityes", "languages", "years", "kids", "docs", "vos"],
 
-  "notes": "Películas y Series con enlaces torrent exclusivamente, por géneros, calidad, idioma y año."
+  "notes": "Canal con enlaces Torrent exclusivamente. Películas por géneros, calidad, idioma y año. Tambien Series."
 }

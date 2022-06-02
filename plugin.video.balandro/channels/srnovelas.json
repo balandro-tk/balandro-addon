@@ -3,15 +3,15 @@
   "name": "SrNovelas",
   "thumbnail": "srnovelas.png",
 
-  "active": false,
+  "active": true,
 
   "searchable": true,
   "search_types": ["tvshow"],
 
   "categories": ["tvshow"],
-  "language": ["cast", "lat", "vose"],
+  "language": ["cast", "lat"],
 
-  "clusters": ["temporary", "suggested", "lasts", "producers", "vos", "tales"],
+  "clusters": ["tales"],
 
-  "notes": "Series por Géneros."
+  "notes": "Web dedicada exclusivamente en Novelas."
 }

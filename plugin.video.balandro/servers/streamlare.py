@@ -8,7 +8,7 @@ def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
 
-    id = scrapertools.find_single_match(page_url,'/e/(\w+)')
+    id = scrapertools.find_single_match(page_url, '/e/(\w+)')
 
     post = {"id": id}
 
@@ -16,7 +16,12 @@ def get_video_url(page_url, url_referer=''):
 
     jdata = jsontools.load(data)
 
-    media_url = jdata["result"]["file"]
-    video_urls.append(["m3u", media_url])
+    try:
+        media_url = jdata["result"]["file"]
+    except:
+        media_url = scrapertools.find_single_match(str(jdata), ".*?'file': '(.*?)'")
+
+    if media_url:
+        video_urls.append(["m3u", media_url])
 
     return video_urls

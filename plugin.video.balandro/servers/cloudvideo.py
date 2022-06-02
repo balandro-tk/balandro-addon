@@ -19,8 +19,7 @@ def get_video_url(page_url, url_referer=''):
         return 'El archivo no existe o ha sido borrado'
 
     data = resp.data
-    # ~ logger.debug(data)
-    
+
     video_urls = extraer_videos(data)
 
     if len(video_urls) == 0:
@@ -29,7 +28,6 @@ def get_video_url(page_url, url_referer=''):
         if enc_data:
             try:
                 data = jsunpack.unpack(enc_data)
-                # ~ logger.debug(data)
                 video_urls = extraer_videos(data)
             except:
                 pass
@@ -57,5 +55,5 @@ def extraer_videos(data):
         for videourl in matches:
             extension = scrapertools.get_filename_from_url(videourl)[-4:]
             video_urls.append([extension, videourl])
-        
+
     return video_urls

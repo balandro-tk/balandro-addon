@@ -174,7 +174,18 @@ def configurar_proxies_canal(canal, url):
 
     if not proxies_iniciales:
         proxies = config.get_setting('proxies', canal, default='').strip()
-        if proxies: return True
+
+        if proxies:
+            if config.get_setting('memorize_channels_proxies', default=True):
+                channels_proxies_memorized = config.get_setting('channels_proxies_memorized', default='')
+
+                el_memorizado = "'" + canal + "'"
+
+                if not el_memorizado in str(channels_proxies_memorized):
+                    channels_proxies_memorized = channels_proxies_memorized + ', ' + el_memorizado
+                    config.set_setting('channels_proxies_memorized', channels_proxies_memorized)
+
+        return True
 
 
     while True:

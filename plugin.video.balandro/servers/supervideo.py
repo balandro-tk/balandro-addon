@@ -28,8 +28,9 @@ def get_video_url_embed(page_url, url_referer=''):
         page_url = page_url.replace('supervideo.tv/','supervideo.tv/e/')
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
-    if '<title>404 Not Found</title>' in data: return 'El vídeo ya no está disponible'
+
+    if '<title>404 Not Found</title>' in data:
+        return 'El vídeo ya no está disponible'
 
     packed = scrapertools.find_multiple_matches(data, "(?s)eval(.*?)\s*</script>")
     for pack in packed:
@@ -37,8 +38,8 @@ def get_video_url_embed(page_url, url_referer=''):
             data = jsunpack.unpack(pack)
         except:
             data = ''
+
         if 'sources:[' in data: break
-    # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, 'sources:\s*\[(.*?)\]')
 
@@ -50,10 +51,11 @@ def get_video_url_embed(page_url, url_referer=''):
         if not lbl: lbl = url[-4:]
         video_urls.append([lbl, url+'|Referer=https://supervideo.tv/'])
 
-    try: # calidad increscendo y m3u8 al principio
+    try:
         video_urls = sorted(video_urls, key=lambda x: 0 if x[0] == 'm3u8' else int(x[0].replace('p','')) )
     except:
         pass
+
     return video_urls
 
 
@@ -65,7 +67,7 @@ def get_video_url_download(page_url, url_referer=''):
         page_url = page_url.replace('supervideo.tv/e/','supervideo.tv/')
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
+
     if '<title>404 Not Found</title>' in data: return 'El vídeo ya no está disponible'
 
     if 'download_video(' not in data:
@@ -77,25 +79,24 @@ def get_video_url_download(page_url, url_referer=''):
             'referer': scrapertools.find_single_match(data, '<input type="hidden" name="referer" value="([^"]+)'),
             'hash': scrapertools.find_single_match(data, '<input type="hidden" name="hash" value="([^"]+)'),
         }
+
         if post['id'] and post['hash']:
             data = httptools.downloadpage(page_url, post=post).data
-            # ~ logger.debug(data)
 
     matches = scrapertools.find_multiple_matches(data, "download_video\('([^']+)','([^']+)','([^']+)'\)\">([^<]+)</a></td><td>([^<]+)")
     if not matches:
         matches = scrapertools.find_multiple_matches(data, "download_video\('([^']+)','([^']+)','([^']+)'\)\">.*? class=\"downloadbox__quality\">([^<]+)</b><span class=\"downloadbox__size\">([^<]+)")
+
     for a, b, c, titulo, desc in matches:
         if b == 'l' and len(video_urls) > 1: continue # descartar low si ya hay original y normal
         
         data = httptools.downloadpage('https://supervideo.tv/dl?op=download_orig&id=%s&mode=%s&hash=%s' % (a, b, c)).data
-        # ~ logger.debug(data)
 
         url = scrapertools.find_single_match(data, ' href="([^"]+)">Direct Download Link</a>')
         if not url: url = scrapertools.find_single_match(data, 'btn_direct-download" href="([^"]+)')
         if not url:
             post = {'op': 'download_orig', 'id': a, 'mode': b, 'hash': c}
             data = httptools.downloadpage('https://supervideo.tv/dl', post=post).data
-            # ~ logger.debug(data)
             
             url = scrapertools.find_single_match(data, '<a href="([^"]+)">Direct Download Link</a>')
             if not url: url = scrapertools.find_single_match(data, 'btn_direct-download" href="([^"]+)')
@@ -103,5 +104,5 @@ def get_video_url_download(page_url, url_referer=''):
         if url:
             video_urls.append(["%s - %s" % (titulo.replace(' quality', '').strip(), desc.strip()), url])
 
-    video_urls.reverse() # calidad increscendo
+    video_urls.reverse()
     return video_urls

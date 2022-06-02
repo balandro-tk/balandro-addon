@@ -2,10 +2,8 @@
 
 import sys
 
-if sys.version_info[0] < 3:
-    PY3 = False
-else:
-    PY3 = True
+if sys.version_info[0] < 3: PY3 = False
+else: PY3 = True
 
 
 import re
@@ -17,9 +15,12 @@ from core import httptools, scrapertools, servertools, tmdb
 
 host = 'https://seriespapaya.club/'
 
+
+# ~ 23/5/2022 Solo funciona TODO en k19 el resto hay enlaces q si y otros que no
+
 notification_d_ok = config.get_setting('notification_d_ok', default=True)
 
-color_alert = config.get_setting('notification_alert_color', default='red')
+color_adver = config.get_setting('notification_adver_color', default='violet')
 
 
 def do_downloadpage(url, post=None, headers=None):
@@ -268,7 +269,7 @@ def temporadas(item):
             if notification_d_ok:
                 platformtools.dialog_ok(config.__addon_name, '[COLOR yellow]Probable incompatibilidad con la versión de su Media Center.[/COLOR]', 'El canal no da respuesta a las temporadas en esta serie.')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Probable Incompatibilidad MediaCenter[/COLOR][/B]' % color_alert)
+                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Posible MediaCenter Incompatibile[/COLOR][/B]' % color_adver)
 
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
@@ -318,7 +319,7 @@ def episodios(item):
             if notification_d_ok:
                 platformtools.dialog_ok(config.__addon_name, '[COLOR yellow]Probable incompatibilidad con la versión de su Media Center.[/COLOR]', 'El canal no da respuesta a los episodios de la temporada dn esta serie.')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Probable Incompatibilidad MediaCenter[/COLOR][/B]' % color_alert)
+                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Posible MediaCenter Incompatibile[/COLOR][/B]' % color_adver)
 
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
@@ -377,7 +378,7 @@ def findvideos(item):
             if notification_d_ok:
                 platformtools.dialog_ok(config.__addon_name, '[COLOR yellow]Probable incompatibilidad con la versión de su Media Center.[/COLOR]', 'El canal no da respuesta a los enlaces de reproducción.')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Probable Incompatibilidad MediaCenter[/COLOR][/B]' % color_alert)
+                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Posible MediaCenter Incompatibile[/COLOR][/B]' % color_adver)
 
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 

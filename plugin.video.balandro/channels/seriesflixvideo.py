@@ -279,7 +279,6 @@ def play(item):
     logger.info()
     itemlist = []
 
-    item.url = item.url.replace('&#038;', '&')
     item.url = item.url.replace('&amp;#038;', '&').replace('&#038;', '&').replace('&amp;', '&')
 
     data = do_downloadpage(item.url)

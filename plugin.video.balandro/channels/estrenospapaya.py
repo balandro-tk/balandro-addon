@@ -356,7 +356,9 @@ def play(item):
 
 
 def search_post(item, texto):
+    logger.info()
     itemlist = []
+
     data = do_downloadpage(host + 'busqueda/', post = 'searchquery=%s' % texto)
 
     patron = 'onclick="location.href=\'([^\']+)\''

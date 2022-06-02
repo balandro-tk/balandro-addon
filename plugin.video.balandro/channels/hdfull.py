@@ -49,7 +49,7 @@ class login_dialog(xbmcgui.WindowDialog):
 
         if avis:
             self.login_result = False
-            platformtools.dialog_ok("Recomendación Balandro - HdFull", '[COLOR yellow]Sugerimos crear una nueva cuenta para registrarse en la web, no deberiais indicar ninguna de vuestras cuentas personales.[/COLOR]', 'Para más detalles al respecto, acceda a la Ayuda, apartado Uso, Información dominios que requieren registrase.')
+            platformtools.dialog_ok("Recomendación Balandro - HdFull", '[COLOR yellow]Sugerimos crear una nueva cuenta para registrarse en la web, no deberiais indicar ninguna de vuestras cuentas personales.[/COLOR]', 'Para más detalles al respecto, acceda a la Ayuda, apartado Canales, Información dominios que requieren registrarse.')
 
         self.background = xbmcgui.ControlImage(250, 150, 800, 355, filename=config.get_thumb('ContentPanel'))
         self.addControl(self.background)
@@ -219,7 +219,7 @@ def logout(item):
 
 def item_configurar_dominio(item):
     plot = 'Este canal tiene varios posibles dominios. Si uno no te funciona puedes probar con los otros antes de intentarlo con proxies.'
-    return item.clone( title = 'Configurar dominio a usar ... [COLOR plum](si no hay resultados)[/COLOR]', action = 'configurar_dominio', folder=False, plot=plot, text_color='yellowgreen' )
+    return item.clone( title = 'Configurar dominio a usar ...', action = 'configurar_dominio', folder=False, plot=plot, text_color='yellowgreen' )
 
 def configurar_dominio(item):
     dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
@@ -253,7 +253,7 @@ def item_configurar_proxies(item):
 
     plot = 'Es posible que para poder utilizar este canal necesites configurar algún proxy, ya que no es accesible desde algunos países/operadoras.'
     plot += '[CR]Si desde un navegador web no te funciona el sitio ' + dominio + ' necesitarás un proxy.'
-    return item.clone( title = 'Configurar proxies a usar ... [COLOR plum](si no hay resultados)[/COLOR]', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
+    return item.clone( title = 'Configurar proxies a usar ...', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
 
 def configurar_proxies(item):
     dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
@@ -294,31 +294,52 @@ def do_downloadpage(url, post=None, referer=None):
     return data
 
 
+def acciones(item):
+    logger.info()
+    itemlist = []
+
+    username = config.get_setting('hdfull_username', 'hdfull', default='')
+
+    if username:
+        domain_memo = config.get_setting('dominio', 'hdfull', default='')
+
+        if domain_memo:
+            itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test web del canal [COLOR yellow][B]' + domain_memo + '[/B][/COLOR]',
+                                        from_channel='hdfull', folder=False, text_color='chartreuse' ))
+
+        itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='Comprobar último dominio vigente',
+                              desde_el_canal = True, thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+
+        itemlist.append(item_configurar_dominio(item))
+        itemlist.append(item_configurar_proxies(item))
+
+    if not config.get_setting('hdfull_login', 'hdfull', default=False):
+        if username:
+            itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
+        else:
+            itemlist.append(item.clone( title = '[COLOR crimson][B]Credenciales cuenta[/B][/COLOR]', action = 'login' ))
+
+            itemlist.append(Item( channel='helper', action='show_help_register', title='[B]Información para registrarse[/B]', thumbnail=config.get_thumb('help'), text_color='green' ))
+
+    if config.get_setting('hdfull_login', 'hdfull', default=False):
+        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR]', action = 'logout' ))
+
+    platformtools.itemlist_refresh()
+
+    return itemlist
+
+
 def mainlist(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='Comprobar último dominio vigente',
-                          desde_el_canal = True, thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('hdfull_login', 'hdfull', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
-
-    if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
-
-    itemlist.append(item_configurar_dominio(item))
-    itemlist.append(item_configurar_proxies(item))
-
-    if not config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
-
-        itemlist.append(item.clone( title = '[COLOR teal]Menú usuario[/COLOR]', action = 'mainlist_user', search_type = 'all' ))
+        itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'all' ))
 
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 
@@ -327,14 +348,14 @@ def mainlist(item):
         itemlist.append(item.clone( title = 'Películas', action = 'mainlist_pelis', text_color = 'deepskyblue' ))
         itemlist.append(item.clone( title = 'Series', action = 'mainlist_series', text_color = 'hotpink' ))
 
-        itemlist.append(item.clone( title = 'Búsqueda de personas:', action = '', folder=False, text_color='plum' ))
+        itemlist.append(item.clone( title = 'Búsqueda de personas:', action = '', folder=False, text_color='goldenrod' ))
 
         itemlist.append(item.clone( title = ' - Buscar intérprete ...', action = 'search', group = 'actor', search_type = 'person',
                                     plot = 'Debe indicarse el nombre y apellido/s del intérprete (lo más exacto posible).'))
         itemlist.append(item.clone( title = ' - Buscar dirección ...', action = 'search', group = 'director', search_type = 'person',
                                     plot = 'Debe indicarse el nombre y apellido/s del director (lo más exacto posible).'))
 
-        itemlist.append(item.clone( title = 'Búsqueda en listas:', action = '', folder=False, text_color='plum' ))
+        itemlist.append(item.clone( title = 'Búsqueda en listas:', action = '', folder=False, text_color='goldenrod' ))
         itemlist.append(item.clone( title = ' - Buscar lista ...', action = 'search', target_action = 'top', search_type = 'all',
                                     plot = 'Debe indicarse el título de la lista (ó parte del mismo).'))
 
@@ -345,27 +366,17 @@ def mainlist_pelis(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='Comprobar último dominio vigente',
-                          desde_el_canal = True, thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('hdfull_login', 'hdfull', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
-
-    if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
-
-    itemlist.append(item_configurar_dominio(item))
-    itemlist.append(item_configurar_proxies(item))
-
-    if not config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
+        dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
 
-        itemlist.append(item.clone( title = '[COLOR teal]Menú usuario[/COLOR]', action = 'mainlist_user', search_type = 'movie' ))
+        if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
+
+        itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'movie' ))
 
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 
@@ -389,27 +400,17 @@ def mainlist_series(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='Comprobar último dominio vigente',
-                          desde_el_canal = True, thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('hdfull_login', 'hdfull', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
-
-    if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
-
-    itemlist.append(item_configurar_dominio(item))
-    itemlist.append(item_configurar_proxies(item))
-
-    if not config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('hdfull_login', 'hdfull', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
+        dominio = config.get_setting('dominio', 'hdfull', default=dominios[0])
 
-        itemlist.append(item.clone( title = '[COLOR teal]Menú usuario[/COLOR]', action = 'mainlist_user', search_type = 'tvshow' ))
+        if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
+
+        itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'tvshow' ))
 
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 

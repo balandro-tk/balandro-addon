@@ -14,5 +14,5 @@ def get_video_url(page_url, url_referer=''):
     c = Client(url=page_url, is_playing_fnc=platformtools.is_playing)
     f = c.get_file()
     if f: video_urls.append(['m3u8', f])
-    
+
     return video_urls

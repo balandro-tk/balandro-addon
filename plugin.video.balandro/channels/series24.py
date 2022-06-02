@@ -6,12 +6,12 @@ from platformcode import config, logger, platformtools
 from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
-host = 'https://ww3.series24.cc/'
+host = 'https://ww2.series24.cc/'
 
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://www.series24.cc/', 'https://www1.series24.cc/']
+    ant_hosts = ['https://www.series24.cc/', 'https://www1.series24.cc/', 'https://ww3.series24.cc/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

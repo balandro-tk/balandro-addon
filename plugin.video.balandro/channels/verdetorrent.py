@@ -11,6 +11,8 @@ from platformcode import logger, platformtools
 from core.item import Item
 from core import httptools, scrapertools, tmdb
 
+from lib import decrypters
+
 
 host = 'https://verdetorrent.com/'
 
@@ -366,6 +368,12 @@ def findvideos(item):
 def play(item):
     logger.info()
     itemlist = []
+
+    if not item.url.endswith('.torrent'):
+        host_torrent = host[:-1]
+        url_base64 = decrypters.decode_url_base64(item.url, host_torrent)
+
+        if url_base64.endswith('.torrent'): item.url = url_base64
 
     if item.url.endswith('.torrent'):
         from platformcode import config

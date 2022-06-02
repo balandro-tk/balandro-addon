@@ -45,6 +45,11 @@ def get_video_url(page_url, url_referer=''):
     vid = scrapertools.find_single_match(page_url, "(?:uptobox.com/|uptostream.com/)(?:iframe/|)([A-z0-9]+)")
     if not vid: return video_urls
 
+    data = httptools.downloadpage(page_url).data
+
+    if "Unfortunately, the file you want is not available." in data or "Unfortunately, the video you want to see is not available" in data or "This stream doesn" in data or "Page not found" in data or "Archivo no encontrado" in data:
+        return "El archivo no existe o ha sido borrado"
+
     if xbmc.getCondVisibility('System.HasAddon("script.module.resolveurl")'):
         try:
             import_libs('script.module.resolveurl')

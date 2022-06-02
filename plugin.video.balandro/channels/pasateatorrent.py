@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+PY3 = False
+if sys.version_info[0] >= 3: PY3 = True
+
+
 import re
 
 from platformcode import logger, config
@@ -217,19 +223,25 @@ def play(item):
     logger.info()
     itemlist = []
 
-    data = do_downloadpage(item.url)
+    if PY3:
+        from core import requeststools
+        data = requeststools.read(item.url, '')
+    else:
+        data = do_downloadpage(item.url)
 
     if data:
-        if '<meta name="captcha-bypass" id="captcha-bypass"' in data:
+        if '<meta name="captcha-bypass" id="captcha-bypass"' in str(data):
             return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
 
-        if not '<!DOCTYPE html>' in str(data):
-            import os
+        if '<h1>Not Found</h1>' in str(data) or '<!DOCTYPE html>' in str(data) or '<!DOCTYPE>' in str(data):
+            return 'Archivo [COLOR red]Inexistente[/COLOR]'
 
-            file_local = os.path.join(config.get_data_path(), "temp.torrent")
-            with open(file_local, 'wb') as f: f.write(data); f.close()
+        import os
 
-            itemlist.append(item.clone( url = file_local, server = 'torrent' ))
+        file_local = os.path.join(config.get_data_path(), "temp.torrent")
+        with open(file_local, 'wb') as f: f.write(data); f.close()
+
+        itemlist.append(item.clone( url = file_local, server = 'torrent' ))
 
     return itemlist
 

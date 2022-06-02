@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+if sys.version_info[0] < 3: PY3 = False
+else: PY3 = True
+
+
 import os, re, xbmcgui
 
 from platformcode import config, logger, platformtools
@@ -7,12 +13,19 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb, jsontools
 
 
-host = 'https://playdede.com/'
+host = 'https://playdede.nu/'
 
 
 elepage = 40
 
 perpage = 20
+
+
+# ~ 31/5/2022 Solo funciona TODO en k19 el resto da error bad gateway
+
+notification_d_ok = config.get_setting('notification_d_ok', default=True)
+
+color_adver = config.get_setting('notification_adver_color', default='violet')
 
 
 class login_dialog(xbmcgui.WindowDialog):
@@ -24,7 +37,7 @@ class login_dialog(xbmcgui.WindowDialog):
 
         if avis:
             self.login_result = False
-            platformtools.dialog_ok("Recomendación Balandro - PlayDede", '[COLOR yellow]Sugerimos crear una nueva cuenta para registrarse en la web, no deberiais indicar ninguna de vuestras cuentas personales.[/COLOR]', 'Para más detalles al respecto, acceda a la Ayuda, apartado Uso, Información dominios que requieren registrase.')
+            platformtools.dialog_ok("Recomendación Balandro - PlayDede", '[COLOR yellow]Sugerimos crear una nueva cuenta para registrarse en la web, no deberiais indicar ninguna de vuestras cuentas personales.[/COLOR]', 'Para más detalles al respecto, acceda a la Ayuda, apartado Canales, Información dominios que requieren registrarse.')
 
         self.background = xbmcgui.ControlImage(250, 150, 800, 355, filename=config.get_thumb('ContentPanel'))
         self.addControl(self.background)
@@ -84,6 +97,13 @@ def do_make_login_logout(url, post=None, headers=None):
 
     # ~ data = httptools.downloadpage(url, post=post, headers=headers, add_referer=add_referer, raise_weberror=False).data
     data = httptools.downloadpage_proxy('playdede', url, post=post, headers=headers, add_referer=add_referer, raise_weberror=False).data
+
+    if not PY3:
+        if '<title>Please Wait... | Cloudflare</title>' in data:
+            if notification_d_ok:
+                platformtools.dialog_ok(config.__addon_name, '[COLOR yellow]Probable incompatibilidad con la versión de su Media Center.[/COLOR]', 'El canal no da respuesta adecuada.')
+            else:
+                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Posible MediaCenter Incompatibile[/COLOR][/B]' % color_adver)
 
     return data
 
@@ -206,7 +226,7 @@ def logout(item):
 def item_configurar_proxies(item):
     plot = 'Es posible que para poder utilizar este canal necesites configurar algún proxy, ya que no es accesible desde algunos países/operadoras.'
     plot += '[CR]Si desde un navegador web no te funciona el sitio ' + host + ' necesitarás un proxy.'
-    return item.clone( title = 'Configurar proxies a usar ... [COLOR plum](si no hay resultados)[/COLOR]', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
+    return item.clone( title = 'Configurar proxies a usar ...', action = 'configurar_proxies', folder=False, plot=plot, text_color='red' )
 
 def configurar_proxies(item):
     from core import proxytools
@@ -216,6 +236,12 @@ def configurar_proxies(item):
 def do_downloadpage(url, post=None, referer=None):
     # ~ por si viene de enlaces guardados posteriores
     if url.startswith('/'): url = host + url[1:] # ~ solo v. 2.0.0
+
+    ant_hosts = ['https://playdede.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
 
     headers = {}
 
@@ -235,25 +261,51 @@ def do_downloadpage(url, post=None, referer=None):
         result = login('')
         if result == True: return do_downloadpage(url, post=post, referer=referer)
 
+    if not PY3:
+        if '<title>Please Wait... | Cloudflare</title>' in data:
+            if notification_d_ok:
+                platformtools.dialog_ok(config.__addon_name, '[COLOR yellow]Probable incompatibilidad con la versión de su Media Center.[/COLOR]', 'El canal no da respuesta adecuada.')
+            else:
+                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Posible MediaCenter Incompatibile[/COLOR][/B]' % color_adver)
+
     return data
+
+
+def acciones(item):
+    logger.info()
+    itemlist = []
+
+    username = config.get_setting('playdede_username', 'playdede', default='')
+
+    if username:
+        itemlist.append(item_configurar_proxies(item))
+
+    if not config.get_setting('playdede_login', 'playdede', default=False):
+        if username:
+            itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
+        else:
+            itemlist.append(item.clone( title = '[COLOR crimson][B]Credenciales cuenta[/B][/COLOR]', action = 'login' ))
+
+            itemlist.append(Item( channel='helper', action='show_help_register', title='[B]Información para registrarse[/B]', thumbnail=config.get_thumb('help'), text_color='green' ))
+
+    if config.get_setting('playdede_login', 'playdede', default=False):
+        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR]', action = 'logout' ))
+
+    platformtools.itemlist_refresh()
+
+    return itemlist
 
 
 def mainlist(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(item_configurar_proxies(item))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('playdede_login', 'playdede', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    if not config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
-
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar ...', action = 'search', search_type = 'all', text_color = 'yellow' ))
@@ -269,18 +321,12 @@ def mainlist_pelis(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(item_configurar_proxies(item))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('playdede_login', 'playdede', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    if not config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
-
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
@@ -302,18 +348,12 @@ def mainlist_series(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(item_configurar_proxies(item))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('playdede_login', 'playdede', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    if not config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
-
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
@@ -339,18 +379,12 @@ def mainlist_animes(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(item_configurar_proxies(item))
+    titulo = '[B]Acciones[/B]'
+    if config.get_setting('playdede_login', 'playdede', default=False): titulo += ' [COLOR plum](si no hay resultados)[/COLOR]'
 
-    if not config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Iniciar sesión[/COLOR]', action = 'login' ))
-
-        itemlist.append(Item( channel='helper', action='show_help_register', title='Información para registrase', thumbnail=config.get_thumb('help'), text_color='green' ))
-
-        platformtools.itemlist_refresh()
+    itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = '[COLOR chartreuse]Cerrar sesión[/COLOR] [COLOR plum](si no hay resultados)[/COLOR]', action = 'logout' ))
-
         itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar anime ...', action = 'search', search_type = 'tvshow', text_color = 'springgreen' ))
@@ -421,7 +455,7 @@ def generos(item):
     data = do_downloadpage(url_generos)
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
-    matches = re.compile('<li class="cfilter " data-type="genre" data-value="([^"]+)"><img src="[^"]+"><b>([^<]+)').findall(data)
+    matches = re.compile('<li class="cfilter.*?data-type="genre".*?data-value="(.*?)">.*?<b>(.*?)</b>').findall(data)
 
     for genre, title in matches:
         genre = '?genre=' + genre

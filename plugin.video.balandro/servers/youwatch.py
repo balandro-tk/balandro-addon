@@ -8,7 +8,7 @@ def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
+
     if "File Not Found" in data:
         return 'El archivo no existe o ha sido borrado'
 
@@ -16,7 +16,7 @@ def get_video_url(page_url, url_referer=''):
     if not url_redirect: return []
 
     data = httptools.downloadpage(url_redirect).data
-    # ~ logger.debug(data)
+
     if "We're sorry, this video is no longer available" in data:
         return 'El archivo no existe o ha sido borrado'
 

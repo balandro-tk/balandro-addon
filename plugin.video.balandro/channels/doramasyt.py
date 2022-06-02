@@ -173,17 +173,21 @@ def list_all(item):
         title = re.sub(r'Audio|Latino|Castellano|\((.*?)\)', '', title)
         title = re.sub(r'\s:', ':', title)
 
-        tipo = 'movie' if '<button class="btnone">Pelicula</button>' in match else 'tvshow'
+        if '<button class="btnone">Pelicula</button>' in match:
+            tipo = 'movie' if '<button class="btnone">Pelicula</button>' in match else 'tvshow'
+        else: tipo = item.search_type
 
         sufijo = '' if item.search_type != 'all' else tipo
 
         if tipo == 'movie':
-            if item.search_type == 'tvshow': continue
+            if not item.search_type == 'all':
+                if item.search_type == 'tvshow': continue
 
-            itemlist.append(item.clone( action='findvideos', url=url, title=title, thumbnail=thumb, languages = lang, fmt_sufijo=sufijo,
-                                        contentType='movie', contentTitle=title, infoLabels={'year': year} ))
+            itemlist.append(item.clone( action='episodios', url=url, title=title, thumbnail=thumb, languages = lang, fmt_sufijo=sufijo,
+                                        contentType='movie', contentTitle=title, contentSeason = 1, infoLabels={'year': year} ))
         else:
-            if item.search_type == 'movie': continue
+            if not item.search_type == 'all':
+                if item.search_type == 'movie': continue
 
             itemlist.append(item.clone( action='temporadas', url=url, title=title, thumbnail=thumb, languages = lang, fmt_sufijo=sufijo, 
                                         contentType = 'tvshow', contentSerieName = title, infoLabels={'year': year} ))
@@ -275,7 +279,10 @@ def episodios(item):
 
         if not epis: continue
 
-        title = str(item.contentSeason) + 'x' + str(epis) + ' ' + item.contentSerieName
+        if item.contentSerieName: titulo = item.contentSerieName
+        else: titulo = item.contentTitle
+
+        title = str(item.contentSeason) + 'x' + str(epis) + ' ' + titulo
 
         itemlist.append(item.clone( action='findvideos', url = url, title = title, thumbnail=thumb,
                                     contentType = 'episode', contentSeason = item.contentSeason, contentEpisodeNumber=epis ))
@@ -333,6 +340,7 @@ def findvideos(item):
             if srv == '1fichier': continue
             elif srv == 'solidfiles': continue
             elif srv == 'mediafire': continue
+            elif srv == 'fireload': continue
 
             elif srv == 'ok': srv = 'mega'
 
@@ -366,7 +374,7 @@ def play(item):
     elif '?url=' in item.url:
         url = item.url.replace(host + 'reproductor?url=', '')
         if '//videa.' in url:
-            return 'Servidor [COLOR tan]NO Soportado[/COLOR]'
+            return 'Servidor [COLOR tan]Videa[/COLOR] NO Soportado'
         elif 'solidfiles' in url:
             return 'Servidor [COLOR tan]Solidfiles[/COLOR] NO Soportado'
 

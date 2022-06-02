@@ -7,10 +7,9 @@ from platformcode import logger
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
-    
+
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
-    
+
     bloque = scrapertools.find_single_match(data, 'sources\s*:\s*\[(.*?)\]')
     matches = scrapertools.find_multiple_matches(bloque, '"(http.*?)"')
     for url in matches:

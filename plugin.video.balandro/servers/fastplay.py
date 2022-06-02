@@ -8,22 +8,19 @@ from lib import jsunpack
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
-    
+
     page_url = page_url.replace('fastplay.cc/', 'fastplay.to/')
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     if "Object not found" in data or "longer exists on our servers" in data:
         return 'El archivo no existe o ha sido borrado'
 
     if "p,a,c,k,e,d" in data:
         data = jsunpack.unpack(data).replace("\\", "")
-        # ~ logger.debug(data)
 
     videos = scrapertools.find_multiple_matches(data, 'file\s*:\s*"([^"]+)"\s*,\s*label\s*:\s*"([^"]+)')
 
-    # Detección de subtítulos
     subtitulo = scrapertools.find_single_match(data, 'tracks\s*:\s*\[{file:"(.*?)"')
     if "http" not in subtitulo and subtitulo != '':
         # ~ subtitulo = "http://fastplay.cc" + subtitulo

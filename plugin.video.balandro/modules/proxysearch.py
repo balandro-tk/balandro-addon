@@ -66,6 +66,9 @@ def proxysearch_all(item):
     cfg_excludes = 'proxysearch_excludes'
     channels_excludes = config.get_setting(cfg_excludes, default='')
 
+    channels_proxies_memorized = config.get_setting('channels_proxies_memorized', default='')
+    iniciales_channels_proxies_memorized = channels_proxies_memorized
+
     proceso_seleccionar = True
 
     filtros = {'searchable': True}
@@ -73,10 +76,10 @@ def proxysearch_all(item):
 
     if ch_list:
         if config.get_setting('memorize_channels_proxies', default=True):
-            channels_proxies_memorized = config.get_setting('channels_proxies_memorized', default='')
             if channels_proxies_memorized:
                 if not platformtools.dialog_yesno(config.__addon_name, '[COLOR cyan]¿ Desea SOLO buscar en los canales con proxies memorizados actualmente ?[/COLOR]', '[COLOR yellow]En el caso de NO contestar afirmativamente se Eliminaran los proxies memorizados en la actualidad de estos canales ?[/COLOR]'):
                     config.set_setting('channels_proxies_memorized', '')
+                    iniciales_channels_proxies_memorized = ''
                 else: proceso_seleccionar = False
 
         if proceso_seleccionar:
@@ -146,7 +149,7 @@ def proxysearch_all(item):
                    platformtools.dialog_ok(config.__addon_name, '[B][COLOR %s]Proxies eliminados[/B][/COLOR]' % color_infor)
 
                config.set_setting('channels_proxies_memorized', '')
-
+               iniciales_channels_proxies_memorized = ''
 
     if proceso_seleccionar:
         if not channels_excludes:
@@ -293,12 +296,12 @@ def proxysearch_all(item):
            else:
                if not 'all' in ch['search_types']: continue
 
-        proxysearch_channel(item, ch['id'], ch['name'])
+        proxysearch_channel(item, ch['id'], ch['name'], iniciales_channels_proxies_memorized)
 
     if config.get_setting('memorize_channels_proxies', default=True):
-       txt = 'Revise los canales Memorizados, porque podria ser que algún canal no los necesite ó viceversa. '
+       txt = 'Revise los canales Memorizados, porque podría ser que algún canal no los necesite ó viceversa. '
     else:
-       txt = 'Revise los canales, porque podria ser que algún canal no los necesite ó viceversa. '
+       txt = 'Revise los canales, porque podría ser que algún canal no los necesite ó viceversa. '
        if not item.extra:
            txt += 'Para ello bastará con entrar al canal y ver si se presentan listas en cualquiera de sus opciones, '
            txt += 'si procede deberá eliminar los proxies memorizados ó configurarlos de nuevo dentro del canal.'
@@ -339,7 +342,7 @@ def channels_excluded_list(ret, channels_ids, channels_excludes):
     return seleccionados
 
 
-def proxysearch_channel(item, channel_id, channel_name):
+def proxysearch_channel(item, channel_id, channel_name, iniciales_channels_proxies_memorized):
     logger.info()
 
     channels_proxies_memorized = config.get_setting('channels_proxies_memorized', default='')
@@ -347,7 +350,9 @@ def proxysearch_channel(item, channel_id, channel_name):
     if config.get_setting('memorize_channels_proxies', default=True):
         if channels_proxies_memorized:
             el_memorizado = "'" + channel_id + "'"
-            if not el_memorizado in str(channels_proxies_memorized): return
+
+            if iniciales_channels_proxies_memorized:
+                if not el_memorizado in str(channels_proxies_memorized): return
 
             cfg_proxies_channel = 'channel_' + channel_id + '_proxies'
 

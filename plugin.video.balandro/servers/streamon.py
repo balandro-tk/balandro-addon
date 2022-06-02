@@ -6,15 +6,28 @@ from core import httptools, scrapertools
 from platformcode import logger
 from lib import hunterdecode
 
+
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
 
-    data = httptools.downloadpage(page_url).data
+    resp = httptools.downloadpage(page_url)
+
+    if resp.code == 404:
+        return "El archivo no existe o ha sido borrado"
+    elif "We can't find the video" in resp.data:
+        return "El archivo no existe o ha sido borrado"
+
+    data = resp.data
+
     data_m = httptools.downloadpage("https://highload.to/assets/js/master.js").data
-    dec_m = hunterdecode.decode(data_m)
-    head_ch = scrapertools.find_single_match(data, '<head>(.*?)<\/head>')
-    decoded_m = hunterdecode.decode(head_ch)
+
+    try:
+       dec_m = hunterdecode.decode(data_m)
+       head_ch = scrapertools.find_single_match(data, '<head>(.*?)<\/head>')
+       decoded_m = hunterdecode.decode(head_ch)
+    except:
+       return video_urls
 
     var_res = scrapertools.find_single_match(dec_m, 'var\s*res\s*=\s*([^\.]+)')
     obf_link = scrapertools.find_single_match(decoded_m, '%s="([^"]+)"' % var_res)

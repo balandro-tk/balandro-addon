@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import re, base64
+
 from core import httptools, scrapertools
 from platformcode import logger
 from lib.aadecode import decode as aadecode
-import re, base64
 
 
 def get_video_url(page_url, url_referer=''):
@@ -23,8 +24,9 @@ def get_video_url(page_url, url_referer=''):
         if 'Video embed restricted for this domain site2.net' in resp.data:
             headers['Referer'] = headers['Referer'].replace('upvid.host/', 'site2.net/')
             resp = httptools.downloadpage(page_url, headers=headers)
+
         data = resp.data
-        # ~ logger.debug(data)
+
         if 'ﾟωﾟﾉ' in data:
             break
         else:

@@ -12,14 +12,13 @@ def get_video_url(page_url, url_referer=''):
     page_url = page_url.replace('http://', 'https://').replace('://www.', '://')
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     srcs = scrapertools.find_single_match(data, 'sources:\s*\[(.*?)\]')
     if not srcs:
         packed = scrapertools.find_single_match(data, "<script type=[\"']text/javascript[\"']>(eval.*?)</script>")
         if packed:
             unpacked = jsunpack.unpack(packed)
-            # ~ logger.debug(unpacked)
+
             srcs = scrapertools.find_single_match(unpacked, 'sources:\s*\[(.*?)\]')
 
     urls = scrapertools.find_multiple_matches(srcs, 'file:"([^"]+)')

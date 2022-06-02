@@ -89,6 +89,8 @@ def only_animes(item):
     if descartar_anime: return
 
     cabecera = 'Canales con contenido de Animes'
+    if item.exclusively_animes: cabecera = 'Canales con contenido Exclusivamente de Animes'
+
     filtros = {'clusters': 'anime'}
 
     opciones_channels = []
@@ -102,6 +104,9 @@ def only_animes(item):
 
     for ch in ch_list:
         info = ''
+
+        if item.exclusively_animes:
+            if not 'exclusivamente al anime' in ch['notes'].lower(): continue
 
         if ch['status'] == 1: info = info + '[B][COLOR %s][I] Preferido [/I][/B][/COLOR]' % color_list_prefe
         elif ch['status'] == -1: info = info + '[B][COLOR %s][I] Desactivado [/I][/B][/COLOR]' % color_list_inactive
@@ -156,6 +161,8 @@ def only_adults(item):
     if descartar_xxx: return
 
     cabecera = 'Canales con contenido para Adultos'
+    if item.exclusively_adults: cabecera = 'Canales con contenido Exclusivamente para Adultos'
+
     filtros = {'clusters': 'adults'}
 
     opciones_channels = []
@@ -169,6 +176,9 @@ def only_adults(item):
 
     for ch in ch_list:
         info = ''
+
+        if item.exclusively_adults:
+            if not '+18' in ch['notes']: continue
 
         if ch['status'] == 1: info = info + '[B][COLOR %s][I] Preferido [/I][/B][/COLOR]' % color_list_prefe
         elif ch['status'] == -1: info = info + '[B][COLOR %s][I] Desactivado [/I][/B][/COLOR]' % color_list_inactive
@@ -248,14 +258,17 @@ def with_proxies(item):
     for ch in ch_list:
         if not 'proxies' in ch['notes'].lower(): continue
 
-        if item.memo_proxies:
-            if channels_proxies_memorized:
-                el_memorizado = "'" + ch['id'] + "'"
-                if not el_memorizado in str(channels_proxies_memorized): continue
-
         cfg_proxies_channel = 'channel_' + ch['id'] + '_proxies'
         cfg_proxytools_max_channel = 'channel_' + ch['id'] + '_proxytools_max'
         cfg_proxytools_provider = 'channel_' + ch['id'] + '_proxytools_provider'
+
+        if item.memo_proxies:
+            if channels_proxies_memorized:
+                el_memorizado = "'" + ch['id'] + "'"
+                if not el_memorizado in str(channels_proxies_memorized):
+                    if not config.get_setting(cfg_proxies_channel, default=''): continue
+            else:
+                if not config.get_setting(cfg_proxies_channel, default=''): continue
 
         info = ''
 
@@ -467,7 +480,7 @@ def only_torrents(item):
     cabecera = 'Canales que pueden contener archivos Torrents'
     if item.exclusively_torrents: cabecera = 'Canales con enlaces Torrent exclusivamente'
 
-    filtros = {'categories': 'torrent' ,'searchable': True}
+    filtros = {'categories': 'torrent'}
 
     opciones_channels = []
     canales_torrents = []
@@ -1000,6 +1013,7 @@ def show_channels_list(item):
         elif item.no_stable == True: filtros = {'clusters': 'inestable'}
         elif item.cta_register == True: filtros = {'clusters': 'register'}
         elif item.suggesteds == True: filtros = {'clusters': 'suggested'}
+        elif item.lat_domain == True: filtros = {'clusters': 'current'}
         else: filtros = {}
 
         ch_list = channeltools.get_channels_list(filtros=filtros)
@@ -1017,8 +1031,12 @@ def show_channels_list(item):
             if 'temporary' in ch['clusters']: continue
         elif item.var_domains:
             if not 'dominios' in ch['notes'].lower(): continue
+        elif item.last_domain:
+            if not 'current' in ch['clusters']: continue
         elif item.suggesteds:
             if not 'suggested' in ch['clusters']: continue
+        elif item.privates:
+            if not 'privates' in ch['clusters']: continue
 
         cfg_proxies_channel = 'channel_' + ch['id'] + '_proxies'
 
@@ -1079,7 +1097,9 @@ def show_channels_list(item):
         elif item.no_stable == True: cabecera = 'Canales [COLOR yellow]Inestables[/COLOR]'
         elif item.cta_register == True: cabecera = 'Canales [COLOR yellow]con Cuenta[/COLOR]'
         elif item.var_domains == True: cabecera = 'Canales [COLOR yellow]con varios Dominios[/COLOR]'
+        elif item.last_domain == True: cabecera = 'Canales [COLOR yellow]que puede comprobarse el Último Dominio Vigente[/COLOR]'
         elif item.suggesteds == True: cabecera = 'Canales [COLOR yellow]Sugeridos[/COLOR]'
+        elif item.privates == True: cabecera = 'Canales [COLOR yellow]Privados[/COLOR]'
         else: cabecera = 'Canales [COLOR yellow]Disponibles[/COLOR]'
 
     ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)

@@ -10,7 +10,6 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     if 'File Not Found' in data:
         return 'El archivo no existe o ha sido borrado'
@@ -19,6 +18,7 @@ def get_video_url(page_url, url_referer=''):
 
     block = scrapertools.find_single_match(data, '(?i)<Form method="POST"(.*?)</Form>')
     matches = scrapertools.find_multiple_matches(block, 'input.*?name="([^"]+)".*?value="([^"]*)"')
+
     for name, value in matches:
         post += name + '=' + value + '&'
 

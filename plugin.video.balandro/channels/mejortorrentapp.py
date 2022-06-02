@@ -7,13 +7,19 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb
 
 
-host = 'https://mejortorrent.app'
+host = 'https://mejortorrent.wtf'
 
 
 perpage = 30
 
 
 def do_downloadpage(url, post=None, headers=None):
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['https://mejortorrent.app']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
     data = httptools.downloadpage(url, post=post).data
     return data
 
@@ -317,7 +323,7 @@ def episodios(item):
 
     data = do_downloadpage(item.url)
 
-    bloque = scrapertools.find_single_match(data, '>Episodios:(.*)</tbody>')
+    bloque = scrapertools.find_single_match(data, '>Episodios:(.*?)</tbody>')
 
     season = scrapertools.find_single_match(bloque, '-Temporada-(.*?)-')
     if not season: season = 0

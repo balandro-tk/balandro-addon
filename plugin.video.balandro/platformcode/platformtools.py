@@ -419,7 +419,7 @@ def set_context_commands(item, parent_item, colores):
             if item.contentType in ['movie', 'tvshow', 'season', 'episode'] and item.contentExtra != 'documentary' \
                and parent_item.channel not in ['tracking', 'downloads', 'tmdblists']:
                 tipo = {'movie':'película', 'tvshow':'serie', 'season':'temporada', 'episode':'episodio',}
-                context_commands.append( ('[B][COLOR %s]Guardar %s en preferidos[/COLOR][/B]' % (colores['tracking'], tipo[item.contentType]), config.build_RunPlugin(
+                context_commands.append( ('[B][COLOR %s]Guardar %s en Preferidos[/COLOR][/B]' % (colores['tracking'], tipo[item.contentType]), config.build_RunPlugin(
                     item.clone(channel="tracking", action="addFavourite", from_channel=item.channel, from_action=item.action))) )
 
     # Buscar misma peli/serie en otros canales
@@ -429,27 +429,27 @@ def set_context_commands(item, parent_item, colores):
             infolabels = {'tmdb_id': item.infoLabels['tmdb_id']} if item.infoLabels['tmdb_id'] else {}
             item_search = Item(channel='search', action='search', buscando=buscando, search_type=item.contentType, from_channel=item.channel, infoLabels=infolabels)
             tipo_busqueda = 'en los canales' if item.channel == 'tracking' else 'en otros canales'
-            context_commands.append( ('[COLOR %s]Buscar exacto %s[/COLOR]' % (colores['search_exact'], tipo_busqueda), config.build_ContainerUpdate(item_search)) )
+            context_commands.append( ('[B][COLOR %s]Buscar Exacto %s[/COLOR][/B]' % (colores['search_exact'], tipo_busqueda), config.build_ContainerUpdate(item_search)) )
 
         search_type = item.contentType if item.contentExtra != 'documentary' else 'documentary'
         item_search = Item(channel='search', action='search', buscando=buscando, search_type=search_type, from_channel='')
-        context_commands.append( ('[COLOR %s]Buscar parecido en los canales[/COLOR]' % colores['search_similar'], config.build_ContainerUpdate(item_search)) )
+        context_commands.append( ('[B][COLOR %s]Buscar Parecido en los canales[/COLOR][/B]' % colores['search_similar'], config.build_ContainerUpdate(item_search)) )
 
     # Descargar vídeo
     if not config.get_setting('mnu_simple', default=False):
         if config.get_setting('mnu_desargas', default=True):
             if item.channel != '' and item.action == 'findvideos' and parent_item.channel != 'downloads':
-                context_commands.append( ('[COLOR %s]Descargar vídeo[/COLOR]' % colores['download'], config.build_RunPlugin(
+                context_commands.append( ('[B][COLOR %s]Descargar Vídeo[/COLOR][/B]' % colores['download'], config.build_RunPlugin(
                     item.clone(channel="downloads", action="save_download", from_channel=item.channel, from_action=item.action))) )
 
     # Buscar trailer
     if item.contentType in ['movie', 'tvshow'] and item.infoLabels['tmdb_id']:
-        context_commands.append( ('[COLOR %s]Buscar tráiler[/COLOR]' % colores['trailer'], config.build_RunPlugin(
+        context_commands.append( ('[B][COLOR %s]Buscar Tráiler[/COLOR][/B]' % colores['trailer'], config.build_RunPlugin(
             item.clone(channel="actions", action="search_trailers"))) )
 
     # ~ # Mostrar info haciendo una nueva llamada a tmdb para recuperar más datos
     # ~ if item.contentType in ['movie', 'tvshow', 'season', 'episode'] and item.contentExtra != 'documentary':
-        # ~ context_commands.append( ('[COLOR yellow]Información TMDB[/COLOR]', config.build_RunPlugin(
+        # ~ context_commands.append( ('[B][COLOR yellow]Información TMDB[/COLOR][/B]', config.build_RunPlugin(
             # ~ item.clone(channel="actions", action="more_info",
                        # ~ from_channel=item.channel, from_action=item.action))) )
 

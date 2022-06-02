@@ -329,7 +329,7 @@ def play(item):
                     if _json["link"]:
                         url = base64.b64decode(_json['link'])
 
-                        if url.startswith('//') == True: url = 'https:' + url
+                        if not 'https:' in str(url): url = 'https:' + str(url)
 
                         servidor = servertools.get_server_from_url(url)
                         servidor = servertools.corregir_servidor(servidor)
@@ -364,7 +364,7 @@ def play(item):
                         if _json["link"]:
                             url = base64.b64decode(_json["link"])
 
-                            if url.startswith('//') == True: url = 'https:' + url
+                            if not 'https:' in str(url): url = 'https:' + str(url)
 
                             servidor = servertools.get_server_from_url(url)
                             servidor = servertools.corregir_servidor(servidor)
@@ -394,7 +394,7 @@ def play(item):
                         if len(urlremoto_matches) == 1:
                             url = urlremoto_matches[0]
 
-                            if url.startswith('//') == True: url = 'https:' + url
+                            if not 'https:' in str(url): url = 'https:' + str(url)
 
                             servidor = servertools.get_server_from_url(url)
                             servidor = servertools.corregir_servidor(servidor)
@@ -424,7 +424,7 @@ def play(item):
                         if _json['urlremoto']:
                             url = _json['urlremoto']
 
-                            if url.startswith('//') == True: url = 'https:' + url
+                            if not 'https:' in str(url): url = 'https:' + str(url)
 
                             servidor = servertools.get_server_from_url(url)
                             servidor = servertools.corregir_servidor(servidor)
@@ -439,7 +439,7 @@ def play(item):
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
             return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
 
-        if url.startswith('//') == True: url = 'https:' + url
+        if not 'https:' in str(url): url = 'https:' + str(url)
 
         servidor = servertools.get_server_from_url(url)
         servidor = servertools.corregir_servidor(servidor)

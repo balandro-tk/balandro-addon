@@ -11,7 +11,7 @@
   "categories": [ "movie", "tvshow" ],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["register", "suggested", "news", "rankings", "lists", "lasts", "stars", "directors", "kids", "docs", "vos", "dorama", "anime", "tales"],
+  "clusters": ["register", "current", "suggested", "news", "rankings", "lists", "lasts", "stars", "directors", "kids", "docs", "vos", "dorama", "anime", "tales"],
 
   "notes": "Películas por géneros y Series por Géneros. Dispone de varios posibles dominios. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
 }

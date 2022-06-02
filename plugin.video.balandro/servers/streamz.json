@@ -9,7 +9,7 @@
     "patterns": [
       {
         "pattern": "streamz(?:z|).(?:cc|vg|ws|to|tv|)/([A-z0-9]+)",
-        "url": "\\1"
+        "url": "https://streamz.ws/\\1"
       }
     ]
   }

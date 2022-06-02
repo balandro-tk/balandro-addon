@@ -3,7 +3,7 @@
   "name": "EspaPelis",
   "thumbnail": "espapelis.png",
 
-  "active": true,
+  "active": false,
 
   "searchable": true,
   "search_types": ["movie"],
@@ -11,7 +11,7 @@
   "categories": ["movie", "torrent"],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["torrents", "rankings", "years", "kids", "docs"],
+  "clusters": ["temporary", "torrents", "rankings", "years", "kids", "docs"],
 
   "notes": "Canal con enlaces Streaming y Torrent. Películas por géneros."
 }

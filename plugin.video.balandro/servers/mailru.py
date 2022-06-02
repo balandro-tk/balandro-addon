@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import re, time
+
 from core import httptools, scrapertools, jsontools
 from platformcode import logger
-import re, time
+
 
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % (page_url))
@@ -19,10 +21,8 @@ def get_video_url_orig(page_url, url_referer=''):
     # Carga la página para coger las cookies
     data = httptools.downloadpage(page_url).data
 
-    # Nueva url
     url = page_url.replace("embed/", "").replace(".html", ".json")
 
-    # Carga los datos y los headers
     resp = httptools.downloadpage(url)
     if '"error":"video_not_found"' in resp.data or '"error":"Can\'t find VideoInstance"' in resp.data:
         return 'El archivo no existe o ha sido borrado'
@@ -55,18 +55,17 @@ def get_video_url_embed(page_url, url_referer=''):
 
     vid = scrapertools.find_single_match(page_url, "my.mail.ru/video/embed/([A-z0-9\-]+)")
     if not vid: return video_urls
+
     ts = int(time.time()*1000)
     url = 'https://my.mail.ru/+/video/meta/%s?xemail=&ajax_call=1&func_name=&mna=&mnb=&ext=1&_=%s' % (vid, ts)
 
     resp = httptools.downloadpage(url, headers={'Referer': page_url})
-    # ~ logger.debug(resp.data)
 
     if not 'set-cookie' in resp.headers: return video_urls
     ck = scrapertools.find_single_match(resp.headers['set-cookie'], '(video_key=[^;]+)')
     if not ck: return video_urls
 
     bloque = scrapertools.find_single_match(resp.data, '"videos":\[(.*?\})\]')
-    # ~ logger.debug(bloque)
 
     matches = scrapertools.find_multiple_matches(bloque, '\{(.*?)\}')
     for vid in matches:

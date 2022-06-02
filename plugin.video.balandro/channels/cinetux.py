@@ -167,6 +167,7 @@ def corregir_servidor(servidor):
     elif servidor in ['mp4', 'api', 'drive']: return 'gvideo'
     else: return servidor
 
+
 def findvideos(item):
     logger.info()
     itemlist = []
@@ -189,6 +190,7 @@ def findvideos(item):
         servidor = corregir_servidor(servidor.strip().lower())
 
         if not servidor: continue
+
         if 'Descargar</a>' in enlace and servidor not in ['mega', 'gvideo', 'uptobox']: continue
 
         uploader = scrapertools.find_single_match(enlace, "author/[^/]+/'>([^<]+)</a>")
@@ -224,18 +226,22 @@ def findvideos(item):
         dtype = scrapertools.find_single_match(enlace, 'data-type=%s' % entrecomillado)
         dpost = scrapertools.find_single_match(enlace, 'data-post=%s' % entrecomillado)
         dnume = scrapertools.find_single_match(enlace, 'data-nume=%s' % entrecomillado)
+
         tds = scrapertools.find_multiple_matches(enlace, 'data-lazy-src=".*?/assets/img/([^\.]+)')
         if not tds: tds = scrapertools.find_multiple_matches(enlace, " src='.*?/assets/img/([^\.]+)")
         if len(tds) != 2 or not dtype or not dpost or not dnume: continue
 
         lang = tds[0].replace('3', '')
 
-        servidor = tds[1]
-        if servidor == 'cinetuxm': continue
+        servidor = tds[1].lower()
 
+        if servidor == 'cinetuxm': continue
+        elif servidor == 'desconocido': continue
         elif servidor == 'videozerr': servidor = 'directo'
 
-        itemlist.append(Item( channel = item.channel, action = 'play', server = corregir_servidor(servidor.strip().lower()),
+        servidor = corregir_servidor(servidor.strip().lower())
+
+        itemlist.append(Item( channel = item.channel, action = 'play', server = servidor,
                               title = '', dtype = dtype, dpost = dpost, dnume = dnume, referer = item.url, language = IDIOMAS.get(lang, lang) ))
 
     if not itemlist:

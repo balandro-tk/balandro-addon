@@ -9,7 +9,7 @@ from core import httptools, scrapertools, servertools
 from lib import jsunpack
 
 
-host = "https://hentaisd.tv/"
+host = 'https://hentaisd.tv/'
 
 
 def mainlist(item):
@@ -32,9 +32,9 @@ def mainlist_pelis(item):
 
     itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'hentai/' ))
 
-    itemlist.append(item.clone( title = 'Sin censura', action = 'list_all', url = host + 'hentai/sin-censura/' ))
-
     itemlist.append(item.clone( title = 'Estrenos', action = 'list_list', url = host + 'hentai/estrenos/' ))
+
+    itemlist.append(item.clone( title = 'Sin censura', action = 'list_all', url = host + 'hentai/sin-censura/' ))
 
     itemlist.append(item.clone( title = 'Por género', action = 'generos' ))
 
@@ -63,11 +63,11 @@ def list_all(item):
     data = httptools.downloadpage(item.url).data
     data = re.sub(r"\n|\r|\t|&nbsp;|<br>|<br/>", "", data)
 
-    patron = '<div class="media">.*?<a href="([^"]+)".*?<img src="([^"]+)".*?alt="([^"]+)".*?>([^<]+)</p>'
-
-    matches = re.compile(patron,re.DOTALL).findall(data)
+    matches = re.compile('<div class="media">.*?<a href="([^"]+)".*?<img src="([^"]+)".*?alt="([^"]+)".*?>([^<]+)</p>', re.DOTALL).findall(data)
 
     for url, thumb, title, plot in matches:
+        title = title.strip()
+
         itemlist.append(item.clone( action = 'episodios', url = url, title = title, thumbnail = thumb,
                                     contentType = 'movie', contentTitle = title, infoLabels={'plot': plot} ))
 
@@ -85,9 +85,7 @@ def list_list(item):
     data = httptools.downloadpage(item.url).data
     data = re.sub(r"\n|\r|\t|&nbsp;|<br>|<br/>", "", data)
 
-    patron = '<div class="col-sm-6 col-md-2 central">.*?<a href="([^"]+)".*?<img src="([^"]+)".*?<h5>([^<]+)</h5>'
-
-    matches = re.compile(patron,re.DOTALL).findall(data)
+    matches = re.compile('<div class="col-sm-6 col-md-2 central">.*?<a href="([^"]+)".*?<img src="([^"]+)".*?<h5>([^<]+)</h5>', re.DOTALL).findall(data)
 
     for url, thumb, title in matches:
         itemlist.append(item.clone( action = 'episodios', url = url, title = title, thumbnail = thumb, contentType = 'movie', contentTitle = title ))

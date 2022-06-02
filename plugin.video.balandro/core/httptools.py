@@ -48,8 +48,8 @@ cj = MozillaCookieJar()
 ficherocookies = os.path.join(config.get_data_path(), "cookies.dat")
 
 
-# ~ useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.100 Safari/537.36"
-useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
+# ~ useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
+useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.78 Safari/537.36"
 
 
 ver_stable_chrome = config.get_setting("ver_stable_chrome", default=True)
@@ -158,13 +158,19 @@ def downloadpage_proxy(canal,
                 logger.info('El proxy %s NO responde adecuadamente. %s' % (proxy, resp.code))
                 if (type(resp.code) == int and (resp.code == 500)):
                     if len(resp.data) > 1000:
-                        logger.info('El proxy (error 500 y data > 10000) %s SI responde adecuadamente. %s' % (proxy, resp.code))
+                        logger.info('El proxy (error 500 y data > 1000) %s SI responde adecuadamente. %s' % (proxy, resp.code))
                         proxy_ok = True
                         if proxy != '': logger.info('El proxy %s parece válido.' % proxy)
                         if n > 0: # guardar el proxy que ha funcionado como primero de la lista si no lo está
                             del proxies[n]
                             new_proxies = proxy + ', ' + ', '.join(proxies)
                             config.set_setting('proxies', new_proxies, canal)
+                        break
+            else:
+                if (type(resp.code) == int and (resp.code == 404)):
+                    if len(resp.data) > 1000:
+                        logger.info('El proxy (error 404 y data > 1000) %s SI responde adecuadamente. %s' % (proxy, resp.code))
+                        proxy_ok = True
                         break
         else:
             if 'ERROR 404 - File not found' in str(resp.data) or '<title>Site Blocked</title>' in str(resp.data) or 'HTTP/1.1 400 Bad Request' in str(resp.data):

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from platformcode import config, logger
 from core.item import Item
 from core import httptools, scrapertools
 
 
-host = "https://www.pornhd.com"
+host = 'https://www.pornhd.com'
 
 host2 = 'https://www.pornhdprime.com'
 
@@ -63,7 +65,7 @@ def categorias(item):
     itemlist = []
 
     url_cat = host + '/category/'
-   
+
     itemlist.append(item.clone( title = 'Novedades en categorías', action = 'list_categorias', url = url_cat + '?order=newest' ))
     itemlist.append(item.clone( title = 'Categorías más populares', action = 'list_categorias', url = url_cat + '?order=most-popular' ))
     itemlist.append(item.clone( title = 'Categorías con más vídeos', action = 'list_categorias', url = url_cat + '?order=video-count' ))
@@ -90,8 +92,9 @@ def list_all(item):
     if not item.page: item.page = 0
 
     data = httptools.downloadpage(item.url).data
+    data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
-    matches = scrapertools.find_multiple_matches(data, '<phd-video-item(.*?)</phd-video-item')
+    matches = scrapertools.find_multiple_matches(data, '<div class="video-item(.*?)</a></div>')
 
     num_matches = len(matches)
 
@@ -106,10 +109,8 @@ def list_all(item):
             thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
 
             if url.startswith('/') == True:
-               if '/videos/' in url:
-                   url = host + url
-               else:
-                   url = host2 + url
+               if '/videos/' in url: url = host + url
+               else: url = host2 + url
 
             if thumb.startswith('//') == True: thumb = 'https:' + thumb
 

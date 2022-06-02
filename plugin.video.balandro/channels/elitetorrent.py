@@ -7,12 +7,12 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb
 
 
-host = 'https://www.elitetorrent.dev/'
+host = 'https://www.elitetorrent.com/'
 
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://elitetorrent.app/', 'https://elitetorrent.la/', 'https://www.elitetorrent.wtf/']
+    ant_hosts = ['https://elitetorrent.app/', 'https://elitetorrent.la/', 'https://www.elitetorrent.wtf/' 'https://www.elitetorrent.dev/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
@@ -217,6 +217,22 @@ def findvideos(item):
 
            itemlist.append(Item( channel = item.channel, action = 'play', title = '', url = link, server = 'torrent',
                                  language = item.languages, quality = item.qualities, other = other))
+
+    return itemlist
+
+
+def play(item):
+    logger.info()
+    itemlist = []
+
+    if item.url.endswith('.torrent'):
+        data = do_downloadpage(item.url)
+
+        if data:
+            if '<h1>Not Found</h1>' in str(data) or '<!DOCTYPE html>' in str(data) or '<!DOCTYPE>' in str(data):
+               return 'Archivo [COLOR red]Inexistente[/COLOR]'
+
+    itemlist.append(item.clone( url = item.url, server = 'torrent' ))
 
     return itemlist
 

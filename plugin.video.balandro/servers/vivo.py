@@ -7,9 +7,11 @@ if sys.version_info[0] < 3:
 else:
     import urllib.parse as urllib
 
+
+import base64
+
 from core import httptools, scrapertools
 from platformcode import logger
-import base64
 
 
 def get_video_url(page_url, url_referer=''):
@@ -17,7 +19,6 @@ def get_video_url(page_url, url_referer=''):
     video_urls = []
 
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     if not 'data-stream=' in data and not "source: '" in data:
         return 'El archivo ha sido eliminado o no existe'
@@ -38,6 +39,5 @@ def get_video_url(page_url, url_referer=''):
             if b > 126: url += chr(b - 94)
             else: url += chr(b)
         if url: video_urls.append(['mp4', url])
-
 
     return video_urls

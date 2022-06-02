@@ -13,5 +13,5 @@
 
   "clusters": ["rankings", "years", "lasts", "producers", "docs", "kids", "vos"],
 
-  "notes": "Películas por géneros, año y tambien Series"
+  "notes": "Películas por géneros, año. También Series"
 }

@@ -2,6 +2,7 @@
 
 from core import httptools, scrapertools
 from platformcode import logger
+
 from lib.aadecode import decode as aadecode
 from lib import jsunpack
 
@@ -9,19 +10,16 @@ from lib import jsunpack
 def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
-    
+
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
-    
+
     code = scrapertools.find_single_match(data, '(ﾟωﾟ.*?)</script>')
     if not code: return video_urls
     text_decode = aadecode(code)
-    # ~ logger.debug(text_decode)
-    
+
     packed = scrapertools.find_single_match(text_decode, "eval\((function\(p,a,c,k.*?)\)$")
     if not packed: return video_urls
     text_decode = jsunpack.unpack(packed)
-    # ~ logger.debug(text_decode)
 
     bloque = scrapertools.find_single_match(text_decode, 'sources:\s*\[(.*?)\]')
 

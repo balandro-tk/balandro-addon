@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-
 from platformcode import logger
 from core.item import Item
 from core import httptools, scrapertools, servertools
+
 
 host = 'https://www.mundodesconocido.es/'
 
@@ -32,8 +32,7 @@ def categorias(item):
     matches = scrapertools.find_multiple_matches(data, '/category/blog/(.*?)/')
 
     for url in matches:
-        if '/page/' in url:
-            continue
+        if '/page/' in url: continue
 
         title = url.capitalize()
         title = title.replace('-blog', '').replace('-', '')
@@ -54,8 +53,7 @@ def categorias(item):
         elif title == 'Saludhumana': title = 'Salud humana'
         elif title == 'Videoprogramas': title = 'Video programas'
 
-        if title in str(cats):
-            continue
+        if title in str(cats): continue
 
         url = host + '/category/blog/' + url + '/'
 
@@ -72,7 +70,7 @@ def list_all(item):
 
     data = httptools.downloadpage(item.url).data
 
-    matches = scrapertools.find_multiple_matches(data, 'by: <a href=.*?data-a2a-url="(.*?)".*?data-a2a-title="(.*?)".*?".*?src="(.*?)"')
+    matches = scrapertools.find_multiple_matches(data, 'by: <a href=.*?data-a2a-url="(.*?)".*?data-a2a-title="(.*?)".*?src="(.*?)"')
 
     for url, title, thumb in matches:
         itemlist.append(item.clone( action = 'findvideos', url = url, title = title, thumbnail = thumb,

@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://entrepeliculasyseries.nu/'
+host = 'https://entrepeliculasyseries.nz/'
 
 perpage = 21
 
@@ -24,8 +24,7 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://entrepeliculasyseries.com/',
-                 'https://entrepeliculasyseries.io/']
+    ant_hosts = ['https://entrepeliculasyseries.com/', 'https://entrepeliculasyseries.io/', 'https://entrepeliculasyseries.nu/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

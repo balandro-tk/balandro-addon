@@ -13,5 +13,5 @@
 
   "clusters": ["news", "rankings", "years", "lasts", "docs", "anime", "dorama"],
 
-  "notes": "Películas por géneros y años. Tambien series, animes y doramas"
+  "notes": "Películas por géneros y años. También series, animes y doramas"
 }

@@ -19,7 +19,6 @@ def get_video_url(page_url, url_referer=''):
 
     post = 'op=download2&id=%s&rand=&referer=&method_free=&method_premium=' % page_url.split('/')[-1]
     data = httptools.downloadpage(page_url, post = post).data
-    # ~ logger.debug(data)
 
     videourl = scrapertools.find_single_match(data, "window.open\('([^']+)").replace(" ","%20")
     if videourl:

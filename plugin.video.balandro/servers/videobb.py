@@ -16,7 +16,6 @@ def get_video_url(page_url, url_referer=''):
         page_url = 'https://videobb.ru/api/source/' + nid
 
         resp = httptools.downloadpage(page_url, post='r=&d=videobb.ru')
-        # ~ logger.debug(resp.data)
 
         data = jsontools.load(resp.data)
         if 'data' not in data or 'success' not in data: return 'Vídeo no encontrado'

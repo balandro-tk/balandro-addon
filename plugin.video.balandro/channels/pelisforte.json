@@ -3,7 +3,7 @@
   "name": "PelisForte",
   "thumbnail": "pelisforte.png",
 
-  "active": true,
+  "active": false,
 
   "searchable": true,
   "search_types": ["movie"],
@@ -11,7 +11,7 @@
   "categories": ["movie"],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["languages", "years", "kids", "docs", "vos"],
+  "clusters": ["temporary", "languages", "years", "kids", "docs", "vos"],
 
   "notes": "Películas por idiomas, géneros y año."
 }

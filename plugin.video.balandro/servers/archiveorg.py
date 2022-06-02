@@ -13,9 +13,7 @@ def get_video_url(page_url, url_referer=''):
         if url: video_urls.append(['mp4', url])
         return video_urls
 
-
     data = httptools.downloadpage(page_url).data
-    # ~ logger.debug(data)
 
     subtitles = ''
     # ~ try:
@@ -37,7 +35,7 @@ def get_video_url(page_url, url_referer=''):
             lista = sorted(data_json, key=lambda x: (x['height'], x['width']))
         except:
             lista = data_json
-        
+
         for vid in lista:
             if 'file' not in vid: continue
             url = vid['file']

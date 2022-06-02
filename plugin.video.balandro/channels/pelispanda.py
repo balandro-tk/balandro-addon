@@ -183,9 +183,6 @@ def temporadas(item):
     return itemlist
 
 
-def tracking_all_episodes(item):
-    return episodios(item)
-
 
 def episodios(item):
     logger.info()
@@ -195,6 +192,16 @@ def episodios(item):
     if not item.perpage: item.perpage = 50
 
     data = do_downloadpage(item.url)
+    data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
+
+    new_url = scrapertools.find_single_match(data, '<span>Temporada ' + str(item.contentSeason) + '.*?<a class="btn btn-primary" target="_blank" href="(.*?)"')
+
+    if not new_url: return itemlist
+
+    host_torrent = host[:-1]
+    url_base64 = decrypters.decode_url_base64(new_url, host_torrent)
+
+    data = do_downloadpage(url_base64)
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
     qlty = scrapertools.find_single_match(data, '<span>Temporada ' + str(item.contentSeason) + '.*?<tbody>.*?</td>.*?<td>(.*?)</td>')

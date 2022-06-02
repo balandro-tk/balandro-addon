@@ -12,7 +12,6 @@ def get_video_url(page_url, url_referer=''):
     if url_referer: headers['Referer'] = url_referer
         
     data = httptools.downloadpage(page_url, headers=headers).data
-    # ~ logger.debug(data)
 
     if "borrado" in data or "Deleted" in data:
         return 'El fichero ha sido borrado'
@@ -22,7 +21,6 @@ def get_video_url(page_url, url_referer=''):
         if ck:
             headers['Cookie'] = ck
             data = httptools.downloadpage(page_url, headers=headers).data
-            # ~ logger.debug(data)
 
     bloque = scrapertools.find_single_match(data, 'sources:.\[.*?\]')
     matches = scrapertools.find_multiple_matches(bloque, '(http.*?)"')
@@ -31,5 +29,4 @@ def get_video_url(page_url, url_referer=''):
         # ~ video_urls.append([extension, videourl])
         video_urls.append([extension, videourl+'|Referer=https://vidlox.me/'])
 
-    # ~ video_urls.reverse() # calidad increscendo !?
     return video_urls
