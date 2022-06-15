@@ -12,7 +12,7 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb
 
 
-host = 'https://dontorrent.fi/'
+host = 'https://dontorrent.kim/'
 
 
 # ~ por si viene de enlaces guardados
@@ -25,7 +25,8 @@ ant_hosts = ['https://dontorrents.org/', 'https://dontorrents.net/', 'https://do
              'https://dontorrent.sk/', 'https://dontorrent.eu/', 'https://dontorrent.top/', 'https://dontorrent.pm/',
              'https://dontorrent.re/', 'https://dontorrent.wf/', 'https://dontorrent.run/', 'https://dontorrent.cat/'
              'https://dontorrent.pl/', 'https://dontorrent.tel/', 'https://dontorrent.nl/', 'https://dontorrent.cx/'
-             'https://dontorrent.bet/', 'https://dontorrent.cab/', 'https://dontorrent.wtf/']
+             'https://dontorrent.bet/', 'https://dontorrent.cab/', 'https://dontorrent.wtf/', 'https://dontorrent.fi/'
+             'https://dontorrent.ink/']
 
 domain = config.get_setting('dominio', 'dontorrents', default='')
 
@@ -61,11 +62,15 @@ def acciones(item):
     domain_memo = config.get_setting('dominio', 'dontorrents', default='')
 
     if domain_memo:
-        itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test web del canal [COLOR yellow][B]' + domain_memo + '[/B][/COLOR]',
+        itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test Web del canal [COLOR yellow][B] ' + domain_memo + '[/B][/COLOR]',
                                     from_channel='dontorrents', folder=False, text_color='chartreuse' ))
 
-    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='Comprobar último dominio vigente',
+    itemlist.append(Item( channel='actions', action='last_domain_dontorrents', title='[B]Comprobar último dominio vigente[/B]',
                           thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+
+    if domain_memo:
+        itemlist.append(item.clone( channel='actions', action='manto_domain_dontorrents', title= '[B]Modificar el dominio memorizado[/B]',
+                                    folder=False, text_color='darkorange' ))
 
     itemlist.append(item_configurar_proxies(item))
 

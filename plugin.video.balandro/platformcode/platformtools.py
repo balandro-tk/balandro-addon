@@ -739,7 +739,7 @@ def play_from_itemlist(itemlist, parent_item):
                 else:
                     opciones.append(it.title)
 
-            seleccion = dialog_select('Enlaces disponibles en %s' % itemlist[0].channel.capitalize(), opciones)
+            seleccion = dialog_select('Enlaces disponibles en [COLOR yellow]%s[/COLOR]' % itemlist[0].channel.capitalize(), opciones)
 
             if seleccion == -1:
                 play_fake()

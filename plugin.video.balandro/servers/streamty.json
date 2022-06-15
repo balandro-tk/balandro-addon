@@ -9,7 +9,7 @@
     "patterns": [
       {
         "pattern": "streamty.com/(?:embed-|)([A-z0-9]+)",
-        "url": "http://streamty.com/embed-\\1.html"
+        "url": "https://streamty.com/embed-\\1.html"
       }
     ]
   }

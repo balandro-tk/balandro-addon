@@ -6,10 +6,16 @@ from platformcode import logger, platformtools
 from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
-host = "https://seriespapaya.to/"
+host = 'https://papayaseries.net/'
 
 
 def do_downloadpage(url, post=None, referer=None, raise_weberror=True):
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['https://seriespapaya.to/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
     headers = {'Referer': host}
 
     data = httptools.downloadpage(url, post=post, headers=headers, raise_weberror=raise_weberror).data

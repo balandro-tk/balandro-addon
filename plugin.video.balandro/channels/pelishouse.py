@@ -14,7 +14,8 @@ from platformcode import config, logger, platformtools
 from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb, jsontools
 
-host = 'https://pelishouse.me/'
+
+host = 'https://ww1.pelishouse.me/'
 
 
 def item_configurar_proxies(item):
@@ -29,7 +30,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('/pelishouse.com/', '/pelishouse.me/')
+    ant_hosts = ['https://pelishouse.com/', 'https://pelishouse.me/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     timeout = 30
 

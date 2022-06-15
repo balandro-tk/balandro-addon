@@ -9,7 +9,7 @@
     "patterns": [
       {
         "pattern": "https://upvid.(?:co|live|host)/(?:embed-|)([A-z0-9]+)",
-        "url": "https://upvid.host/embed-\\1.html"
+        "url": "https://upvid.co/embed-\\1.html"
       }
     ]
   }

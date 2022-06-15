@@ -13,5 +13,5 @@
 
   "clusters": ["suggested", "classic", "years", "stars", "directors", "lists"],
 
-  "notes": "Películas clásicas."
+  "notes": "Películas clásicas. Por sagas, año, interpretes, directores, etc."
 }

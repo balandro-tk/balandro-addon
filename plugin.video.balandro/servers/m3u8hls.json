@@ -3,6 +3,7 @@
   "name": "M3u8hls",
 
   "active": true,
+  "notes": "No pattern, Enabled Manually",
 
   "find_videos": {
     "ignore_urls": [],

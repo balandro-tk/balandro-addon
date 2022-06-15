@@ -9,10 +9,16 @@ from core import httptools, scrapertools, tmdb
 from lib import decrypters
 
 
-host = 'https://torrentpelis.com/'
+host = 'https://www1.torrentpelis.com/'
 
 
 def do_downloadpage(url, post=None, headers=None):
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['https://torrentpelis.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
     data = httptools.downloadpage(url, post=post).data
     return data
 
@@ -44,7 +50,7 @@ def generos(item):
 
     data = do_downloadpage(host)
 
-    bloque = scrapertools.find_single_match(data, 'PELICULA</a>(.*?)</ul>')
+    bloque = scrapertools.find_single_match(data, 'GENEROS</a>(.*?)</ul>')
 
     matches = scrapertools.find_multiple_matches(bloque, 'href="(.*?)">(.*?)</a>')
 

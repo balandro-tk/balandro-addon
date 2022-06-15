@@ -48,35 +48,47 @@ def mainlist(item):
     if channels_search_excluded_documentaries: tot_opt_anular += 1
 
     if config.get_setting('channels_link_main', default=True):
-        itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Películas y/o Series', extra = 'mixed', folder = False ))
+        itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR yellow][B]Películas y/o Series[/B][/COLOR]',
+                                    extra = 'mixed', folder = False ))
 
-    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Películas', extra = 'movies', folder = False ))
-    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Series', extra = 'tvshows', folder = False ))
-    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Documentales', extra = 'documentaries', folder = False ))
-    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Torrents', extra = 'torrents', folder = False ))
+    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR deepskyblue][B]Películas[/B][/COLOR]',
+                                extra = 'movies', folder = False ))
+    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR hotpink][B]Series[/B][/COLOR]',
+                                extra = 'tvshows', folder = False ))
+    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR cyan][B]Documentales[/B][/COLOR]',
+                                extra = 'documentaries', folder = False ))
+    itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR blue][B]Torrents[/B][/COLOR]',
+                                extra = 'torrents', folder = False ))
 
     if config.get_setting('channels_link_main', default=True):
-        itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de Películas, Series y Documentales', extra = 'all', folder = False ))
+        itemlist.append(item.clone( action = 'channels_excluded', title='Excluir canales en las búsquedas de [COLOR green][B]Todos[/B][/COLOR]',
+                                    extra = 'all', folder = False ))
 
     if config.get_setting('channels_link_main', default=True):
         if channels_search_excluded_mixed:
-            itemlist.append(item.clone( title = 'Anular las exclusiones para Películas y/o Series', action = 'channels_excluded_del', extra = 'mixed', folder = False, text_color='coral' ))
+            itemlist.append(item.clone( title = '[B]Anular las exclusiones para [COLOR yellow]Películas y/o Series[/COLOR][/B]', action = 'channels_excluded_del',
+                                        extra = 'mixed', folder = False, text_color='coral' ))
 
     if channels_search_excluded_movies:
-        itemlist.append(item.clone( title = 'Anular las exclusiones para Películas', action = 'channels_excluded_del', extra = 'movies', folder = False, text_color='coral' ))
+        itemlist.append(item.clone( title = '[B]Anular las exclusiones para [COLOR deepskyblue]Películas[/COLOR][/B]', action = 'channels_excluded_del',
+                                    extra = 'movies', folder = False, text_color='coral' ))
 
     if channels_search_excluded_tvshows:
-        itemlist.append(item.clone( title = 'Anular las exclusiones para Series', action = 'channels_excluded_del', extra = 'tvshows', folder = False, text_color='coral' ))
+        itemlist.append(item.clone( title = '[B]Anular las exclusiones para [COLOR hotpink]Series[/COLOR][/B]', action = 'channels_excluded_del',
+                                    extra = 'tvshows', folder = False, text_color='coral' ))
 
     if channels_search_excluded_documentaries:
-        itemlist.append(item.clone( title = 'Anular las exclusiones para Documentales', action = 'channels_excluded_del', extra = 'documentaries', folder = False, text_color='coral' ))
+        itemlist.append(item.clone( title = '[B]Anular las exclusiones para [COLOR cyan]Documentales[/COLOR][/B]', action = 'channels_excluded_del',
+                                    extra = 'documentaries', folder = False, text_color='coral' ))
 
     if channels_search_excluded_torrents:
-        itemlist.append(item.clone( title = 'Anular las exclusiones para Torrents', action = 'channels_excluded_del', extra = 'torrents', folder = False, text_color='coral' ))
+        itemlist.append(item.clone( title = '[B]Anular las exclusiones para [COLOR blue]Torrents[/COLOR][/B]', action = 'channels_excluded_del',
+                                    extra = 'torrents', folder = False, text_color='coral' ))
 
     if config.get_setting('channels_link_main', default=True):
         if channels_search_excluded_all or tot_opt_anular > 1:
-            itemlist.append(item.clone( title = 'Anular todas las exclusiones', action = 'channels_excluded_del', extra= 'all', folder = False, text_color='yellow' ))
+            itemlist.append(item.clone( title = '[B]Anular [COLOR green]Todas[/COLOR][/B] las exclusiones', action = 'channels_excluded_del',
+                                        extra= 'all', folder = False, text_color='yellow' ))
 
     return itemlist
 
@@ -1014,6 +1026,7 @@ def show_channels_list(item):
         elif item.cta_register == True: filtros = {'clusters': 'register'}
         elif item.suggesteds == True: filtros = {'clusters': 'suggested'}
         elif item.lat_domain == True: filtros = {'clusters': 'current'}
+        elif item.mismatched == True: filtros = {'clusters': 'mismatched'}
         else: filtros = {}
 
         ch_list = channeltools.get_channels_list(filtros=filtros)
@@ -1037,6 +1050,8 @@ def show_channels_list(item):
             if not 'suggested' in ch['clusters']: continue
         elif item.privates:
             if not 'privates' in ch['clusters']: continue
+        elif item.mismatched:
+            if not 'mismatched' in ch['clusters']: continue
 
         cfg_proxies_channel = 'channel_' + ch['id'] + '_proxies'
 
@@ -1100,6 +1115,7 @@ def show_channels_list(item):
         elif item.last_domain == True: cabecera = 'Canales [COLOR yellow]que puede comprobarse el Último Dominio Vigente[/COLOR]'
         elif item.suggesteds == True: cabecera = 'Canales [COLOR yellow]Sugeridos[/COLOR]'
         elif item.privates == True: cabecera = 'Canales [COLOR yellow]Privados[/COLOR]'
+        elif item.mismatched == True: cabecera = 'Canales [COLOR yellow]Incompatibles con su Media Center[/COLOR]'
         else: cabecera = 'Canales [COLOR yellow]Disponibles[/COLOR]'
 
     ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
@@ -1153,12 +1169,12 @@ def search_new_proxies(canal_0, canal_1, canal_2):
     return False
 
 def tests_channels(canal_0, canal_1, canal_2):
-    if platformtools.dialog_yesno(canal_0, canal_1, canal_2, '[COLOR coral]¿ Efectuar Test Status del Canal ?[/COLOR]'):
+    if platformtools.dialog_yesno(canal_0, canal_1, canal_2, '[COLOR darkorange][B]¿ Efectuar Test Web del Canal ?[/B][/COLOR]'):
         from modules import tester
         tester.test_channel(canal_0)
 
 
 def tests_servers(servidor_0, servidor_1):
-    if platformtools.dialog_yesno(servidor_0, servidor_1, '[COLOR plum]¿ Efectuar Test Status del Servidor ?[/COLOR]'):
+    if platformtools.dialog_yesno(servidor_0, servidor_1, '[COLOR darkorange][B]¿ Efectuar Test Web del Servidor ?[/B][/COLOR]'):
         from modules import tester
         tester.test_server(servidor_0)

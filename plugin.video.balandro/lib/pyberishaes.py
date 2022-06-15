@@ -5,7 +5,7 @@ Transcodificación de GibberishAES a Python 2/3
 Solo decodifica texto, no se necesitó mas que para eso,
 pero si se requiere, se pueden transformar más cosas ;)
 
-@autor: SistemaRayoXP (con ayuda de Delta y Kingbox)
+@autor: SistemaRayoXP
 @version: 0.5
 """
 

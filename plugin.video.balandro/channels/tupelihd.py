@@ -13,8 +13,10 @@ IDIOMAS = {'Español': 'Esp', 'Latino': 'Lat', 'Subtitulado': 'Vose'}
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('/www.tupelihd.com/', '/www.pelitorrent.com/')
-    url = url.replace('/senininternetin.com/', '/www.pelitorrent.com/')
+    ant_hosts = ['https://www.tupelihd.com/', 'https://senininternetin.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post, headers=headers).data
     return data

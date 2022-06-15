@@ -5,14 +5,16 @@ import sys
 PY3 = False
 if sys.version_info[0] >= 3: PY3 = True
 
-import re
+import re, os
 
 from platformcode import logger, config, platformtools
 from core.item import Item
 from core import httptools, scrapertools, tmdb, servertools
 
+from lib import decrypters
 
-host = 'https://www.ditorrent.com/'
+
+host = 'https://www1.ditorrent.com/'
 
 
 # ~  las series con recaptcha
@@ -31,7 +33,7 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['http://www.torrentdivx.net/', 'https://www.torrentdivx.com/']
+    ant_hosts = ['http://www.torrentdivx.net/', 'https://www.torrentdivx.com/', 'https://www.ditorrent.com/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
@@ -147,7 +149,7 @@ def list_all(item):
     if not bloque: bloque = scrapertools.find_single_match(data, '</h2>(.*?)>TOP ESTRENOS<')
     if not bloque: bloque = scrapertools.find_single_match(data, '<h1>(.*?)>Géneros<')
 
-    matches = re.compile('<li class="xxx TPostMv" id="post-(.*?)</div></div> </li>', re.DOTALL).findall(bloque)
+    matches = re.compile('<li class="xxx TPostMv" id="post-(.*?)</div></div></li>', re.DOTALL).findall(bloque)
     if not matches: matches = re.compile('<article(.*?)</article>', re.DOTALL).findall(bloque)
 
     for article in matches:
@@ -241,7 +243,7 @@ def findvideos(item):
     itemlist = []
 
     IDIOMAS = {'Castellano': 'Esp', 'Latino': 'Lat', 'V.O. Subtitulado': 'Vose', 'Version Original': 'VO',
-               'Subtitulo Español': 'Vose', 'Version Original +Sub': 'VOS', 'Latino - Varios': 'Varios'}
+               'Subtitulo Español': 'Vose', 'Version Original +Sub': 'VOS', 'Latino - Varios': 'Varios', 'Español latino': 'Lat'}
 
     data = do_downloadpage(item.url)
 
@@ -326,6 +328,33 @@ def play(item):
 
             if servidor and servidor != 'directo':
                 itemlist.append(item.clone( url = url, server = servidor ))
+
+    if not item.url.endswith('.torrent'):
+        host_torrent = host[:-1]
+        url_base64 = decrypters.decode_url_base64(item.url, host_torrent)
+
+        if url_base64.endswith('.torrent'): item.url = url_base64
+
+    if item.url.endswith('.torrent'):
+        if PY3:
+            from core import requeststools
+            data = requeststools.read(item.url, 'torrentdivx')
+        else:
+            data = do_downloadpage(item.url)
+
+        if data:
+            try:
+               if 'Página no encontrada</title>' in str(data):
+                   platformtools.dialog_ok('DivxTotal', '[COLOR yellow]Archivo no encontrado[/COLOR]')
+                   return itemlist
+            except:
+               pass
+
+            file_local = os.path.join(config.get_data_path(), "temp.torrent")
+            with open(file_local, 'wb') as f: f.write(data); f.close()
+
+            itemlist.append(item.clone( url = file_local, server = 'torrent' ))
+
 
     return itemlist
 

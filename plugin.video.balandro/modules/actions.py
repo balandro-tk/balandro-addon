@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+if sys.version_info[0] >= 3:
+    PY3 = True
+
+    import xbmcvfs
+    translatePath = xbmcvfs.translatePath
+else:
+    PY3 = False
+
+    translatePath = xbmc.translatePath
+
 import os, re
 import xbmcgui, xbmc
 
@@ -12,8 +24,8 @@ from core.item import Item
 color_alert = config.get_setting('notification_alert_color', default='red')
 color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
-color_avis  = config.get_setting('notification_avis_color', default='yellow')
-color_exec  = config.get_setting('notification_exec_color', default='cyan')
+color_avis = config.get_setting('notification_avis_color', default='yellow')
+color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 
 def open_settings(item):
@@ -298,21 +310,19 @@ def last_domain_hdfull(item):
         return
 
     try:
-       host_domain = 'https://hdfullcdn.cc/login'
+       host_domain = 'https://hdfull.vip/'
 
-       if item.desde_el_canal:
-           if item.dominios_ret: host_domain = item.dominios_ret + 'login'
-
-       data = httptools.downloadpage(host_domain).data
-
-       last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
-       if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
-
+       try:
+          last_domain = httptools.downloadpage(host_domain, follow_redirects=False).headers.get('location', '')
+       except:
+          last_domain = ''
+          
        if not last_domain:
            if config.get_setting('channel_hdfull_proxies', default=''):
-               data = httptools.downloadpage_proxy('hdfull', host_domain).data
-               last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
-               if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
+               try:
+                  last_domain = httptools.downloadpage_proxy('hdfull', host_domain, follow_redirects=False).headers.get('location', '')
+               except:
+                  last_domain = ''
 
        if last_domain:
            last_domain = last_domain.replace('login', '')
@@ -323,6 +333,30 @@ def last_domain_hdfull(item):
     if not last_domain:
         try:
            host_domain = 'https://new.hdfull.one/login'
+
+           if item.desde_el_canal:
+               if item.dominios_ret: host_domain = item.dominios_ret + 'login'
+
+           data = httptools.downloadpage(host_domain).data
+
+           last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
+           if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
+
+           if not last_domain:
+               if config.get_setting('channel_hdfull_proxies', default=''):
+                   data = httptools.downloadpage_proxy('hdfull', host_domain).data
+                   last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
+                   if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
+
+           if last_domain:
+               last_domain = last_domain.replace('login', '')
+               if not last_domain.endswith('/'): last_domain = last_domain + '/'
+        except:
+           last_domain = ''
+
+    if not last_domain:
+        try:
+           host_domain = 'https://hdfullcdn.cc/login'
 
            if item.desde_el_canal:
                if item.dominios_ret: host_domain = item.dominios_ret + 'login'
@@ -490,11 +524,11 @@ def manto_domain_hdfull(item):
 
     domain = config.get_setting('dominio', 'hdfull', default='')
 
-    new_domain = platformtools.dialog_input(default=domain, heading='Indicar dominio HdFull  -->  https://hdfull.???/')
+    if not domain: domain = 'https://hdfull.'
+
+    new_domain = platformtools.dialog_input(default=domain, heading='Indicar dominio HdFull  -->  [COLOR %s]https://hdfull.???/[/COLOR]' % color_avis)
 
     if new_domain is None: return
-
-    logger.info("check-01-new_domain: %s" % new_domain)
 
     if new_domain:
         if not new_domain.startswith('https://'): new_domain = 'https://' + new_domain
@@ -507,6 +541,51 @@ def manto_domain_hdfull(item):
 
     return
 
+
+def manto_domain_dontorrents(item):
+    logger.info()
+
+    from core import jsontools
+
+    platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Comprobando DonTorrents[/B][/COLOR]' % color_exec)
+
+    channel_json = 'dontorrents.json'
+    filename_json = os.path.join(config.get_runtime_path(), 'channels', channel_json)
+
+    data = filetools.read(filename_json)
+    params = jsontools.load(data)
+
+    try:
+       data = filetools.read(filename_json)
+       params = jsontools.load(data)
+    except:
+       el_canal = ('Falta [B][COLOR %s]' + channel_json) % color_alert
+       platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+       return
+
+    if params['active'] == False:
+        el_canal = ('[B][COLOR %s] DonTorrents') % color_avis
+        platformtools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
+        return
+
+    domain = config.get_setting('dominio', 'dontorrents', default='')
+
+    if not domain: domain = 'https://dontorrent.'
+
+    new_domain = platformtools.dialog_input(default=domain, heading='Indicar dominio DonTorrents  -->  [COLOR %s]https://dontorrent.???/[/COLOR]' % color_avis)
+
+    if new_domain is None: return
+
+    if new_domain:
+        if not new_domain.startswith('https://'): new_domain = 'https://' + new_domain
+        if not new_domain.endswith('/'): new_domain = new_domain + '/'
+
+        if platformtools.dialog_yesno(config.__addon_name + ' - DonTorrents', '¿ [COLOR yellow] Confirma el dominio informado ?[/COLOR]', '[COLOR cyan][B] ' + new_domain + ' [/B][/COLOR]'): 
+            config.set_setting('dominio', new_domain, 'dontorrents')
+
+            platformtools.dialog_ok(config.__addon_name + ' - DonTorrents', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+
+    return
 
 def manto_params(item):
     logger.info()
@@ -537,11 +616,21 @@ def manto_params(item):
 
         config.set_setting('proxysearch_excludes', '')
 
+        config.set_setting('search_last_all', '')
+        config.set_setting('search_last_movie', '')
+        config.set_setting('search_last_tvshow', '')
+        config.set_setting('search_last_documentary', '')
+        config.set_setting('search_last_person', '')
+
         # ~ config.set_setting('downloadpath', '')  No funciona
 
-        config.set_setting('chrome_last_version', '102.0.5005.78')
+        config.set_setting('chrome_last_version', '102.0.5005.115')
 
         config.set_setting('debug', '0')
+
+        config.set_setting('developer_mode', False)
+        config.set_setting('developer_test_channels', '')
+        config.set_setting('developer_test_servers', '')
 
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Parámetros restablecidos[/B][/COLOR]' % color_infor)
 
@@ -558,6 +647,25 @@ def manto_cookies(item):
     if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ Confirma Eliminar el fichero de Cookies ?[/COLOR]'):
         filetools.remove(path)
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Fichero Cookies eliminado[/B][/COLOR]' % color_infor)
+
+def manto_advs(item):
+    logger.info()
+
+    path = translatePath(os.path.join('special://home/userdata', ''))
+
+    file_advs = 'advancedsettings.xml'
+
+    file = path + file_advs
+
+    existe = filetools.exists(file)
+
+    if existe == False:
+        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Advancedsettings[/COLOR][/B]' % color_infor)
+        return
+
+    if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ Confirma Eliminar el fichero Advancedsettings ?[/COLOR]'):
+        filetools.remove(file)
+        platformtools.dialog_ok(config.__addon_name, '[B][COLOR pink]Fichero Advancedsettings eliminado[/B][/COLOR]', '[B][COLOR yellow]Debe Abandonar obligatoriamente su Media Center e Ingresar de nuevo en el.[/B][/COLOR]')
 
 def manto_folder_cache(item):
     logger.info()

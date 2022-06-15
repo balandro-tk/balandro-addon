@@ -10,6 +10,10 @@
       {
         "pattern": "(https://streamlare.com/(?:v|e)/[A-z0-9]+)",
         "url": "\\1"
+      },
+      {
+        "pattern": "(https://slmaxed.com/(?:v|e)/[A-z0-9]+)",
+        "url": "\\1"
       }
     ]
   }

@@ -1,5 +1,5 @@
-[COLOR coral][B]Balandro[/COLOR][COLOR red]  Junio 2022[/B][/COLOR]
-   [COLOR yellow][B]Version 2.3.3[/B][/COLOR]
+[COLOR coral][B]Balandro[/COLOR][COLOR red]  16 de Junio 2022[/B][/COLOR]
+   [COLOR yellow][B]Version 2.3.4[/B][/COLOR]
 
    [COLOR yellow]MEDIA CENTERS:[/COLOR]
       Kodi releases  20.x,  19.x,  18.x  y  17.x
@@ -9,9 +9,9 @@
 
    [COLOR yellow]MODIFICACIONES:[/COLOR]
       Configuracion:
-         Menu: Nuevas opciones
-         Sistema: Nuevas opciones
-         Ayuda: Nuevas opciones
+        Menu: Nuevas opciones
+        Sistema: Nuevas opciones
+        Ayuda: Nuevas opciones
 
       Generos: Re-configurados
       Canales: Revision generalizada y Anulados las webs cerradas
@@ -35,6 +35,12 @@
 
          - [B][COLOR hotpink]De Series:[/B][/COLOR]
            SeoDiv,  TvSeries
+
+         - [B][COLOR yellow]De Peliculas y Series[/B][/COLOR]:
+           MovidyTv
+
+         - [B][COLOR blue]De Torrents:[/B][/COLOR]
+           Frozenlayer
 
          - [B][COLOR crimson]Todos los canales con contenido Exclusivo de:[/B][/COLOR]
            Doramas,  Animes,  Adultos
@@ -66,17 +72,21 @@
          - [B][COLOR orange]De Adultos:[/B][/COLOR]
            PornHub,  XVideos
 
+   [COLOR yellow]CANALES INCOMPATIBLES:[/COLOR]
+      [B][COLOR violet]Que canales pueden ser Incompatibles:[/COLOR][/B]
+         [COLOR coral]Si su Media Center es anterior a K19.x, podrian NO resultar completamente operativos.[/COLOR]
+         HdFullCom,  PlayDede,  SeriesPapayaXyz
+
    [COLOR yellow]CANALES INESTABLES:[/COLOR]
       [B][COLOR plum]Que canales estan Inestables:[/COLOR][/B]
          [COLOR coral]Son los pendientes de su evolucion, para evaluar su Situacion Definitiva.[/COLOR]
-         Dilo,  Gnula,  HdFullCom,  MejorTorrentLa,  NewPct1,
-         Pelis28
+         Dilo,  Gnula,  HdFullCom,  MejorTorrentLa,  NewPct1
 
    [COLOR yellow]CANALES TEMPORALMENTE DESACTIVADOS:[/COLOR]
       [B][COLOR cyan]Que canales estan Temporalmente Inactivos:[/COLOR][/B]
          [COLOR coral]Son los pendientes de su situacion, para evaluar su Re-activacion o Anulacion.[/COLOR]
-         Danimados,  DocumaniaTv,  EspaPelis,  MovidyTv,  PanDrama,
-         PeliSeries,  PelisForte
+         Danimados,  DocumaniaTv,  EspaPelis,  PanDrama,  PeliSeries,
+         PelisForte
 
    [COLOR yellow]SERVIDORES CON VIAS ALTERNATIVAS:[/COLOR]
       [B][COLOR tan]Servidores con Vias Alternativas:[/COLOR][/B]
@@ -91,23 +101,24 @@
        219 [COLOR darkorange]Canales[/COLOR]
 
          55 [COLOR coral]Inactivos[/COLOR]
-           7 [COLOR cyan]Temporalmente Inactivos[/COLOR]
+           6 [COLOR cyan]Temporalmente Inactivos[/COLOR]
 
-           6 [COLOR plum]Inestables[/COLOR]
+           3 [COLOR violet]Con probable Incompatibilidad[/COLOR]
+           5 [COLOR plum]Inestables[/COLOR]
          39 [COLOR red]Pueden Usar Proxies[/COLOR]
 
            2 [COLOR teal]Requieren Cuenta[/COLOR]
            1 [COLOR green]Con varios Dominios[/COLOR]
            2 [COLOR goldenrod]Con control dominio Vigente[/COLOR]
 
-         32 [COLOR fuchsia]No Intervendran en busquedas[/COLOR]
+         33 [COLOR fuchsia]No Intervendran en busquedas[/COLOR]
 
-       157 [COLOR gold]Disponibles[/COLOR]
+       159 [COLOR gold]Disponibles[/COLOR]
 
    [COLOR yellow]DISTRIBUCION CANALES DISPONIBLES:[/COLOR]
          25 de [COLOR moccasin]Sugeridos[/COLOR]
 
-       106 de [COLOR deepskyblue]Peliculas[/COLOR]
+       107 de [COLOR deepskyblue]Peliculas[/COLOR]
          75 de [COLOR hotpink]Series[/COLOR]
          65 de [COLOR yellow]Peliculas y Series[/COLOR]
 
@@ -124,10 +135,10 @@
 
    [COLOR yellow]RESUMEN SERVIDORES:[/COLOR]
       Totales:
-       150 [COLOR darkorange]Servidores[/COLOR]
+       152 [COLOR darkorange]Servidores[/COLOR]
 
          53 [COLOR coral]Inactivos[/COLOR]
          18 [COLOR fuchsia]Sin Soporte[/COLOR]
            6 [COLOR green]Con Vias alternativas[/COLOR]
 
-         97 [COLOR gold]Disponibles[/COLOR]
+         99 [COLOR gold]Disponibles[/COLOR]

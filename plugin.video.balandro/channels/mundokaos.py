@@ -12,7 +12,10 @@ host = 'https://mundokaos.net/'
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    url = url.replace('https://mundokaos.tv/', host)
+    ant_hosts = ['https://mundokaos.tv/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     headers = {'Referer': host}
 

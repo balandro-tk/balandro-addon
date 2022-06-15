@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------
-# Item is the object we use for representing data 
-# -----------------------------------------------
 
 import base64
 import copy

@@ -22,7 +22,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('/www.pelisplanet.com/', '/www.pelisplanet.to/')
+    ant_hosts = ['https://www.pelisplanet.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage_proxy('pelisplanet', url, post=post, headers=headers).data
     return data

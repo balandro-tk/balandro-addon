@@ -9,11 +9,11 @@
     "patterns": [
       {
         "pattern": "clipwatching.com/(e.*?.html)",
-        "url": "https://clipwatching.com/\\1"
+        "url": "https://highstream.tv/\\1"
       },
       {
         "pattern": "clipwatching.com/(\\w+)",
-        "url": "https://clipwatching.com/embed-\\1.html"
+        "url": "https://highstream.tv/embed-\\1.html"
       }
     ]
   }

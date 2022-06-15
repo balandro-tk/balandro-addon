@@ -8,6 +8,10 @@ def get_video_url(page_url, url_referer=''):
     logger.info("(page_url='%s')" % page_url)
     video_urls = []
 
+    response = httptools.downloadpage(page_url)
+    if not response.sucess or "Not Found" in response.data or "File was deleted" in response.data or "is no longer available" in response.data:
+        return "El fichero no existe o ha sido borrado"
+
     id = scrapertools.find_single_match(page_url, '/e/(\w+)')
 
     post = {"id": id}

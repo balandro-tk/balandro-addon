@@ -15,7 +15,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://www2.cuevana3.pe/'
+host = 'https://cuevana3.vc/'
 
 perpage = 22
 
@@ -35,7 +35,7 @@ def do_downloadpage(url, post=None, headers=None):
     ant_hosts = ['https://www1.cuevana3.video', 'https://www2.cuevana3.video',
                  'https://cuevana3.so', 'https://www1.cuevana3.so', 'https://www2.cuevana3.so',
                  'https://cuevana3.cx', 'https://www1.cuevana3.cx', 'https://www2.cuevana3.cx',
-                 'https://cuevana3.pe/', 'https://www1.cuevana3.pe/']
+                 'https://cuevana3.pe/', 'https://www1.cuevana3.pe/', 'https://www2.cuevana3.pe/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

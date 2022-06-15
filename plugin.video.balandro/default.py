@@ -70,7 +70,15 @@ if tipo_channel != '':
                     tecleado = item.buscando
                 else:
                     last_search = config.get_last_search(item.search_type)
-                    tecleado = platformtools.dialog_input(last_search, 'Texto a buscar')
+
+                    search_type = ''
+
+                    if item.search_type == 'movie': search_type = 'para Películas'
+                    elif item.search_type == 'tvshow': search_type = 'para Series'
+                    elif item.search_type == 'documentary': search_type = 'para Documentales'
+                    elif item.search_type == 'person': search_type = 'para Personas'
+
+                    tecleado = platformtools.dialog_input(last_search, 'Texto a buscar ' + search_type)
 
                 if tecleado is not None and tecleado != '':
                     itemlist = canal.search(item, tecleado)

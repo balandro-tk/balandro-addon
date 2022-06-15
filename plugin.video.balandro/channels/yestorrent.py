@@ -8,10 +8,16 @@ from core import httptools, scrapertools, servertools, tmdb
 
 from lib import decrypters
 
-host = 'https://yestorrent.cx/'
+host = 'http://yestorrent.org/'
 
 
 def do_downloadpage(url, post=None, raise_weberror=True):
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['https://yestorrent.cx/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
+
     if '/years/' in url: raise_weberror = False
 
     data = httptools.downloadpage(url, post=post, raise_weberror=raise_weberror).data

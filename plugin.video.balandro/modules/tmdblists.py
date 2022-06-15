@@ -11,15 +11,15 @@ def mainlist(item):
 
     item.category = 'TMDB'
 
-    itemlist.append(item.clone( action='', title= 'Búsquedas a través de [COLOR pink]Personas[/COLOR]', text_color='yellowgreen' ))
+    itemlist.append(item.clone( action='', title= '[B]Búsquedas a través de [COLOR pink]Personas[/COLOR]:[/B]', text_color='yellowgreen' ))
 
-    itemlist.append(item.clone( action='personas', search_type='cast', title=' - Buscar intérprete ...',
+    itemlist.append(item.clone( action='personas', search_type='cast', title=' - Buscar [COLOR aquamarine][B]intérprete[/B][/COLOR] ...',
                                 plot = 'Escribir el nombre de un actor o una actriz para listar todas las películas y series en las que ha intervenido.' ))
 
-    itemlist.append(item.clone( action='personas', search_type='crew', title=' - Buscar dirección ...',
+    itemlist.append(item.clone( action='personas', search_type='crew', title=' - Buscar [COLOR springgreen][B]dirección[/B][/COLOR] ...',
                                 plot = 'Escribir el nombre de una persona para listar todas las películas y series que ha dirigido.' ))
 
-    itemlist.append(item.clone( action='', title= 'Búsquedas a través de [COLOR pink]Listas[/COLOR]', text_color='yellowgreen' ))
+    itemlist.append(item.clone( action='', title= '[B]Búsquedas a través de [COLOR pink]Listas[/COLOR]:[/B]', text_color='yellowgreen' ))
 
     itemlist.append(item.clone( action='listado_personas', search_type='person', extra = 'popular', title=' - Personas con Mayor popularidad' ))
 
@@ -30,14 +30,14 @@ def mainlist(item):
        if item.search_type == 'movie': presentar = False
 
     if presentar:
-        itemlist.append(item.clone( title = ' - Películas', thumbnail=config.get_thumb('movie'), action = '', text_color='deepskyblue' ))
+        itemlist.append(item.clone( title = '[B]Películas:[/B]', thumbnail=config.get_thumb('movie'), action = '', text_color='deepskyblue' ))
 
         itemlist.append(item.clone( action='listado', search_type='movie', extra = 'now_playing', title='   - En Cartelera' ))
         itemlist.append(item.clone( action='listado', search_type='movie', extra = 'popular', title='   - Más populares' ))
         itemlist.append(item.clone( action='listado', search_type='movie', extra = 'top_rated', title='   - Mejor valoradas' ))
         # ~ itemlist.append(item.clone( action='listado', search_type='movie', url = 'movie/upcoming', title='   - Próximas' ))
         itemlist.append(item.clone( action='generos', search_type='movie', title='   - Por Género' ))
-        itemlist.append(item.clone( action='networks', search_type='movie', title='   - Por productoras' ))
+        itemlist.append(item.clone( action='networks', search_type='movie', title='   - Por productora' ))
         itemlist.append(item.clone( action='anios', search_type='movie', title='   - Por Año' ))
 
     presentar = True
@@ -47,7 +47,7 @@ def mainlist(item):
        if item.search_type == 'tvshow': presentar = False
 
     if presentar:
-        itemlist.append(item.clone( title = ' - Series', thumbnail=config.get_thumb('tvshow'), action = '', text_color='hotpink' ))
+        itemlist.append(item.clone( title = '[B]Series:[/B]', thumbnail=config.get_thumb('tvshow'), action = '', text_color='hotpink' ))
 
         itemlist.append(item.clone( action='listado', search_type='tvshow', extra = 'on_the_air', title='   - En Emisión' ))
         itemlist.append(item.clone( action='listado', search_type='tvshow', extra = 'popular', title='   - Más populares' ))
@@ -220,7 +220,7 @@ def personas(item):
         last_search = config.get_setting('search_last_person', default='')
         tecleado = platformtools.dialog_input(last_search, 'Nombre de la persona a buscar')
 
-        if tecleado is None or tecleado == '': return itemlist
+        if tecleado is None or tecleado == '': return
 
         config.set_setting('search_last_person', tecleado)
 
@@ -256,7 +256,7 @@ def personas(item):
 
             ret = platformtools.dialog_select('Selecciona la persona que buscas', opciones, useDetails=True)
             if ret == -1: 
-                return itemlist
+                return
 
             item.person_id = opciones_ids[ret]
             item.category = opciones[ret].getLabel()

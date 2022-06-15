@@ -13,5 +13,5 @@
 
   "clusters": ["rankings", "years", "docs"],
 
-  "notes": "Películas por géneros."
+  "notes": "Películas por géneros y año."
 }

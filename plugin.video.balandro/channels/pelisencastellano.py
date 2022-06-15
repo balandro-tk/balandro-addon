@@ -14,7 +14,10 @@ perpage = 20
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('http://pelisencastellano.com/', host)
+    ant_hosts = ['http://pelisencastellano.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post, headers=headers).data
 

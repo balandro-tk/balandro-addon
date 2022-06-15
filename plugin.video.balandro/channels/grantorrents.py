@@ -43,7 +43,7 @@ def mainlist_pelis(item):
 
     itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
 
-    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'pelis/', search_type = 'movie' ))
+    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'pelicula/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = 'Más vistas', action = 'list_all', url = host + 'tendencias/', search_type = 'movie' ))
 
@@ -252,6 +252,8 @@ def play(item):
             if not url.endswith('.torrent'): return itemlist
 
         url = url.replace('https://vk.com/away.php?to=', '').strip()
+
+        if '/grantorrents.pro/' in url: url = url.replace('https://grantorrents.pro/', host)
 
         itemlist.append(item.clone( url = url, server = 'torrent' ))
 

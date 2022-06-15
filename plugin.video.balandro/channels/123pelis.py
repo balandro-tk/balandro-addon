@@ -317,6 +317,8 @@ def play(item):
 
         url = scrapertools.find_single_match(data, '"embed_url":"(.*?)"')
 
+        if not 'http' in url: url = ''
+
         if url:
             url = url.replace('\\/', '/')
 

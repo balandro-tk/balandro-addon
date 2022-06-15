@@ -93,6 +93,7 @@ def list_all(item):
     for match in matches:
         title = scrapertools.find_single_match(match, '<h2>.*?">(.*?)</h2>')
         if not title: title = scrapertools.find_single_match(match, 'alt="(.*?)"')
+        if not title: title = scrapertools.find_single_match(match, '<div class="in_title">(.*?)</div>')
 
         url = scrapertools.find_single_match(match, ' href="(.*?)"')
 

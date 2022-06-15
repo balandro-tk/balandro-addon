@@ -28,7 +28,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('http://pelisgratis.nu/', host)
+    ant_hosts = ['http://pelisgratis.nu/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     raise_weberror = False if '/ano/' in url else True
 

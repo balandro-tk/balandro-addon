@@ -48,8 +48,8 @@ cj = MozillaCookieJar()
 ficherocookies = os.path.join(config.get_data_path(), "cookies.dat")
 
 
-# ~ useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
-useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.78 Safari/537.36"
+# ~ useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.78 Safari/537.36"
+useragent = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
 
 
 ver_stable_chrome = config.get_setting("ver_stable_chrome", default=True)
@@ -561,3 +561,25 @@ def get_cookies_from_headers(headers):
                     cookies[ck[0]] = ck[1]
 
     return cookies
+
+
+def get_cookie(url, name, follow_redirects=False):
+    if follow_redirects:
+        import requests
+
+        try:
+            headers = requests.head(url, headers=default_headers).headers
+            url = headers['location']
+        except Exception:
+            pass
+        
+    domain = urlparse(url).netloc
+    split_lst = domain.split(".")
+
+    if len(split_lst) > 2:
+        domain = domain.replace(split_lst[0], "")
+    
+    for cookie in cj:
+        if cookie.name == name and domain in cookie.domain:
+            return cookie.value
+    return False

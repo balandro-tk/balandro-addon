@@ -327,6 +327,7 @@ def findvideos(item):
         elif 'https://pelisplushd.me' in url: url = url.replace('pelisplushd.me', 'feurl.com')
         elif 'https://pelisplushd.net/fembed.php' in url: url= url.replace('pelisplushd.net/fembed.php?url=', 'https://feurl.com/v/')
         elif (host + 'fembed.php') in url: url = url.replace(host + 'fembed.php?url=', 'https://feurl.com/v/')
+        elif 'plusto.link' in url: url = url.replace('plusto.link', 'feurl.com')
 
         if url.startswith('/'): url = host[:-1] + url
 

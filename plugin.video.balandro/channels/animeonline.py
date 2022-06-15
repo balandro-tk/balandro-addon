@@ -12,7 +12,10 @@ host = 'https://www1.animeonline.ninja/'
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('https://animeonline1.ninja/', host)
+    ant_hosts = ['https://animeonline1.ninja/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post).data
     return data

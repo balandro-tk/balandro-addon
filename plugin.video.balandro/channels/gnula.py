@@ -29,7 +29,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('http://gnula.nu/', host)
+    ant_hosts = ['http://gnula.nu/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     # ~ timeout
     timeout = 15

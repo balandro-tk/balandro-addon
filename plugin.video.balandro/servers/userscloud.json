@@ -9,7 +9,7 @@
     "patterns": [
       {
         "pattern": "userscloud.com/(?:embed-|embed/|)([a-zA-Z0-9]+)",
-        "url": "http://userscloud.com/\\1"
+        "url": "https://userscloud.com/\\1"
       }
     ]
   }

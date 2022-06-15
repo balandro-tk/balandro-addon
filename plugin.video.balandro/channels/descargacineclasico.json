@@ -13,5 +13,5 @@
 
   "clusters": ["classic", "languages", "years", "adults", "docs", "vos"],
 
-  "notes": "Películas clásicas, por idiomas, géneros y categorías."
+  "notes": "Películas clásicas, por idiomas, géneros y años."
 }

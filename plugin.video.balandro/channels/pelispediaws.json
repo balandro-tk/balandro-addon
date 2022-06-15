@@ -13,5 +13,5 @@
 
   "clusters": ["years", "kids", "docs", "anime", "vos"],
 
-  "notes": "Películas por géneros."
+  "notes": "Películas por géneros y año."
 }

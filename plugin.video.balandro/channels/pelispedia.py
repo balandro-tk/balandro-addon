@@ -23,7 +23,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    url = url.replace('/pelispedia.co/', '/www.pelispedia.de/')
+    ant_hosts = ['https://pelispedia.co/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     if '/release/' in url: raise_weberror = False
 

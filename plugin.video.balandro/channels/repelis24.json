@@ -13,6 +13,6 @@
 
   "clusters": ["news", "languages", "rankings", "years", "lists", "producers", "kids", "docs", "vos", "anime"],
 
-  "notes": "Películas por idioma, géneros y año y Series por Géneros."
+  "notes": "Películas por idioma, géneros y año. Series por Géneros."
 
 }

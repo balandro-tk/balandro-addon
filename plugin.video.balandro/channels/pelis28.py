@@ -167,6 +167,7 @@ def findvideos(item):
     data = do_downloadpage(item.url)
 
     _id = scrapertools.find_single_match(data, '<div class="movieplay">.*?data-lazy-src="(.*?)"')
+    if not _id: _id = scrapertools.find_single_match(data, '<div class="movieplay">.*?src="(.*?)"')
 
     if not _id: return itemlist
 
@@ -198,6 +199,7 @@ def findvideos(item):
         elif servidor == 'servidor vip': continue
 
         if servidor == 'dood': servidor = 'doodstream'
+        elif servidor == 'suzihaza': servidor = 'fembed'
 
         itemlist.append(Item( channel = item.channel, action = 'play', url = url, server = servidor, title = '', language = lang ))
 

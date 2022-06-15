@@ -10,7 +10,7 @@
     "patterns": [
       {
         "pattern": "http(?:s|)://(?:doodstream.com|doodstream.co|dood.watch|dood.to|dood.so|dood.cx|dood.la|dood.ws|dood.sh|dood.pm)/(d|e)/(?:embed-|)([A-z0-9]+)",
-        "url": "https://dood.to/\\1/\\2"
+        "url": "https://doodstream.com/\\1/\\2"
       }
     ]
   }

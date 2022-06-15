@@ -225,6 +225,8 @@ def play(item):
     logger.info()
     itemlist = []
 
+    if item.url.startswith('/'): item.url = host[:-1] + item.url
+
     if item.url.endswith('.torrent'):
         data = do_downloadpage(item.url)
 

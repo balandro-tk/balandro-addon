@@ -5,7 +5,7 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb, servertools
 
 
-host = "https://cinetux.nu/"
+host = 'https://cinetux.nu/'
 
 IDIOMAS = {'Latino': 'Lat', 'Subtitulado': 'Vose', 'Español': 'Esp', 'Espa%C3%B1ol': 'Esp', 'SUB': 'VO' }
 
@@ -20,10 +20,11 @@ def configurar_proxies(item):
     return proxytools.configurar_proxies_canal(item.channel, host)
 
 def do_downloadpage(url, post=None, headers=None):
-    # ~  por si viene de enlaces guardados
-    url = url.replace('http://', 'https://')
-    url = url.replace('https://www.', 'https://')
-    url = url.replace('cinetux.to/', 'cinetux.nu/')
+    # ~ por si viene de enlaces guardados
+    ant_hosts = ['http://cinetux.nu/', 'https://www.cinetux.to/', 'https://cinetux.to/', 'https://www.cinetux.nu/',]
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     # ~ data = httptools.downloadpage(url, post=post, headers=headers).data
     data = httptools.downloadpage_proxy('cinetux', url, post=post, headers=headers).data

@@ -25,7 +25,10 @@ color_adver = config.get_setting('notification_adver_color', default='violet')
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('https://seriespapaya.xyz/', host)
+    ant_hosts = ['https://seriespapaya.xyz/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     headers = {'Referer': host}
 

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+if sys.version_info[0] >= 3: PY3 = True
+else: PY3 = False
+
+
 import os, re, time
 
 from platformcode import config, logger, platformtools
@@ -11,6 +17,9 @@ color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
 color_avis  = config.get_setting('notification_avis_color', default='yellow')
 color_exec  = config.get_setting('notification_exec_color', default='cyan')
+
+channels_unsatisfactory = config.get_setting('developer_test_channels', default='')
+servers_unsatisfactory = config.get_setting('developer_test_servers', default='')
 
 
 channels_poe = [
@@ -52,6 +61,8 @@ def test_channel(channel_name):
     else:
         txt = test_internet()
 
+    txt += '[COLOR moccasin][B]Balandro:[/B][/COLOR] ' + config.get_addon_version() + '[CR][CR]'
+
     txt += '[COLOR moccasin][B]Parámetros:[/B][/COLOR][CR]'
     txt += 'id: ' + str(params['id']) + '[CR]'
     txt += 'active: ' + str(params['active']) + '[CR]'
@@ -71,19 +82,28 @@ def test_channel(channel_name):
 
     clusters = str(params['clusters'])
     clusters = clusters.replace('[', '').replace(']', '').replace("'", '').strip()
+
     if 'suggested' in clusters: clusters = clusters.replace('suggested,', '').strip()
     if 'inestable' in clusters: clusters = clusters.replace('inestable,', '').strip()
     if 'temporary' in clusters: clusters = clusters.replace('temporary,', '').strip()
     if 'mismatched' in clusters: clusters = clusters.replace('mismatched,', '').strip()
+    if 'clons' in clusters: clusters = clusters.replace('clons,', '').strip()
     if 'register' in clusters: clusters = clusters.replace('register,', '').strip()
     if 'current' in clusters: clusters = clusters.replace('current,', '').strip()
     if 'torrents' in clusters: clusters = clusters.replace('torrents,', '').strip()
-    txt += 'clusters: ' + str(clusters) + '[CR]'
+
+    if str(params['clusters']) == "['dorama']": clusters = clusters.replace('dorama', '').strip()
+    if str(params['clusters']) == "['anime']": clusters = clusters.replace('anime', '').strip()
+
+    if 'adults' in clusters: clusters = clusters.replace('adults,', '').strip()
+    if str(params['clusters']) == "['adults']": clusters = clusters.replace('adults', '').strip()
+
+    if clusters: txt += 'clusters: ' + str(clusters) + '[CR]'
 
     notes = str(params['notes'])
 
     if '+18' in notes:
-        notes = notes.replace('+18', '').strip()
+        notes = notes.replace(' +18', '').strip()
 
     if 'Canal con enlaces Torrent exclusivamente.' in notes:
         notes = notes.replace('Canal con enlaces Torrent exclusivamente.', '').strip()
@@ -102,76 +122,120 @@ def test_channel(channel_name):
     txt_diag = ''
 
     if 'temporary' in str(params['clusters']):
-        txt_diag  += 'estado: ' + '[COLOR orangered][B]Temporalmente Inactivo[/B][/COLOR]'
+        txt_diag  += 'estado: ' + '[COLOR plum][B]Temporalmente Inactivo[/B][/COLOR]'
 
     if 'inestable' in str(params['clusters']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'estado: ' + '[COLOR orangered][B]Inestable[/B][/COLOR]'
+        txt_diag  += 'estado: ' + '[COLOR plum][B]Inestable[/B][/COLOR]'
 
     if 'mismatched' in str(params['clusters']):
+        if not PY3:
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag  += 'result: ' + '[COLOR violet][B]Posible MediaCenter Incompatibile (Sin Resultados) si versión anterior a 19.x[/B][/COLOR]'
+
+    if 'clons' in str(params['clusters']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'result: ' + '[COLOR violet][B]Posible MediaCenter Incompatibile (Sin Resultados) si versión inferior a K19.x[/B][/COLOR]'
+        txt_diag  += 'clones: ' + '[COLOR lightyellow][B]Varios Clones[/B][/COLOR]'
 
     if 'suggested' in str(params['clusters']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'canal: ' + '[COLOR orangered][B]Sugerido[/B][/COLOR]'
+        txt_diag  += 'canal: ' + '[COLOR aquamarine][B]Sugerido[/B][/COLOR]'
+
+    cfg_status_channel = 'channel_' + channel_id + '_status'
+
+    if str(config.get_setting(cfg_status_channel)) == '1':
+        if txt_diag: txt_diag += '[CR]'
+        txt_diag  += 'marcado: ' + '[COLOR aqua][B]Preferido[/B][/COLOR]'
+    elif str(config.get_setting(cfg_status_channel)) == '-1':
+        if txt_diag: txt_diag += '[CR]'
+        txt_diag  += 'marcado: ' + '[COLOR aqua][B]Desactivado[/B][/COLOR]'
 
     if not params['searchable']:
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'buscar: ' + '[COLOR orangered][B]No Interviene[/B][/COLOR]'
+        txt_diag  += 'buscar: ' + '[COLOR yellow][B]No Interviene[/B][/COLOR]'
     else:
         if str(params['search_types']) == "['documentary']":
             if txt_diag: txt_diag += '[CR]'
-            txt_diag  += 'buscar: ' + '[COLOR orangered][B]Solo Documental[/B][/COLOR]'
+            txt_diag  += 'buscar: ' + '[COLOR yellow][B]Solo Documental[/B][/COLOR]'
 
     if '+18' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'adultos: ' + '[COLOR orangered][B]+18[/B][/COLOR]'
+        txt_diag  += 'adultos: ' + '[COLOR orange][B]+18[/B][/COLOR]'
 
     if 'Web dedicada exclusivamente al anime' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'contenido: ' + '[COLOR orangered][B]Solo Animes[/B][/COLOR]'
+        txt_diag  += 'contenido: ' + '[COLOR springgreen][B]Solo Animes[/B][/COLOR]'
 
     if 'Web dedicada exclusivamente al dorama' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'contenido: ' + '[COLOR orangered][B]Solo Doramas[/B][/COLOR]'
+        txt_diag  += 'contenido: ' + '[COLOR firebrick][B]Solo Doramas[/B][/COLOR]'
 
     if 'Web dedicada exclusivamente en Novelas' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'contenido: ' + '[COLOR orangered][B]Solo Novelas[/B][/COLOR]'
+        txt_diag  += 'contenido: ' + '[COLOR limegreen][B]Solo Novelas[/B][/COLOR]'
 
     if not str(params['clusters']) == "['adults']":
         if 'adults' in str(params['clusters']):
             if txt_diag: txt_diag += '[CR]'
-            txt_diag  += 'contenido: ' + '[COLOR orangered][B]Puede tener enlaces para Adultos[/B][/COLOR]'
+            txt_diag  += 'contenido: ' + '[COLOR orange][B]Puede tener enlaces para Adultos[/B][/COLOR]'
 
     if str(params['search_types']) == "['documentary']":
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'contenido: ' + '[COLOR orangered][B]Solo Documentales[/B][/COLOR]'
+        txt_diag  += 'contenido: ' + '[COLOR cyan][B]Solo Documentales[/B][/COLOR]'
 
     if 'Canal con enlaces Torrent exclusivamente' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'contenido: ' + '[COLOR orangered][B]Solo Torrents[/B][/COLOR]'
+        txt_diag  += 'contenido: ' + '[COLOR blue][B]Solo Torrents[/B][/COLOR]'
 
     if 'Canal con enlaces Streaming y Torrent' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'enlaces: ' + '[COLOR orangered][B]Streaming y Torrent[/B][/COLOR]'
+        txt_diag  += 'enlaces: ' + '[COLOR thistle][B]Streaming y Torrent[/B][/COLOR]'
 
     if 'register' in str(params['clusters']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'cuenta: ' + '[COLOR orangered][B]Requiere registrarse[/B][/COLOR]'
+        txt_diag  += 'cuenta: ' + '[COLOR green][B]Requiere registrarse[/B][/COLOR]'
 
     if 'dominios' in str(params['notes']):
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'dominos: ' + '[COLOR orangered][B]Varios disponibles[/B][/COLOR]'
+        txt_diag  += 'dominios: ' + '[COLOR lightyellow][B]Varios disponibles[/B][/COLOR]'
 
     if 'current' in str(params['clusters']):
+        cfg_dominio_channel = 'channel_' + channel_id + '_dominio'
+        if config.get_setting(cfg_dominio_channel, default=''):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag  += 'memorizado: ' + '[COLOR darkorange][B]' + config.get_setting(cfg_dominio_channel) + '[/B][/COLOR]'
+
         if txt_diag: txt_diag += '[CR]'
-        txt_diag  += 'vigente: ' + '[COLOR orangered][B]Puede comprobarse el último dominio[/B][/COLOR]'
+        txt_diag  += 'vigente: ' + '[COLOR darkorange][B]Puede comprobarse el último dominio[/B][/COLOR]'
 
     if 'Puede requerir el uso de proxies' in params['notes']:
         if txt_diag: txt_diag += '[CR]'
-        txt_diag += 'bloqueo: ' + '[COLOR orangered][B]Puede requerir el uso de proxies en función del país/operadora desde el que se accede.[/B][/COLOR]'
+        txt_diag += 'bloqueo: ' + '[COLOR red][B]Puede requerir el uso de proxies en función del país/operadora desde el que se accede[/B][/COLOR]'
+
+    if config.get_setting('search_excludes_movies', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_movies')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR deepskyblue][B]Películas[/B][/COLOR]'
+    if config.get_setting('search_excludes_tvshows', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_tvshows')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR hotpink][B]Series[/B][/COLOR]'
+    if config.get_setting('search_excludes_documentaries', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_documentaries')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR cyan][B]Documentales[/B][/COLOR]'
+    if config.get_setting('search_excludes_torrents', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_torrents')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR blue][B]Torrents[/B][/COLOR]'
+    if config.get_setting('search_excludes_mixed', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_mixed')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR yellow][B]Películas y/ó Series[/B][/COLOR]'
+    if config.get_setting('search_excludes_all', default=''):
+        if "'" + channel_id + "'" in str(config.get_setting('search_excludes_all')):
+            if txt_diag: txt_diag += '[CR]'
+            txt_diag += 'excluido: Buscar en [COLOR green][B]Todos[/B][/COLOR]'
 
     if txt_diag:
         txt += '[CR][CR][COLOR moccasin][B]Diagnosis:[/B][/COLOR][CR]'
@@ -181,8 +245,10 @@ def test_channel(channel_name):
         from modules import helper
 
         txt_plat =  helper.get_plataforma('')
-        txt_plat = txt_plat.replace('[CR][CR]', '[CR]')
-        txt += '[CR][CR]' + txt_plat
+
+        if '(17.' in txt_plat or '(18.' in txt_plat:
+            txt_plat = txt_plat.replace('[CR][CR]', '[CR]')
+            txt += '[CR][CR]' + txt_plat
 
     channel_py = channel_id + '.py'
     filename_py = os.path.join(config.get_runtime_path(), 'channels', channel_py)
@@ -242,6 +308,17 @@ def test_channel(channel_name):
 
     txt = info_channel(channel_name, channel_poe, host, dominio, txt)
 
+    avisado = False
+
+    if channel_id in str(channels_poe): pass
+    else:
+       if not 'code: [COLOR springgreen][B]200' in txt:
+           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR yellow][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+           avisado = True
+
+    if channels_unsatisfactory == 'unsatisfactory':
+        if not avisado: return
+
     platformtools.dialog_textviewer(channel_name.capitalize(), txt)
 
 
@@ -263,7 +340,12 @@ def info_channel(channel_name, channel_poe, host, dominio, txt):
             if not 'Host error' in txt:
                 if not 'Cloudflare' in txt:
                    if not 'Invisible Captcha' in txt:
-                       response, txt = acces_channel(channel_name, host, '', txt, follow_redirects=True)
+                       if not 'Parece estar Bloqueado' in txt:
+                           if not '<urlopen error' in txt:
+                               if not 'timed out' in txt:
+                                   platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
+
+                                   response, txt = acces_channel(channel_name, host, '', txt, follow_redirects=True)
 
     if not dominio:
         dominio = config.get_setting('dominio', channel_id, default='')
@@ -310,6 +392,10 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
             proxies = str(proxies)
             proxies = proxies.replace('[', '').replace(']', '').replace("'", '').strip()
             txt += 'actuales: ' + str(proxies)
+
+            cfg_provider_channel = 'channel_' + channel_id + '_proxytools_provider'
+
+            if config.get_setting(cfg_provider_channel): txt += '[CR]provider: ' + config.get_setting(cfg_provider_channel)
     else:
         if 'requerir el uso de proxies' in txt:
             txt += '[CR][CR]'
@@ -340,9 +426,26 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
     txt += 'error: ' + str(response.error) + '[CR]'
     txt += 'length: ' + str(len(response.data))
 
+    new_web = scrapertools.find_single_match(str(response.headers), "'location':.*?'(.*?)'")
+
     if response.sucess == False:
-        if '<urlopen error timed out>' in str(response.code):
-            if config.get_setting(cfg_proxies_channel, default=''): txt += '[CR]proxies: [COLOR orangered][B]Obtenga nuevos proxies[/B][/COLOR]'
+        if '<urlopen error timed out>' in str(response.code) or '<urlopen error' in str(response.code):
+            if not 'Sugerencias:' in txt:
+                txt += '[CR][CR]'
+                txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+
+            if 'actuales:' in txt:
+                if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                else:
+                  if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                  txt += 'Obtenga Nuevos Proxies desde [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
+            else:
+               if config.get_setting(cfg_proxies_channel, default=''): txt += '[COLOR red][B]Obtenga nuevos proxies[/B][/COLOR]'
+
+               txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
+               txt += '[COLOR tomato][B]Compruebe su Internet y/ó el Canal, a través de un Navegador Web[/B][/COLOR][CR]'
+               txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
         else:
            if '| 502: Bad gateway</title>' in response.data:  txt += '[CR]gate: [COLOR orangered][B]Host error[/B][/COLOR]'
            elif '<title>Attention Required! | Cloudflare</title>' in response.data: txt += '[CR]blocked: [COLOR orangered][B]Cloudflare[/B][/COLOR]'
@@ -360,8 +463,6 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
                       txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                       txt += str(response.data) + '[CR]'
     else:
-        new_web = scrapertools.find_single_match(str(response.headers), "'location':.*?'(.*?)'")
-
         if len(response.data) > 1000:
             if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
             elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
@@ -373,14 +474,21 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
                 txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                 txt += str(response.headers) + '[CR]'
         else:
-            if len(response.data) < 500:
+            if len(response.data) < 1000:
                 if new_web == '/login':
                     txt += '[CR]login: [COLOR springgreen][B]' + new_web + '[/B][/COLOR]'
                     new_web = ''
+
+                    if response.code == 301 or response.code == 302 or response.code == 307 or response.code == 308:
+                        if 'dominios:' in txt:
+                            txt += "[CR]obtener: [COLOR yellow][B]Puede Obtener Otro Dominio desde Configurar Dominio a usar ...[/B][/COLOR]"
+
+                        txt += "[CR]comprobar: [COLOR red][B]Nuevo Dominio (verificar la Web vía internet[/B][/COLOR]"
+
                 else:
-                    if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
-                    elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
-                    else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location':)[/B][/COLOR]"
+                   if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
+                   elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
+                   else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location':)[/B][/COLOR]"
 
                 if new_web:
                     if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]status: [COLOR red][B]' + new_web + '[/B][/COLOR]'
@@ -392,7 +500,7 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
 
             if 'status:' in txt:
                 if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]account: [COLOR goldenrod][B]Suspendida[/B][/COLOR]'
-                else:  txt += '[CR]account: [COLOR goldenrod][B]Podría estar en Mantenimiento[/B][/COLOR]'
+                else: txt += '[CR]account: [COLOR goldenrod][B]Podría estar en Mantenimiento[/B][/COLOR]'
 
             if not "'location': '/login'" in str(response.headers):
                 if not 'status:'in txt:
@@ -413,32 +521,95 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
                 txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
 
                 if 'Invisible Captcha' in txt:
-                    txt += 'router:[COLOR yellow] Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e intentelo de nuevo[/COLOR][CR]'
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [/COLOR][COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
 
-                    if 'actuales:' in txt: txt += 'proxies:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
  
-                if 'Obtenga nuevos proxies' in txt: txt += 'proxies:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
+                elif 'Obtenga nuevos proxies' in txt:
+                    if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                    else:
+                       if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                       txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
 
-                if 'Host error' in txt:
-                    txt += 'marcar:[COLOR gold] Puede Marcar el canal como Desactivado[/COLOR][CR]'
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
 
-                    if 'actuales:' in txt: txt += 'proxies:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
+                elif 'Host error' in txt:
+                    txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
 
-                if 'No se puede establecer una' in txt:
-                    txt += 'conexión:[COLOR yellow] No se pudo establecer la conectividad[/COLOR][CR]'
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B] Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
 
-                    if 'actuales:' in txt: txt += 'proxies:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
-                    else: txt += 'test:[COLOR golden] Compruebe su Internet y/ó el Canal, a través de un Navegador Web[/COLOR][CR]'
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
 
-                if 'Cloudflare' in txt:
-                    if 'actuales:' in txt: txt += 'proxies:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
-                    else:txt += 'marcar:[COLOR gold] Puede Marcar el canal como Desactivado[/COLOR][CR]'
+                elif 'No se puede establecer una' in txt:
+                    txt += 'conexión:[COLOR yellow][B]No se pudo establecer la conectividad[/B][/COLOR][CR]'
 
-                if 'Unknow' in txt:
-                    txt += 'desconocido:[COLOR yellow] Puede estar en Mantenimiento[/COLOR][CR]'
-                    txt += 'action:[COLOR gold] Puede Marcar el canal como Desactivado[/COLOR][CR]'
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
+                    else: txt += '[COLOR tomato][B]Compruebe su Internet y/ó el Canal, a través de un Navegador Web[/B][/COLOR][CR]'
 
-                    if 'actuales:' in txt: txt += 'configurar:[COLOR red] Configure Nuevos Proxies a Usar ...[/COLOR][CR]'
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
+                elif 'Cloudflare' in txt:
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B]Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
+                    else: txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
+
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
+                elif 'Unknow' in txt:
+                    if not '<p>Por causas ajenas a' in txt: txt += '[COLOR goldenrod][B]Puede estar en Mantenimiento[/B][/COLOR][CR]'
+                    txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
+
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B] Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
+
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
+                elif '<p>Por causas ajenas a' in txt:
+                    txt += '[COLOR darkorange][B]Parece estar Bloqueado por su Operadora de Internet[/B][/COLOR][CR]'
+
+                    if 'actuales:' in txt:
+                        if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
+                        else:
+                           if not 'Configure Nuevos Proxies a Usar' in txt: txt += '[COLOR red][B] Configure Nuevos Proxies a Usar ...[/B][/COLOR][CR]'
+                           txt += '[COLOR plum][B]Obtenga Nuevos Proxies desde el proveedor[/B] [COLOR yellow][B]All-providers[/B][/COLOR] ó [COLOR yellow][B]Proxyscrape.com[/B][/COLOR][CR]'
+
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
+                else:
+                    txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
+                    txt += '[COLOR tomato][B]Compruebe su Internet y/ó el Canal, a través de un Navegador Web[/B][/COLOR][CR]'
+                    txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
+
+    if not 'Sugerencias:' in txt:
+        if 'Suspendida' in txt:
+            txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+
+            txt += '[COLOR goldenrod][B]Puede estar Renovando el Dominio o quizás estar en Mantenimiento[/B][/COLOR]'
+
+        elif response.sucess == False:
+            txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+
+            txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
+            txt += '[COLOR tomato][B]Compruebe su Internet y/ó el Canal, a través de un Navegador Web[/B][/COLOR][CR]'
+            txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/B][/I][/COLOR][CR]'
 
     return response, txt
 
@@ -475,7 +646,9 @@ def test_server(server_name):
     else:
         txt = test_internet()
 
-    bloc = str(dict_server['find_videos']['patterns'])
+    txt += '[COLOR moccasin][B]Balandro:[/B][/COLOR] ' + config.get_addon_version() + '[CR][CR]'
+
+    bloc = dict_server['find_videos']['patterns']
 
     servers = scrapertools.find_multiple_matches(str(bloc), '.*?"url".*?"(.*?)"')
     if not servers: servers = scrapertools.find_multiple_matches(str(bloc), ".*?'url'.*?'(.*?)'")
@@ -516,18 +689,37 @@ def test_server(server_name):
     txt += '[COLOR moccasin][B]Parámetros:[/B][/COLOR][CR]'
 
     try:
-       patterns = scrapertools.find_multiple_matches(str(bloc), '{(.*?)}')
+       patterns = dict_server['find_videos']['patterns']
 
        for pattern in patterns:
-           url_pat = scrapertools.find_multiple_matches(pattern, "'url': '(.*?)'")
-           tab_pat = scrapertools.find_multiple_matches(pattern, "'pattern': '(.*?)'")
+           tab_pat = scrapertools.find_single_match(str(pattern), "'pattern': '(.*?)'").strip()
+           url_pat = scrapertools.find_single_match(str(pattern), "'url': '(.*?)'").strip()
 
-           txt += 'url patron: ' + str(url_pat) + '[CR]'
+           if not tab_pat or not url_pat: continue
+
            txt += 'patron: ' + str(tab_pat) + '[CR]'
-           txt += '[CR]'
-
+           txt += 'urlpat: ' + str(url_pat) + '[CR][CR]'
     except:
        txt += 'patrones: ' + str(bloc) + '[CR][CR]'
+
+    try:
+       notes = dict_server['notes']
+    except: 
+       notes = ''
+
+    txt_diag = ''
+
+    if 'Alternative' in notes:
+        notes = notes.replace('Alternative vía:', '').strip()
+        txt_diag  += 'alternativas: ' + '[COLOR plum][B]' + str(notes) + '[/B][/COLOR][CR]'
+    else:
+        if notes: txt_diag  += 'notes: ' + '[COLOR plum][B]' + str(notes) + '[/B][/COLOR][CR]'
+
+    if txt_diag:
+        txt += '[COLOR moccasin][B]Diagnosis:[/B][/COLOR][CR]'
+        txt += txt_diag
+    else:
+        txt += '[CR][COLOR moccasin][B]Diagnosis:[/B][/COLOR][CR]'
 
     if url_servidor == '': url_servidor = 'Indefinido'
     elif '\\' in url_servidor: url_servidor = 'Variable'
@@ -536,6 +728,18 @@ def test_server(server_name):
     else:
        txt += 'url: ' + url_servidor
        txt = info_server(server_name, server_poe, url_servidor, txt)
+
+    avisado = False
+
+    if 'Variable' in txt or 'Indefinido' in txt: pass
+    elif server_id in str(servers_poe): pass
+    else:
+       if not 'code: [COLOR springgreen][B]200' in txt:
+           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + server_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Servidor NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR yellow][B]Por favor, compruebe la información del Test del Servidor.[/B][/COLOR]')
+           avisado = True
+
+    if servers_unsatisfactory == 'unsatisfactory':
+        if not avisado: return
 
     platformtools.dialog_textviewer(server_name.capitalize(), txt)
 
@@ -556,7 +760,10 @@ def info_server(server_name, server_poe, url, txt):
         if not 'Host error' in txt:
             if not 'Cloudflare' in txt:
                if not 'Invisible Captcha' in txt:
-                   response, txt = acces_server(server_name, url, txt, follow_redirects=True)
+                   if not 'timed out' in txt:
+                       platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
+
+                       response, txt = acces_server(server_name, url, txt, follow_redirects=True)
 
     return txt
 
@@ -565,8 +772,6 @@ def acces_server(server_name, url, txt, follow_redirects=None):
     platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
 
     server_id = server_name.lower()
-
-    text_with_proxies = ''
 
     response = httptools.downloadpage(url, follow_redirects=follow_redirects, raise_weberror=False, bypass_cloudflare=False)
 
@@ -592,6 +797,8 @@ def acces_server(server_name, url, txt, follow_redirects=None):
     txt += 'error: ' + str(response.error) + '[CR]'
     txt += 'length: ' + str(len(response.data))
 
+    new_web = scrapertools.find_single_match(str(response.headers), "'location':.*?'(.*?)'")
+
     if response.sucess == False:
         if '| 502: Bad gateway</title>' in response.data:  txt += '[CR]gate: [COLOR orangered][B]Host error[/B][/COLOR]'
         elif '<title>Attention Required! | Cloudflare</title>' in response.data: txt += '[CR]blocked: [COLOR orangered][B]Cloudflare[/B][/COLOR]'
@@ -609,8 +816,6 @@ def acces_server(server_name, url, txt, follow_redirects=None):
                    txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                    txt += str(response.data) + '[CR]'
     else:
-        new_web = scrapertools.find_single_match(str(response.headers), "'location':.*?'(.*?)'")
-
         if len(response.data) > 1000:
             if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
             elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
@@ -622,7 +827,7 @@ def acces_server(server_name, url, txt, follow_redirects=None):
                 txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                 txt += str(response.headers) + '[CR]'
         else:
-            if len(response.data) < 500:
+            if len(response.data) < 1000:
                 if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
                 elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
                 else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location':)[/B][/COLOR]"
@@ -637,7 +842,7 @@ def acces_server(server_name, url, txt, follow_redirects=None):
 
             if 'status:'in txt:
                 if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]account: [COLOR goldenrod][B]Suspendida[/B][/COLOR]'
-                else:  txt += '[CR]account: [COLOR goldenrod][B]Podría estar en Mantenimiento[/B][/COLOR]'
+                else: txt += '[CR]account: [COLOR goldenrod][B]Podría estar en Mantenimiento[/B][/COLOR]'
             else:
                 txt += '[CR][CR]'
                 txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
@@ -651,9 +856,20 @@ def acces_server(server_name, url, txt, follow_redirects=None):
 
     if not 'Sugerencias:' in txt:
         if 'Invisible Captcha' in txt:
-            txt += '[CR][CR]'
-            txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
-            txt += 'router:[COLOR yellow] Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e intentelo de nuevo[/COLOR][CR]'
+            txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+            txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/B][/I][/COLOR][CR]'
+
+        elif 'Suspendida' in txt:
+            txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+
+            txt += '[COLOR goldenrod][B]Puede estar Renovando el Dominio o quizás estar en Mantenimiento[/B][/COLOR]'
+
+        elif response.sucess == False:
+            txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+
+            txt += '[COLOR gold][B]Puede Descartar el Servidor en la Configuración (categoría Play)[/B][/COLOR][CR]'
+            txt += '[COLOR tomato][B]Compruebe su Internet y/ó el Servidor, a través de un Navegador Web[/B][/COLOR][CR]'
+            txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/B][/I][/COLOR][CR]'
 
     return response, txt
 

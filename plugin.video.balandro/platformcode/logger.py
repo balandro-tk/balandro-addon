@@ -12,7 +12,7 @@ import inspect, xbmc
 
 from platformcode import config
 
-loglevel = config.get_setting('debug', 0) # 0 (sólo error), 1 (error+info), 2 (error+info+debug)
+loglevel = config.get_setting('debug', 0) # 0 (error), 1 (error+info), 2 (error+info+debug)
 
 
 def info(texto=""):

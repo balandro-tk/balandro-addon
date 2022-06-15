@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -223,12 +222,15 @@ def sorted_urls(url, url_base64, host_torrent):
             chors = sortened_domains[domain][1]
 
             for c in chars:
-                if chors[0] < c < chors[1]:
-                    if chors[2] < c < chors[3]: chers.append(c - chors[6])
-                    elif c > chors[5]: chers.append(c - chors[6])
-                    elif chors[3] <= c <= chors[4]: chers.append(c)
-                    else: chers.append(c + chors[7])
-                else:
+                try:
+                    if chors[0] < c < chors[1]:
+                        if chors[2] < c < chors[3]: chers.append(c - chors[6])
+                        elif c > chors[5]: chers.append(c - chors[6])
+                        elif chors[3] <= c <= chors[4]: chers.append(c)
+                        else: chers.append(c + chors[7])
+                    else:
+                        chers.append(c)
+                except:
                     chers.append(c)
 
             url_base64 = "".join([chr(x) for x in chers])

@@ -2,7 +2,25 @@
 
 [COLOR yellow][B]2022[/B][/COLOR]
 
-2.3.3  [COLOR darkorange]Junio 2022[/COLOR]
+2.3.4  [COLOR darkorange]16 de Junio 2022[/COLOR]
+    Correcciones: Bugs de la version anterior
+
+    Configuracion:
+       Menu: Nuevas opciones
+       Sistema: Nuevas opciones
+       Ayuda: Nuevas opciones
+
+    Generos: Re-configurados
+
+    Canales:
+       Modificados: Revision generalizada
+       Anulados: Las webs cerradas
+
+    Servidores:
+       Modificados: Revision generalizada
+       Anulados: Las webs cerradas
+
+2.3.3  [COLOR darkorange]1 de Junio 2022[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion:
@@ -20,7 +38,7 @@
        Modificados: Revision generalizada
        Anulados: Las webs cerradas
 
-2.3.2  [COLOR darkorange]Mayo 2022[/COLOR]
+2.3.2  [COLOR darkorange]10 de Mayo 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Generos: Re-configurados
 
@@ -32,7 +50,7 @@
        Modificados: Revision generalizada
        Anulados: Las webs cerradas
 
-2.3.1  [COLOR darkorange]Mayo 2022[/COLOR]
+2.3.1  [COLOR darkorange]5 de Mayo 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Configuracion: Cuentas - Dominio HdFull
     Generos: Re-configurados
@@ -45,7 +63,7 @@
        Modificados: Revision generalizada
        Anulados: Las webs cerradas
 
-2.3.0  [COLOR darkorange]Mayo 2022[/COLOR]
+2.3.0  [COLOR darkorange]30 de Mayo 2022[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion:
@@ -67,19 +85,19 @@
        Modificados: Revision generalizada
        Nuevos: Varios
 
-2.2.5  [COLOR darkorange]Abril 2022[/COLOR]
+2.2.5  [COLOR darkorange]1 de Abril 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Generos: Re-configurados
     Canales: Modificados - Revision generalizada
     Servidores: Modificados - Revision generalizada
 
-2.2.4  [COLOR darkorange]Marzo 2022[/COLOR]
+2.2.4  [COLOR darkorange]1 de Marzo 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Generos: Re-configurados
     Canales: Modificados - Revision generalizada
     Servidores: Modificados - Revision generalizada
 
-2.2.3  [COLOR darkorange]Febrero 2022[/COLOR]
+2.2.3  [COLOR darkorange]22 de Febrero 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Configuracion: Proxies - Nuevas Opciones
     Proxies: Busqueda Global Optimizada
@@ -91,13 +109,13 @@
 
     Servidores: Modificados - Revision generalizada
 
-2.2.2  [COLOR darkorange]Febrero 2022[/COLOR]
+2.2.2  [COLOR darkorange]31 de Enero 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Generos: Re-configurados
     Canales: Modificados - Revision generalizada
     Servidores: Modificados - Revision generalizada
 
-2.2.1  [COLOR darkorange]Enero 2022[/COLOR]
+2.2.1  [COLOR darkorange]17 de Enero 2022[/COLOR]
     Correcciones: Bugs de la version anterior
     Configuracion: Nuevos proveedores de proxies
     Menus: Nueva opcion Doramas
@@ -110,7 +128,7 @@
 
     Servidores: Modificados - Revision generalizada
 
-2.2.0  [COLOR darkorange]Enero 2022[/COLOR]
+2.2.0  [COLOR darkorange]2 de Enero 2022[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion:
@@ -129,7 +147,7 @@
 
 [COLOR yellow][B]2021[/B][/COLOR]
 
-2.1.3  [COLOR darkorange]Noviembre 2021[/COLOR]
+2.1.3  [COLOR darkorange]20 de Noviembre 2021[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion:
@@ -166,7 +184,7 @@
           Streamsb, Streamtape, Upvideo, Vidoza
 
 
-2.1.2  [COLOR darkorange]Octubre 2021[/COLOR]
+2.1.2  [COLOR darkorange]23 de Octubre 2021[/COLOR]
     Correcciones: Bugs de la version anterior
     Implementado nuevo sistema de Fixes
     Configuracion: Buscar - En que canales nunca se buscara
@@ -189,7 +207,7 @@
        Modificados: Fembed, Streamsb, Upstream, Uptobox, Vshare, Vup
        Nuevos: Streamon, Vidhd
 
-2.1.1  [COLOR darkorange]Octubre 2021[/COLOR]
+2.1.1  [COLOR darkorange]12 de Octubre 2021[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion:
@@ -216,7 +234,34 @@
     Servidores:
        Modificados: Doodstream, Okru, Uptobox, Uqload
 
-2.0.6  [COLOR darkorange]Septiembre 2021[/COLOR]
+2.1.0  [COLOR darkorange]30 de Septiembre 2021[/COLOR]
+    Correcciones: Bugs de la version anterior
+
+    Configuracion:
+        Menus: Opcion Idiomas
+        Sub-Menus: Opcion Especiales
+        Canales: Eliminar credenciales
+        Canales: Nuevas opciones personalizacion
+
+    Menus:
+        Buscar: Personalizacion busquedas
+        Sub-Menus: Especiales
+        Ayuda: Canales - Nuevas opciones personalizacion
+
+    Generos: Re-configurados
+
+    Canales:
+       Modificados:
+          AreaDocumental, Cinecalidad, ClubCine, Dilo, DixMaxlive,
+          DonTorrents, HdFull, HdFullCom, HdFullSe, MegaDede2,
+          Pelisforte, PelisPedia, PlayDede, PornTube, SeriesFlix,
+          SeriesMetro, SeriesRetro, SubTorrents, TvSeries, ZooWoman
+       Nuevos: EstrenosPapaya, RetroTv
+
+    Servidores:
+       Modificados: Doodstream, Okru, Uptobox, Uqload
+
+2.0.6  [COLOR darkorange]3 de Septiembre 2021[/COLOR]
     Correcciones: Bugs de la version anterior
     Configuracion: Nuevo apartado Cuentas
     Grupos: Nuevo apartado Especiales
@@ -255,11 +300,11 @@
        Nuevos:
           Highload, Stream2, Streamlare, Streamty, Upvideo, Viwol, Voe
 
-2.0.5  [COLOR darkorange]Agosto 2021[/COLOR]
+2.0.5  [COLOR darkorange]6 de Agosto 2021[/COLOR]
     Correcciones: Bugs de la version anterior
     Descargas
 
-2.0.4  [COLOR darkorange]Agosto 2021[/COLOR]
+2.0.4  [COLOR darkorange]4 de Agosto 2021[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Canales:
@@ -268,7 +313,7 @@
     Servidores:
        Modificados: Evoload, Fastream
 
-2.0.3  [COLOR darkorange]Agosto 2021[/COLOR]
+2.0.3  [COLOR darkorange]4 de Agosto 2021[/COLOR]
     Correcciones: Bugs de la version anterior
     Trailers
     Menu principal opcion: Torrents
@@ -301,7 +346,7 @@
           ClicknUpload, DoodStream, Fembed, Gamovideo, Playtube,
           Sbembed, Streamsb, Streamz, YourUpload,, YouTube, Zplayer
 
-2.0.2  [COLOR darkorange]Mayo 2021[/COLOR]
+2.0.2  [COLOR darkorange]26 de Mayo 2021[/COLOR]
     Correcciones: Bugs de la version anterior
     Configuracion: Opcion Descartar búsquedas en canales torrent
     Generos: Re-configurados
@@ -337,7 +382,7 @@
           PlayTube, Sbembed, Streamsb, Uptobox, YourUpload
        Nuevos: ShareVid
 
-2.0.1  [COLOR darkorange]Abril 2021[/COLOR]
+2.0.1  [COLOR darkorange]25 de Abril 2021[/COLOR]
     Correcciones: Bugs de la version anterior
 
     Configuracion: Visual - Habilitar colores personalizados notificaciones
@@ -373,7 +418,7 @@
        Nuevos:
           Amazon, Fastream, Highstream, Sbembed, Wolfstream
 
-2.0.0  [COLOR darkorange]Marzo 2021[/COLOR]
+2.0.0  [COLOR darkorange]6 de Marzo 2021[/COLOR]
     Compatible con Python3
 
     Nuevo Menu
@@ -406,13 +451,13 @@
 
 [COLOR cyan][B]Versiones NO compatibles con Python3[/B][/COLOR]
 
-1.5.2  [COLOR darkorange]Febrero 2021[/COLOR]
+1.5.2  [COLOR darkorange]13 Febrero 2021[/COLOR]
     Canales modificados: Cinecalidad, Hdfull, Seriesmetro, SeriesFlix, Pelispedia, Repelis,
     Seriesblanco, Newpct1, Seriemega, Seriez, Cliver, Seriespapaya, Seriesdanko, Pepecine
     Servidores modificados: Filesim, Gamovideo, Clipwatching, Vidtodo, Easyload
     Incorporado nuevo proveedor de proxies
 
-1.5.1  [COLOR darkorange]Enero 2021[/COLOR]
+1.5.1  [COLOR darkorange]9 de Enero 2021[/COLOR]
     Canales modificados: Cuevana3, Playview, Inkapelis, Cinecalidad, Hdfull, Movidy, 
     Seriesmetro, Serieflix, Newpct1, Grantorrent, Descargacineclasico, Pelisplay
     Servidores modificados: Doodstream, Vidia, Gounlimited, Youtube, Videossh, 
@@ -421,125 +466,125 @@
 
 [COLOR yellow][B]2020[/B][/COLOR]
 
-1.5.0  [COLOR darkorange]Noviembre 2020[/COLOR]
+1.5.0  [COLOR darkorange]17 de Noviembre 2020[/COLOR]
     Canales modificados: Hdfull, Seriesdanko, Seriespapaya, Estrenoscinesaa, Allpeliculas,
     Playview, Dospelis, Inkapelis, Cinecalidad
     Servidores modificados: Youtube, Gamovideo, Streamtape
     Corrección bug por cambios de tmdb
     Opcion en Settings para forzar actualizaciones de tipo fixes
 
-1.4.23  [COLOR darkorange]Octubre 2020[/COLOR]
+1.4.23  [COLOR darkorange]30 de Octubre 2020[/COLOR]
     Canales modificados: Hdfull, Pepecine, Seriespapaya, Dilo, Dospelis, Movidy
     Servidores modificados: Gamovideo, Fembed, Playtube, Upstream
 
-1.4.22  [COLOR darkorange]Octubre 2020[/COLOR]
+1.4.22  [COLOR darkorange]15 de Octubre 2020[/COLOR]
     Canales modificados: Hdfull, Torrentdivx, Pelispedia, Tupelihd, Retroseriestv
     Servidores modificados: Gamovideo, Streamtape
     Imágenes de Tmdb con https para evitar errores en ciertos dispositivos
 
-1.4.21  [COLOR darkorange]Octubre 2020[/COLOR]
+1.4.21  [COLOR darkorange]5 de Octubre 2020[/COLOR]
     Canales modificados: Hdfull, Pepecine, Seriemega, Cuevana3, Seriesflix
     Servidores modificados: Upstream, Vup, Playtube, Gloria, Streamz
 
-1.4.20  [COLOR darkorange]Septiembre 2020[/COLOR]
+1.4.20  [COLOR darkorange]23 de Septiembre 2020[/COLOR]
     Nuevos canales: Estrenoscinesaa, Peliculasflix, Seriesflix, Repelis, Movidy
     Canales modificados: Torrentdivx, Newpct1, Cinemaclasic, Tucineclasico, Dospelis, Cliver, Hdfull
     Servidores modificados: Mega, Doodstream, Jwp, Aparat, Streamtape, Mystream, Vidtodo
 
-1.4.19  [COLOR darkorange]Septiembre 2020[/COLOR]
+1.4.19  [COLOR darkorange]4 de Septiembre 2020[/COLOR]
     Canales modificados: Hdfull, Cinecalidad, Torrentdivx, Newpct1, Cinemaclasic, Pepecine
     Servidores modificados: Tnencloud, Filesim, Doodstream, Streamz
 
-1.4.18  [COLOR darkorange]Agosto 2020[/COLOR]
+1.4.18  [COLOR darkorange]20 de Agosto 2020[/COLOR]
     Canales modificados: Inkapelis, Pepecine, Pelispedia, Hdfull, Seriemega, Cuevana3, Torrentdivx
     Servidores modificados: Digiload, Gloria, Uploadsmobi
 
-1.4.17  [COLOR darkorange]Agosto 2020[/COLOR]
+1.4.17  [COLOR darkorange]2 de Agosto 2020[/COLOR]
     Canales modificados: Pepecine, Seriemega, Hdfull, Pelisvips, Grantorrent, Torrentdivx,
     Pelispedia, Dospelis
     Servidores modificados: Aparat, Openplay, Easyload, Fastplay, Videoko, Gloria
 
-1.4.16  [COLOR darkorange]Julio 2020[/COLOR]
+1.4.16  [COLOR darkorange]3 de Julio 2020[/COLOR]
     Canales modificados: Retroseriestv, Seriez, Cinetux, Allpeliculas, Newpct1, Dospelis,
     Pelispedia, Seriesmetro, Pepecine, Playview, Seriemega, Tvvip, Cinefox
     Servidores modificados: Zembed, Vk, Cloudvideo, Mixdrop, Easyload, Megaup
 
-1.4.15  [COLOR darkorange]Junio 2020[/COLOR]
+1.4.15  [COLOR darkorange]5 de Junio 2020[/COLOR]
     Canales modificados: Cinetux, Cuevana3, Dilo, Yape, Seriesmetro, Seriespapaya, Grantorrent,
     Pelispedia, Tucineclasico, Documentalesonline
     Servidores modificados: Cloudvideo, VideoMega, Youtube
 
-1.4.14  [COLOR darkorange]Mayo 2020[/COLOR]
+1.4.14  [COLOR darkorange]18 de Mayo 2020[/COLOR]
     Canales modificados: Allpeliculas, Cuevana3, Retroseriestv, Cliver, Gnula
     Servidores modificados: Supervideo, Clipwatching, Mystream, Fembed, Vidtodo, Embedy, Myvi,
     Mailru, Peertube
 
-1.4.13  [COLOR darkorange]Mayo 2020[/COLOR]
+1.4.13  [COLOR darkorange]1 de Mayo 2020[/COLOR]
     Canales modificados: Allpeliculas, Documentalesonline, Descargacineclasico, Cinefox,
     Grantorrent, Torrentdivx, Wikiseries, Zoowoman
     Servidores modificados: Streamz, Archiveorg, Peertube, Streamtape
 
-1.4.12  [COLOR darkorange]Abril 2020[/COLOR]
+1.4.12  [COLOR darkorange]26 de Abril 2020[/COLOR]
     Canales modificados: Seriemega, Seriez, Seriesmetro, Inkapelis, Cinemaclasic, 
     Wikiseries, Cuevana3, Seriesflv
     Servidores modificados: Videobb, Thevideobee, Userscloud, Easyload, Gounlimited, 
     Mailru, M3u8hls, Streamz, Vshare, Jetload, Vsmobi, Embedy
 
-1.4.11  [COLOR darkorange]Abril 2020[/COLOR]
+1.4.11  [COLOR darkorange]16 de Abril 2020[/COLOR]
     Canales modificados: Seriemega, Cinemaclasic, Areadocumental, Grantorrent, Inkapelis, Pelisvips
     Servidores modificados: Archiveorg, Zembed, Easyload, Gounlimited, Vidlox
 
-1.4.10  [COLOR darkorange]Abril 2020[/COLOR]
+1.4.10  [COLOR darkorange]10 de Abril 2020[/COLOR]
     Canales modificados: Descargacineclasico, Inkapelis, Playview, Allpeliculas, Torrentdivx,
     Verdocumentalesonline, Tucineclasico, Cinemaclasic, SerieMega 
     Servidores modificados: Mega, Dailymotion, Netutv, Vidia, Mixdrop, Doodstream, 
     Vidmoly, Vidlox, Supervideo, Youtube, Clipwatching, Myvi
 
-1.4.9  [COLOR darkorange]Abril 2020[/COLOR]
+1.4.9  [COLOR darkorange]2 de Abril 2020[/COLOR]
     Canales modificados: Serieslan. Seriesflv 
     Servidores modificados: Mp4upload, Gamovideo, Vidmoly, Netutv, Uptobox, Uptostream,
     Gounlimited, Vshare, Vidlox
 
-1.4.8  [COLOR darkorange]Marzo 2020[/COLOR]
+1.4.8  [COLOR darkorange]26 de Marzo 2020[/COLOR]
     Canales modificados: Pedropolis, Grantorrent, Seriesmetro, Cinecalidad 
     Servidores modificados: Clipwatching, Uptostream, Netutv, Videomega, Watchvideo
 
-1.4.7  [COLOR darkorange]Marzo 2020[/COLOR]
+1.4.7  [COLOR darkorange]20 de Marzo 2020[/COLOR]
     Canales modificados: Cinetux, Newpct1, Tupelihd, Pelispedia, Mega1link, Seriesmetro 
     Servidores modificados: Powvideo, Streamplay
 
-1.4.6  [COLOR darkorange]Marzo 2020[/COLOR]
+1.4.6  [COLOR darkorange]14 de Marzo 2020[/COLOR]
     Canales modificados: Descargacineclasico, Grantorrent, Inkapelis, Xdede, Allpeliculas, Cinetux
     Servidores modificados: Mystream, Streamz, Gamovideo, Digiload, Fembed
     Incorporada una nueva opcion para buscar proxies
 
-1.4.5  [COLOR darkorange]Febrero 2020[/COLOR]
+1.4.5  [COLOR darkorange]28 de Febrero 2020[/COLOR]
     Canales modificados: Retroseriestv, Hdfull, Seriesdanko, Inkapelis, Elhogardelaprendiz 
     Servidores modificados: Vidload, Gamovideo, Mixdrop, Uptostream, Powvideo, Streamplay
 
-1.4.4  [COLOR darkorange]Febrero 2020[/COLOR]
+1.4.4  [COLOR darkorange]21 de Febrero 2020[/COLOR]
     Canales modificados: Cinetux, InkaPelis, Pedropolis, Cinefox, Cuevana3, Dospelis, Grantorrent,
     Pepecine
     Servidores modificados: Fembed, Upstream, Powvideo, Streamplay, Netutv, Uqload, Streamz,
     Vidia, M3u8hls, Youtube
 
-1.4.3  [COLOR darkorange]Febrero 2020[/COLOR]
+1.4.3  [COLOR darkorange]7 de Febrero 2020[/COLOR]
     Canales modificados: Grantorrent, Seriez, Cinefox, Hdfull, Playview
     Servidores modificados: Fembed, Powvideo, Streamplay, Sendvid, Netutv
 
-1.4.2  [COLOR darkorange]Enero 2020[/COLOR]
+1.4.2  [COLOR darkorange]17 de Enero 2020[/COLOR]
     Canales modificados: Cuevana3, Xdede, Dospelis, Pelisplay, Hdfull
     Servidores modificados: Powvideo, Streamplay, Upstream, Netutv, Youtube, Videomega
     Nueva opcion en Configuracion/Otros para descartar listas eróticas/xxx
 
-1.4.1  [COLOR darkorange]Enero 2020[/COLOR]
+1.4.1  [COLOR darkorange]10 de Enero 2020[/COLOR]
     Canales nuevos: Dospelis.
     Canales modificados: Seriesdanko, Playview, Pepecine, Seriespapaya, Grantorrent, Newpct1,
     Xdede, Cinecalidad
     Servidores modificados: Powvideo, Streamplay, Mixdrop, Vidfast, Vidoza, Dailymotion, 
     Cloudvideo, Upstream
 
-1.4.0  [COLOR darkorange]Enero 2020[/COLOR]
+1.4.0  [COLOR darkorange]3 de Enero 2020[/COLOR]
     Canales modificados: Cinecalidad, Seriesdanko, Pelisplay, Cinetux, Cineonline, Hdfull
     Servidores modificados: Vidoza, Mystream, Jetload, Powvideo, Streamplay, Mixdrop, 
     Yourupload, Thevideobee, Videobin, Gvideo
@@ -547,31 +592,31 @@
 
 [COLOR yellow][B]2019[/B][/COLOR]
 
-1.3.15  [COLOR darkorange]Diciembre 2019[/COLOR]
+1.3.15  [COLOR darkorange]21 de Diciembre 2019[/COLOR]
     Canales modificados: Playview, Xdede, Miradocumentales, Cinetux
     Servidores modificados: Powvideo, Streamplay, Videomega, Bdupload, 
     Youtube, Upvid, Vivo, Mixdrop
 
-1.3.14  [COLOR darkorange]Diciembre 2019[/COLOR]
+1.3.14  [COLOR darkorange]13 de Diciembre 2019[/COLOR]
     Canales modificados: Pepecine, Clasicofilm, Retroseriestv, Cliver, Cinecalidad
     Servidores modificados: Mixdrop, Vidcloud, Thevid, Netutv, Jetload, Openplay
     En Descargas incorporada opcion para guardar una copia del vídeo a otra carpeta, usb
 
-1.3.13  [COLOR darkorange]Diciembre 2019[/COLOR]
+1.3.13  [COLOR darkorange]7 de Diciembre 2019[/COLOR]
     Canales modificados: Pelisplay, InkaSeries, Cinecalidad, Playview, Grantorrent, Cuevana3
     Servidores modificados: Powvideo, Streamplay, JetLoad, Gounlimited, Videomega, Upstream
     Corregido bug en enlaces guardados con ciertos servidores
 
-1.3.12  [COLOR darkorange]Noviembre 2019[/COLOR]
+1.3.12  [COLOR darkorange]29 de Noviembre 2019[/COLOR]
     Canales modificados: Cinecalidad, Wikiseries
     Servidores modificados: Jetload, Upvid, Mixdrop, Prostream, Vidia, Powvideo, Vidfast
     En la Ayuda, incorporado apartado explicando la Utilización de proxies
 
-1.3.11  [COLOR darkorange]Noviembre 2019[/COLOR]
+1.3.11  [COLOR darkorange]24 de Noviembre 2019[/COLOR]
     Canales modificados: Cuevana3, Pelisplay, Xdede, Cineonline, Cliver
     Servidores modificados: Onlystream, M3u8hls, Vk, Fembed
 
-1.3.10  [COLOR darkorange]Noviembre 2019[/COLOR]
+1.3.10  [COLOR darkorange]15 de Noviembre 2019[/COLOR]
     Canales modificados: Cuevana3, GranTorrent, Cliver, Xdede, Pepecine, SeriesBlanco
     Servidores modificados: Clipwatching, Fembed, Supervideo, Mixdrop, Jetload
 

@@ -10,7 +10,10 @@ host = 'https://www.seriesantiguas.com/'
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('www.seriesantiguas.net', 'www.seriesantiguas.com')
+    ant_hosts = ['https://www.seriesantiguas.net/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post, headers=headers).data
     return data

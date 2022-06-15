@@ -118,14 +118,17 @@ def list_lst(item):
     for match in matches:
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
 
-        url = url + '/descargas'
+        if url:
+            if url == '/buscar/descargas/tv': continue
 
-        title = scrapertools.find_single_match(match, 'src=".*?<a href=".*?">(.*?)</a>').strip()
+            url = url + '/descargas'
 
-        thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
+            title = scrapertools.find_single_match(match, 'src=".*?<a href=".*?">(.*?)</a>').strip()
 
-        itemlist.append(item.clone( action='list_lists', url=url, title=title, thumbnail=thumb,
-                                    contentType = 'tvshow', contentSerieName = title, infoLabels = {'year': '-'} ))
+            thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
+
+            itemlist.append(item.clone( action='list_lists', url=url, title=title, thumbnail=thumb,
+                                        contentType = 'tvshow', contentSerieName = title, infoLabels = {'year': '-'} ))
 
     tmdb.set_infoLabels(itemlist)
 

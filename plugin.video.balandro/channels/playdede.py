@@ -160,18 +160,22 @@ def login(item):
 
        jdata = jsontools.load(data)
 
-       if not jdata['alert']:
-           platformtools.dialog_notification(config.__addon_name, '[COLOR chartreuse]PlayDede Login correcto[/COLOR]')
-           config.set_setting('playdede_login', True, 'playdede')
+       if 'reload' in str(jdata):
+           if jdata['reload']:
+               platformtools.dialog_notification(config.__addon_name, '[COLOR chartreuse]PlayDede Login correcto[/COLOR]')
+               config.set_setting('playdede_login', True, 'playdede')
 
-           platformtools.itemlist_refresh()
-           return True
-       elif jdata['reload']:
-           platformtools.dialog_notification(config.__addon_name, '[COLOR chartreuse]PlayDede Login correcto[/COLOR]')
-           config.set_setting('playdede_login', True, 'playdede')
+               platformtools.itemlist_refresh()
+               return True
 
-           platformtools.itemlist_refresh()
-           return True
+       elif 'alert' in str(jdata):
+           if not jdata['alert']:
+               platformtools.dialog_notification(config.__addon_name, '[COLOR chartreuse]PlayDede Login correcto[/COLOR]')
+               config.set_setting('playdede_login', True, 'playdede')
+
+               platformtools.itemlist_refresh()
+               return True
+
        else:
            platformtools.dialog_notification(config.__addon_name, '[COLOR red]PlayDede Login incorrecto[/COLOR]')
            return False
@@ -241,7 +245,6 @@ def do_downloadpage(url, post=None, referer=None):
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
-
 
     headers = {}
 

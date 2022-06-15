@@ -12,7 +12,10 @@ host = 'https://www.cinematte.com.es/'
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('/www.cinematteflix.com/', '/www.cinematte.com.es/')
+    ant_hosts = ['https://www.cinematteflix.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post, headers=headers).data
     return data

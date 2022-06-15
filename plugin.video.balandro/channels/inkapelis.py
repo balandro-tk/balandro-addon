@@ -15,7 +15,10 @@ descartar_anime = config.get_setting('descartar_anime', default=False)
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    url = url.replace('https://inkapelis.me/', host)
+    ant_hosts = ['https://inkapelis.me/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     raise_weberror = False if '/fecha/' in url else True
 

@@ -22,7 +22,10 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    url = url.replace('https://www.pelispedia-v1.wtf/', host)
+    ant_hosts = ['https://www.pelispedia-v1.wtf/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     if not headers: headers = {'Referer': host}
 

@@ -15,7 +15,7 @@ perpage = 20
 
 def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://www.srnovelas.cc/'] 
+    ant_hosts = ['https://www.srnovelas.cc/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

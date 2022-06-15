@@ -2,15 +2,18 @@
 <settings>
 
     <category label="Menu">
+        <setting label="Opciones para la Personalización de menús:" type="lsep"/>
+        <setting id="show_mnu_parameters" type="action" label="Información sobre sus Parámetros Actuales" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_menu_parameters)"/>
+
         <setting label="Opciones para el menú Simplificado:" type="lsep"/>
         <setting id="mnu_simple" type="bool" label="Activar menú simplificado" default="false"/>
 
         <setting label="Opciones para el menú Principal:" type="lsep"/>
         <setting id="mnu_oppciones" type="bool" label="Seleccionar opciones" default="false"/>
-        <setting id="mnu_sugeridos" type="bool" label="Añadir la opción Sugeridos (simplificado y principal)" default="true" visible="eq(-1,true)"/>
-        <setting id="channels_link_main" type="bool" label="Añadir la opción Canales (simplificado y principal)" default="true" visible="eq(-2,true)"/>
-        <setting id="mnu_idiomas" type="bool" label="Añadir la opción Idiomas (simplificado y principal)" default="true" visible="eq(-3,true)"/>
-        <setting id="mnu_grupos" type="bool" label="Añadir la opción Grupos (simplificado y principal)" default="true" visible="eq(-4,true)"/>
+        <setting id="mnu_sugeridos" type="bool" label="Añadir la opción Sugeridos (Menús Simplificado y Principal)" default="true" visible="eq(-1,true)"/>
+        <setting id="channels_link_main" type="bool" label="Añadir la opción Canales (Menús Simplificado y Principal)" default="true" visible="eq(-2,true)"/>
+        <setting id="mnu_idiomas" type="bool" label="Añadir la opción Idiomas (Menús Simplificado y Principal)" default="true" visible="eq(-3,true)"/>
+        <setting id="mnu_grupos" type="bool" label="Añadir la opción Grupos (Menús Simplificado y Principal)" default="true" visible="eq(-4,true)"/>
         <setting id="mnu_pelis" type="bool" label="Añadir la opción Películas" default="true" visible="eq(-5,true)"/>
         <setting id="mnu_series" type="bool" label="Añadir la opción Series" default="true" visible="eq(-6,true)"/>
         <setting id="channels_link_pyse" type="bool" label="Añadir la opción Películas y Series (solo los canales con ambos contenidos)" default="false" visible="eq(-7,true)"/>
@@ -26,17 +29,16 @@
         <setting id="mnu_preferidos" type="bool" label="Añadir la opción Preferidos" default="true" visible="eq(-17,true)"/>
         <setting id="mnu_desargas" type="bool" label="Añadir la opción Descargas" default="true" visible="eq(-18,true)"/>
 
-        <setting label="Opciones para el Menú y los Sub-Menús:" type="lsep"/>
+        <setting label="Opciones para los Menús y Sub-Menús:" type="lsep"/>
         <setting id="mnu_search_proxy_channels" type="bool" label="Añadir acceso al detalle de Buscar Nuevos Proxies" default="false"/>
-
-        <setting type="sep"/>
-        <setting id="sub_mnu_cfg_search" type="bool" label="Añadir acceso al detalle de Personalizar Búsquedas" default="true"/>
+        <setting id="search_extra_proxies" type="bool" label="Añadir acceso al detalle de Búsquedas en Canales con Proxies" default="true"/>
 
         <setting type="sep"/>
         <setting id="sub_mnu_special" type="bool" label="Añadir acceso al detalle de opciones Especiales" default="true"/>
+        <setting id="search_extra_main" type="bool" label="Añadir acceso al detalle de Búsquedas Especiales (Listas TMDB, etc.)" default="false"/>
 
         <setting type="sep"/>
-        <setting id="search_extra_main" type="bool" label="Añadir accesos al detalle de Búsquedas especiales" default="false"/>
+        <setting id="sub_mnu_cfg_search" type="bool" label="Añadir acceso al detalle de Personalizar Búsquedas" default="true"/>
     </category>
 
     <category label="Canales">
@@ -112,6 +114,7 @@
         <setting label="Información Servidores:" type="lsep"/>
         <setting id="show_servers_list" type="action" label="Qué servidores están Disponibles" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_servers_list)"/>
         <setting id="show_help_recaptcha" type="action" label="¿ Qué significa Requiere verificación reCAPTCHA ?" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_recaptcha)"/>
+        <setting id="show_help_mega" type="action" label="Información servidor Mega" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_mega)"/>
         <setting id="show_help_uptobox" type="action" label="Información servidor Uptobox" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_uptobox)"/>
 
         <setting label="Opciones para la reproducción automática AutoPlay:" type="lsep"/>
@@ -173,7 +176,10 @@
         <setting id="proxies_tipos" type="bool" label="Solicitar tipo de Anonimidad" default="false"/>
         <setting id="proxies_paises" type="bool" label="Solicitar País" default="false"/>
         <setting id="proxies_maximo" type="bool" label="No solicitar y forzar el Valor máximo de los proxies a analizar" default="true"/>
-        <setting id="proxies_list" type="bool" label="Habilitar selección por su Lista Personalizada (.../Lista-proxies.txt)" default="false"/>
+
+        <setting type="sep"/>
+        <setting id="proxies_list" type="bool" label="Habilitar selección para su Lista Personalizada (.../Lista-proxies.txt)" default="false"/>
+        <setting id="proxies_yourlist" type="action" label="Pulsar para Visualizar su fichero 'Lista-proxies.txt'" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_yourlist)"/>
 
         <setting label="Opciones Especiales en el Proceso de configurar proxies a usar:" type="lsep"/>
         <setting id="proxies_extended" type="bool" label="Ampliar la lista de Proveedores de proxies a seleccionar" default="false"/>
@@ -193,10 +199,14 @@
         <setting id="channels_exclusively_torrents" type="action" label="Qué canales tienen enlaces Torrent Exclusivamente" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=channels_exclusively_torrents)"/>
 
         <setting type="sep"/>
-        <setting id="show_clients_torrent" type="action" label="Qué Clientes/Motores externos torrent estan Soportados" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_clients_torrent)"/>
+        <setting id="show_clients_torrent" type="action" label="Qué Clientes/Motores externos torrent están Soportados" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_clients_torrent)"/>
 
         <setting type="sep"/>
         <setting id="cliente_torrent" type="labelenum" label="Opciones para el Cliente/Motor Habitual para torrents" values="Ninguno|Seleccionar|Quasar|Elementum|Torrenter|Torrentin|Torrest|Pulsar|Stream|Xbmctorrent" default="Seleccionar"/>
+
+        <setting label="Canal DonTorrents:" type="lsep"/>
+        <setting id="last_domain_dontorrents" type="action" label="Pulsar para comprobar el dominio Vigente" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=last_domain_dontorrents)"/>
+		<setting id="channel_dontorrents_dominio" type="action" label="Modificar el dominio actual memorizado" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_domain_dontorrents)"/>
     </category>
 
     <category label="Buscar">
@@ -454,9 +464,6 @@
         <setting id="show_log" type="action" label="Pulsar para Visualizar el fichero LOG de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_log)"/>
         <setting id="copy_log" type="action" label="Pulsar para Obtener una copia del fichero LOG de su Media Center"  action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=copy_log)"/>
 
-        <setting type="sep"/>
-        <setting id="show_advs" type="action" label="Pulsar para Visualizar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_advs)"/>
-
         <setting label="Opciones para el Evaluar el Estado del Sistema:" type="lsep"/>
         <setting id="show_plataforma" type="action" label="Información Plataforma" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_plataforma)"/>
 
@@ -492,6 +499,15 @@
 
         <setting type="sep"/>
         <setting id="manto_datos" type="action" label="Pulsar para Eliminar 'Todos' los Datos Personalizados del Usuario" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_folder_addon)"/>
+
+        <setting label="Opciones para el fichero Advanced Settings:" type="lsep"/>
+        <setting id="show_advs" type="action" label="Pulsar para Visualizar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_advs)"/>
+
+        <setting type="sep"/>
+        <setting id="manto_advs" type="action" label="Pulsar para Eliminar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_advs)"/>
+
+        <setting label="Opciones para Desarrollo:" type="lsep"/>
+        <setting id="developer_mode" type="bool" label="Activar el Modo de ejecución en Desarrollo" default="false"/>
     </category>
 
     <category label="Ayuda">
@@ -504,13 +520,20 @@
         <setting id="show_version" type="action" label="Información versión" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_version)"/>
         <setting id="show_changelog" type="action" label="Historial de versiones" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_changelog)"/>
 
-        <setting label="Opciones Principales del Uso de Balandro:" type="lsep"/>
-        <setting id="show_help_tips" type="action" label="Trucos y Consejos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_tips)"/>
-        <setting id="show_help_use" type="action" label="Ejemplos de Uso" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_use)"/>
-        <setting id="show_help_faq" type="action" label="FAQS - Preguntas y Respuestas" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_faq)"/>
+        <setting label="Opciones Generales del Uso de Balandro:" type="lsep"/>
+        <setting id="show_not_contemplated" type="action" label="¿ Qué NO está contemplado en Balandro ?" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_not_contemplated)"/>
 
         <setting type="sep"/>
-        <setting id="show_help_settings" type="action" label="Notas sobre ciertos Parámetros de la Configuración" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_settings)"/>
+        <setting id="show_help_faq" type="action" label="Preguntas Frecuentes" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_faq)"/>
+        <setting id="show_help_tips" type="action" label="Trucos y Consejos" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_tips)"/>
+        <setting id="show_help_use" type="action" label="Ejemplos de Uso" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_use)"/>
+        <setting id="show_help_settings" type="action" label="Apuntes sobre ciertos Parámetros de la Configuración" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_settings)"/>
+
+        <setting type="sep"/>
+        <setting id="show_server_report" type="action" label="Como Reportar posible Fallo en la Reproducción de Servidores" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_server_report)"/>
+
+        <setting type="sep"/>
+        <setting id="show_help_notice" type="action" label="Comunicado Oficial de Balandro" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_help_notice)"/>
 
         <setting label="Desarrollo Balandro:" type="lsep"/>
         <setting label="Team [COLOR hotpink][B][I] t.me/Balandro_team [/I][/B][/COLOR] Unirse al Equipo de Desarrollo" visible="true"/>

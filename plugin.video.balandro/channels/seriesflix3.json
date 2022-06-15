@@ -3,7 +3,7 @@
   "name": "SeriesFlix3",
   "thumbnail": "seriesflix3.jpg",
 
-  "active": true,
+  "active": false,
 
   "searchable": true,
   "search_types": ["all", "movie", "tvshow"],

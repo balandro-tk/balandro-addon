@@ -37,7 +37,7 @@ def mainlist(item):
         por_plataforma = True
         por_tema = True
 
-        itemlist.append(item.clone( title = 'Películas', thumbnail=config.get_thumb('movie'), action = '', text_color='deepskyblue' ))
+        itemlist.append(item.clone( title = '[B]Películas:[/B]', thumbnail=config.get_thumb('movie'), action = '', text_color='deepskyblue' ))
 
         itemlist.append(item.clone( title = ' - En cartelera', action = 'list_all', url = host + 'cat_new_th_es.html' ))
 
@@ -68,7 +68,7 @@ def mainlist(item):
             por_tema = True
             itemlist.append(item.clone( title = ' - Por tema', action = 'temas', url = host + 'topics.php' ))
 
-        itemlist.append(item.clone( title = 'Series', thumbnail=config.get_thumb('tvshow'), action = '', text_color='hotpink' ))
+        itemlist.append(item.clone( title = '[B]Series:[/B]', thumbnail=config.get_thumb('tvshow'), action = '', text_color='hotpink' ))
 
         itemlist.append(item.clone( title = ' - Premios Emmy', action = 'emmy_ediciones', url = host + 'awards.php?award_id=emmy&year=' ))
 
@@ -83,15 +83,17 @@ def mainlist(item):
         if not por_tema:
             itemlist.append(item.clone( title = ' - Por tema', action = 'temas', url = host + 'topics.php' ))
 
-        itemlist.append(item.clone( title = 'Documentales', thumbnail=config.get_thumb('documentary'), action = '', text_color='cyan' ))
+        if config.get_setting('mnu_documentales', default=True):
+            itemlist.append(item.clone( title = '[B]Documentales:[/B]', thumbnail=config.get_thumb('documentary'), action = '', text_color='cyan' ))
 
-        itemlist.append(item.clone( title = ' - Los mejores documentales', action = 'list_sel', url = host + ruta_sel + '&notvse=1', cod_genre = 'DO' ))
+            itemlist.append(item.clone( title = ' - Los mejores documentales', action = 'list_sel', url = host + ruta_sel + '&notvse=1', cod_genre = 'DO' ))
 
     if not item.search_type:
-        itemlist.append(item.clone( title = 'Películas y Series', thumbnail=config.get_thumb('heart'), action = '', text_color='yellow' ))
+        if config.get_setting('channels_link_main', default=True):
+            itemlist.append(item.clone( title = '[B]Películas y Series:[/B]', thumbnail=config.get_thumb('heart'), action = '', text_color='yellow' ))
 
-        itemlist.append(item.clone( title = ' - Novedades a la venta', action = 'list_all', url = host + 'cat_new_sa_es.html' ))
-        itemlist.append(item.clone( title = ' - Novedades en alquiler', action = 'list_all', url = host + 'cat_new_re_es.html' ))
+            itemlist.append(item.clone( title = ' - Novedades a la venta', action = 'list_all', url = host + 'cat_new_sa_es.html' ))
+            itemlist.append(item.clone( title = ' - Novedades en alquiler', action = 'list_all', url = host + 'cat_new_re_es.html' ))
 
     return itemlist
  

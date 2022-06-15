@@ -13,12 +13,14 @@ from core import httptools, scrapertools, jsontools, servertools, tmdb
 
 from lib import balandroresolver
 
-
-# ~ webs 'https://hdfullcdn.cc/' y 'https://new.hdfull.one/'  son para comprobar dominio vigente en actions pero pueden requerir proxies
+# ~ webs para comprobar dominio vigente en actions pero pueden requerir proxies
+# ~ webs 1) 'https://hdfull.vip/'  2) 'https://new.hdfull.one/'  3) 'https://hdfullcdn.cc/'
 
 dominios = [
          'https://new.hdfull.one/',
          'https://hdfullcdn.cc/',
+         'https://hdfull.wtf/',
+         'https://hdfull.vip/',
          'https://hdfull.top/',
          'https://hdfull.fun/',
          'https://hdfull.lol/',
@@ -26,8 +28,7 @@ dominios = [
          'https://hdfull.click/',
          'https://hdfull.one/',
          'https://hdfull.stream/',
-         'https://hdfull.org/',
-         'https://hdfull.vip/'
+         'https://hdfull.org/'
          ]
 
 host = config.get_setting('dominio', 'hdfull', default=dominios[0])
@@ -232,19 +233,9 @@ def configurar_dominio(item):
             logout(item)
             platformtools.itemlist_refresh()
 
-    if dominios[ret] == 'https://hdfullcdn.cc/' or dominios[ret] == 'https://new.hdfull.one/':
-        from modules import actions
-
-        item.desde_el_canal = True
-        item.dominios_ret = dominios[ret]
-
-        actions.last_domain_hdfull(item)
-
-        new_domain = config.get_setting('dominio', 'hdfull', default='')
-
-        if not new_domain == dominios[ret]: return True
-
     config.set_setting('dominio', dominios[ret], 'hdfull')
+
+    platformtools.itemlist_refresh()
     return True
 
 
@@ -304,11 +295,15 @@ def acciones(item):
         domain_memo = config.get_setting('dominio', 'hdfull', default='')
 
         if domain_memo:
-            itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test web del canal [COLOR yellow][B]' + domain_memo + '[/B][/COLOR]',
+            itemlist.append(item.clone( channel='submnuctext', action='_test_webs', title= 'Test Web del canal [COLOR yellow][B] ' + domain_memo + '[/B][/COLOR]',
                                         from_channel='hdfull', folder=False, text_color='chartreuse' ))
 
-        itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='Comprobar último dominio vigente',
+        itemlist.append(Item( channel='actions', action='last_domain_hdfull', title='[B]Comprobar último dominio vigente[/B]',
                               desde_el_canal = True, thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
+
+        if domain_memo:
+            itemlist.append(item.clone( channel='actions', action='manto_domain_hdfull', title= '[B]Modificar el dominio memorizado[/B]',
+                                        folder=False, text_color='darkorange' ))
 
         itemlist.append(item_configurar_dominio(item))
         itemlist.append(item_configurar_proxies(item))

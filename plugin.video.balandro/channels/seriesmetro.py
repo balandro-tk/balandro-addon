@@ -13,7 +13,10 @@ perpage = 30
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    url = url.replace('seriesmetro.com', 'seriesmetro.net')
+    ant_hosts = ['https://seriesmetro.com/']
+
+    for ant in ant_hosts:
+        url = url.replace(ant, host)
 
     data = httptools.downloadpage(url, post=post, headers=headers, raise_weberror=raise_weberror).data
     return data

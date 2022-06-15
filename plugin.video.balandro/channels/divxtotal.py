@@ -102,11 +102,11 @@ def generos(item):
     logger.info()
     itemlist = []
 
-    data = do_downloadpage(host)
+    data = do_downloadpage(host + '/peliculas/')
 
-    bloque = scrapertools.find_single_match(data, '>Todas<(.*?)</ul>')
+    bloque = scrapertools.find_single_match(data, '<div id="bloque_cat"(.*?)</div>')
 
-    matches = scrapertools.find_multiple_matches(bloque, 'href="(.*?)">(.*?)</a>')
+    matches = scrapertools.find_multiple_matches(bloque, "href='(.*?)'.*?'>(.*?)</button>")
 
     for url, title in matches:
         itemlist.append(item.clone( action='list_all', title=title, url=url ))
@@ -287,7 +287,7 @@ def play(item):
 
         if PY3:
             from core import requeststools
-            data = requeststools.read(item.url, '')
+            data = requeststools.read(item.url, 'divxtotal')
         else:
             data = do_downloadpage(item.url)
 
@@ -315,7 +315,7 @@ def play(item):
     if item.url.endswith('.torrent'):
         if PY3:
             from core import requeststools
-            data = requeststools.read(item.url, '')
+            data = requeststools.read(item.url, 'divxtotal')
         else:
             data = do_downloadpage(item.url)
 
