@@ -15,8 +15,8 @@ from core import httptools, scrapertools, filetools, jsontools
 color_alert = config.get_setting('notification_alert_color', default='red')
 color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
-color_avis  = config.get_setting('notification_avis_color', default='yellow')
-color_exec  = config.get_setting('notification_exec_color', default='cyan')
+color_avis = config.get_setting('notification_avis_color', default='yellow')
+color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 channels_unsatisfactory = config.get_setting('developer_test_channels', default='')
 servers_unsatisfactory = config.get_setting('developer_test_servers', default='')
@@ -313,7 +313,7 @@ def test_channel(channel_name):
     if channel_id in str(channels_poe): pass
     else:
        if not 'code: [COLOR springgreen][B]200' in txt:
-           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR yellow][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
            avisado = True
 
     if channels_unsatisfactory == 'unsatisfactory':
@@ -386,8 +386,7 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
 
     if proxies:
         if follow_redirects == False:
-            txt += '[CR][CR]'
-            txt += '[COLOR moccasin][B]Proxies: [/B][/COLOR][CR]'
+            txt += '[CR][CR][COLOR moccasin][B]Proxies: [/B][/COLOR][CR]'
 
             proxies = str(proxies)
             proxies = proxies.replace('[', '').replace(']', '').replace("'", '').strip()
@@ -398,18 +397,13 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
             if config.get_setting(cfg_provider_channel): txt += '[CR]provider: ' + config.get_setting(cfg_provider_channel)
     else:
         if 'requerir el uso de proxies' in txt:
-            txt += '[CR][CR]'
-            txt += '[COLOR moccasin][B]Proxies: [/B][/COLOR][CR]'
+            txt += '[CR][CR][COLOR moccasin][B]Proxies: [/B][/COLOR][CR]'
             txt += 'actuales: [COLOR cyan][B]Sin proxies[/B][/COLOR]'
 	
     if dominio: dominio = '[COLOR coral]' + dominio + '[/COLOR]'
 
-    if follow_redirects == False:
-        txt += '[CR][CR]'
-        txt += '[COLOR moccasin][B]Acceso: ' + dominio + ' ' + text_with_proxies + '[/B][/COLOR][CR]'
-    else:
-        txt += '[CR][CR]'
-        txt += '[COLOR moccasin][B]Redirect: ' + dominio + ' ' + text_with_proxies + '[/B][/COLOR][CR]'
+    if follow_redirects == False: txt += '[CR][CR][COLOR moccasin][B]Acceso: ' + dominio + ' ' + text_with_proxies + '[/B][/COLOR][CR]'
+    else: txt += '[CR][CR][COLOR moccasin][B]Redirect: ' + dominio + ' ' + text_with_proxies + '[/B][/COLOR][CR]'
 
     txt += 'host: [COLOR pink][B]' + host + '[/B][/COLOR][CR]'
 
@@ -430,9 +424,7 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
 
     if response.sucess == False:
         if '<urlopen error timed out>' in str(response.code) or '<urlopen error' in str(response.code):
-            if not 'Sugerencias:' in txt:
-                txt += '[CR][CR]'
-                txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+            if not 'Sugerencias:' in txt: txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
 
             if 'actuales:' in txt:
                 if 'Sin proxies' in txt: txt += '[COLOR red][B]Configure Proxies a Usar ...[/B][/COLOR][CR]'
@@ -454,41 +446,44 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
               if len(response.data) > 0:
                   txt += '[CR]resp: [COLOR orangered][B]Unknow[/B][/COLOR]'
 
-                  txt += '[CR][CR]'
-                  txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+                  txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                   txt += str(response.headers) + '[CR]'
 
                   if len(response.data) < 1000:
-                      txt += '[CR][CR]'
-                      txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
+                      txt += '[CR][CR][COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                       txt += str(response.data) + '[CR]'
     else:
-        if len(response.data) > 1000:
-            if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
-            elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
-
+        if len(response.data) >= 1000:
             if new_web:
+                if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location')[/B][/COLOR]"
+                elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location'[/B][/COLOR]"
+
                 txt += '[CR]nuevo: [COLOR springgreen][B]' + new_web + '[/B][/COLOR]'
 
-                txt += '[CR][CR]'
-                txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+                txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                 txt += str(response.headers) + '[CR]'
         else:
             if len(response.data) < 1000:
+                if not 'Diagnosis:' in txt: txt += '[CR][CR][COLOR moccasin][B]Diagnosis:[/B][/COLOR]'
+
                 if new_web == '/login':
+                    if 'Diagnosis:' in txt:
+                        if not 'Sugerencias:' in txt: txt += '[CR][CR][COLOR moccasin][B]Diagnosis:[/B][/COLOR]'
+
                     txt += '[CR]login: [COLOR springgreen][B]' + new_web + '[/B][/COLOR]'
                     new_web = ''
 
                     if response.code == 301 or response.code == 302 or response.code == 307 or response.code == 308:
-                        if 'dominios:' in txt:
-                            txt += "[CR]obtener: [COLOR yellow][B]Puede Obtener Otro Dominio desde Configurar Dominio a usar ...[/B][/COLOR]"
+                        if 'dominios:' in txt: txt += "[CR]obtener: [COLOR yellow][B]Puede Obtener Otro Dominio desde Configurar Dominio a usar ...[/B][/COLOR]"
 
-                        txt += "[CR]comprobar: [COLOR red][B]Nuevo Dominio (verificar la Web vía internet[/B][/COLOR]"
+                        txt += "[CR]comprobar: [COLOR springgreen][B]Podría estar Correcto ó quizás ser un Nuevo Dominio (verificar la Web vía internet)[/B][/COLOR]"
 
                 else:
-                   if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
-                   elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
-                   else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location':)[/B][/COLOR]"
+                   if new_web:
+                       if not '/cgi-sys/suspendedpage.cgi' in new_web and not '/wp-admin/install.php' in new_web:
+                           if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location')[/B][/COLOR]"
+                           elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location'[/B][/COLOR]"
+                           else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location')[/B][/COLOR]"
 
                 if new_web:
                     if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]status: [COLOR red][B]' + new_web + '[/B][/COLOR]'
@@ -504,21 +499,18 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
 
             if not "'location': '/login'" in str(response.headers):
                 if not 'status:'in txt:
-                    txt += '[CR][CR]'
-                    txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+                    txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                     txt += str(response.headers) + '[CR]'
 
             if len(response.data) > 0:
                 if not '/cgi-sys/suspendedpage.cgi' or not '/wp-admin/install.php' in new_web:
-                    txt += '[CR][CR]'
-                    txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
+                    txt += '[CR][CR][COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                     txt += str(response.data) + '[CR]'
 
     if 'active: True' in txt:
         if not 'Sugerencias:' in txt:
             if 'Invisible Captcha' in txt or 'Obtenga nuevos proxies' in txt or 'Host error' in txt or 'No se puede establecer una' in txt or 'Cloudflare' in txt or 'Unknow' in txt:
-                txt += '[CR][CR]'
-                txt += '[COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
+                txt += '[CR][CR][COLOR moccasin][B]Sugerencias:[/B][/COLOR][CR]'
 
                 if 'Invisible Captcha' in txt:
                     if 'actuales:' in txt:
@@ -571,7 +563,9 @@ def acces_channel(channel_name, host, dominio, txt, follow_redirects=None):
                     txt += '[COLOR yellow][B][I]Apague su Router durante 5 minutos aproximadamente, Re-Inicielo e inténtelo de nuevo[/I][/B][/COLOR][CR]'
 
                 elif 'Unknow' in txt:
-                    if not '<p>Por causas ajenas a' in txt: txt += '[COLOR goldenrod][B]Puede estar en Mantenimiento[/B][/COLOR][CR]'
+                    if '<p>Por causas ajenas a' in txt: txt += '[COLOR darkorange][B]Parece estar Bloqueado por su Operadora de Internet[/B][/COLOR][CR]'
+                    else: txt += '[COLOR goldenrod][B]Puede estar en Mantenimiento[/B][/COLOR][CR]'
+
                     txt += '[COLOR gold][B]Puede Marcar el canal como Desactivado[/B][/COLOR][CR]'
 
                     if 'actuales:' in txt:
@@ -735,7 +729,7 @@ def test_server(server_name):
     elif server_id in str(servers_poe): pass
     else:
        if not 'code: [COLOR springgreen][B]200' in txt:
-           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + server_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Servidor NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR yellow][B]Por favor, compruebe la información del Test del Servidor.[/B][/COLOR]')
+           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + server_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Servidor NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR cyan][B]Por favor, compruebe la información del Test del Servidor.[/B][/COLOR]')
            avisado = True
 
     if servers_unsatisfactory == 'unsatisfactory':
@@ -775,12 +769,8 @@ def acces_server(server_name, url, txt, follow_redirects=None):
 
     response = httptools.downloadpage(url, follow_redirects=follow_redirects, raise_weberror=False, bypass_cloudflare=False)
 
-    if follow_redirects == False:
-        txt += '[CR][CR]'
-        txt += '[COLOR moccasin][B]Acceso: [/B][/COLOR][CR]'
-    else:
-        txt += '[CR][CR]'
-        txt += '[COLOR moccasin][B]Redirect: [/B][/COLOR][CR]'
+    if follow_redirects == False: txt += '[CR][CR][COLOR moccasin][B]Acceso: [/B][/COLOR][CR]'
+    else: txt += '[CR][CR][COLOR moccasin][B]Redirect: [/B][/COLOR][CR]'
 
     txt += 'host: [COLOR pink][B]' + url + '[/B][/COLOR][CR]'
 
@@ -807,32 +797,32 @@ def acces_server(server_name, url, txt, follow_redirects=None):
            if len(response.data) > 0:
                txt += '[CR]resp: [COLOR orangered][B]Unknow[/B][/COLOR]'
 
-               txt += '[CR][CR]'
-               txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+               txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                txt += str(response.headers) + '[CR]'
 
                if len(response.data) < 1000:
-                   txt += '[CR][CR]'
-                   txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
+                   txt += '[CR][CR][COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                    txt += str(response.data) + '[CR]'
     else:
-        if len(response.data) > 1000:
-            if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
-            elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
-
+        if len(response.data) >= 1000:
             if new_web:
+                if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location')[/B][/COLOR]"
+                elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location')[/B][/COLOR]"
+
                 txt += '[CR]nuevo: [COLOR springgreen][B]' + new_web + '[/B][/COLOR]'
 
-                txt += '[CR][CR]'
-                txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+                txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                 txt += str(response.headers) + '[CR]'
         else:
             if len(response.data) < 1000:
-                if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location':)[/B][/COLOR]"
-                elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location':[/B][/COLOR]"
-                else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location':)[/B][/COLOR]"
+                if not 'Diagnosis:' in txt: txt += '[CR][CR][COLOR moccasin][B]Diagnosis:[/B][/COLOR]'
 
                 if new_web:
+                    if not '/cgi-sys/suspendedpage.cgi' in new_web and not '/wp-admin/install.php' in new_web:
+                        if response.code == 301 or response.code == 308: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Permanente (ver Headers 'location')[/B][/COLOR]"
+                        elif response.code == 302 or response.code == 307: txt += "[CR][CR][COLOR orangered][B]Nuevo Dominio Temporal (ver Headers) 'location')[/B][/COLOR]"
+                        else: txt += "[CR][CR][COLOR orangered][B]Comprobar Dominio (ver Headers 'location')[/B][/COLOR]"
+
                     if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]status: [COLOR red][B]' + new_web + '[/B][/COLOR]'
                     elif '/wp-admin/install.php' in new_web: txt += '[CR]status: [COLOR red][B]' + new_web + '[/B][/COLOR]'
                     else: txt += '[CR]nuevo: [COLOR springgreen][B]' + new_web + '[/B][/COLOR]'
@@ -844,14 +834,12 @@ def acces_server(server_name, url, txt, follow_redirects=None):
                 if '/cgi-sys/suspendedpage.cgi' in new_web: txt += '[CR]account: [COLOR goldenrod][B]Suspendida[/B][/COLOR]'
                 else: txt += '[CR]account: [COLOR goldenrod][B]Podría estar en Mantenimiento[/B][/COLOR]'
             else:
-                txt += '[CR][CR]'
-                txt += '[COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
+                txt += '[CR][CR][COLOR moccasin][B]Headers:[/B][/COLOR][CR]'
                 txt += str(response.headers) + '[CR]'
 
             if len(response.data) > 0:
                 if not '/cgi-sys/suspendedpage.cgi' in new_web or not '/wp-admin/install.php' in new_web:
-                    txt += '[CR][CR]'
-                    txt += '[COLOR moccasin][B]Data:[/B][/COLOR][CR]'
+                    txt += '[CR][CR][COLOR moccasin][B]Data:[/B][/COLOR][CR]'
                     txt += str(response.data) + '[CR]'
 
     if not 'Sugerencias:' in txt:
@@ -896,7 +884,6 @@ def test_internet():
 
     if not your_ip: your_ip = '[COLOR red] Sin Conexión [/COLOR]'
 
-    txt = '[COLOR moccasin][B]Internet:[/B][/COLOR]  %s ' % your_ip
-    txt += '[CR][CR]'
+    txt = '[COLOR moccasin][B]Internet:[/B][/COLOR]  %s [CR][CR]' % your_ip
 
     return txt

@@ -16,7 +16,7 @@
         <setting id="mnu_grupos" type="bool" label="Añadir la opción Grupos (Menús Simplificado y Principal)" default="true" visible="eq(-4,true)"/>
         <setting id="mnu_pelis" type="bool" label="Añadir la opción Películas" default="true" visible="eq(-5,true)"/>
         <setting id="mnu_series" type="bool" label="Añadir la opción Series" default="true" visible="eq(-6,true)"/>
-        <setting id="channels_link_pyse" type="bool" label="Añadir la opción Películas y Series (solo los canales con ambos contenidos)" default="false" visible="eq(-7,true)"/>
+        <setting id="channels_link_pyse" type="bool" label="Añadir la opción Películas y Series (solo los Canales con Ambos Contenidos)" default="false" visible="eq(-7,true)"/>
         <setting id="mnu_generos" type="bool" label="Añadir la opción Géneros" default="true" visible="eq(-8,true)"/>
         <setting id="mnu_documentales" type="bool" label="Añadir la opción Documentales" default="true" visible="eq(-9,true)"/>
         <setting id="mnu_infantiles" type="bool" label="Añadir la opción Infantiles" default="true" visible="eq(-10,true)"/>
@@ -25,9 +25,10 @@
         <setting id="mnu_doramas" type="bool" label="Añadir la opción Doramas" default="true" visible="eq(-13,true)"/>
         <setting id="mnu_animes" type="bool" label="Añadir la opción Animes" default="true" visible="eq(-14,true)"/>
         <setting id="mnu_adultos" type="bool" label="Añadir la opción Adultos" default="true" visible="eq(-15,true)"/>
-        <setting id="mnu_desactivados" type="bool" label="Añadir la opción Desactivados" default="false" visible="eq(-16,true)"/>
-        <setting id="mnu_preferidos" type="bool" label="Añadir la opción Preferidos" default="true" visible="eq(-17,true)"/>
-        <setting id="mnu_desargas" type="bool" label="Añadir la opción Descargas" default="true" visible="eq(-18,true)"/>
+        <setting id="mnu_proxies" type="bool" label="Añadir la opción Proxies (solo los Canales con Proxies Memorizados)" default="false" visible="eq(-16,true)"/>
+        <setting id="mnu_desactivados" type="bool" label="Añadir la opción Desactivados (solo los Canales que haya Desactivado)" default="false" visible="eq(-17,true)"/>
+        <setting id="mnu_preferidos" type="bool" label="Añadir la opción Preferidos" default="true" visible="eq(-18,true)"/>
+        <setting id="mnu_desargas" type="bool" label="Añadir la opción Descargas" default="true" visible="eq(-19,true)"/>
 
         <setting label="Opciones para los Menús y Sub-Menús:" type="lsep"/>
         <setting id="mnu_search_proxy_channels" type="bool" label="Añadir acceso al detalle de Buscar Nuevos Proxies" default="false"/>
@@ -483,6 +484,7 @@
 
         <setting label="Opciones para el Mantenimiento del Sistema:" type="lsep"/>
         <setting id="manto_params" type="action" label="Pulsar para Restablecer a sus Valores por Defecto los 'Parámetros Internos'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_params)"/>
+        <setting id="manto_temporales" type="action" label="Pulsar para Eliminar 'Todos' los ficheros Temporales" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_temporales)"/>
 
         <setting type="sep"/>
         <setting id="manto_last_fix" type="action" label="Pulsar para Eliminar el fichero de control 'Fix'" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_last_fix)"/>
@@ -502,8 +504,6 @@
 
         <setting label="Opciones para el fichero Advanced Settings:" type="lsep"/>
         <setting id="show_advs" type="action" label="Pulsar para Visualizar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=helper&action=show_advs)"/>
-
-        <setting type="sep"/>
         <setting id="manto_advs" type="action" label="Pulsar para Eliminar Su fichero Advanced Settings de su Media Center" action="RunPlugin(plugin://plugin.video.balandro/?channel=actions&action=manto_advs)"/>
 
         <setting label="Opciones para Desarrollo:" type="lsep"/>
@@ -512,8 +512,8 @@
 
     <category label="Ayuda">
         <setting label="Contacto:" type="lsep"/>
-        <setting label="Foro [COLOR plum][B][I] mimediacenter.info/foro/viewforum.php?f=44 [/I][/B][/COLOR] Instalaciones, Novedades, Sugerencias, etc." visible="true"/>
         <setting label="Fuente [COLOR coral][B][I] balandro-tk.github.io/balandro/ [/I][/B][/COLOR] Repositorio, Add-On, etc." visible="true"/>
+        <setting label="Foro [COLOR plum][B][I] mimediacenter.info/foro/ [/I][/B][/COLOR] Instalaciones, Novedades, Sugerencias, etc." visible="true"/>
         <setting label="Telegram [COLOR lightblue][B][I] t.me/@balandro_asesor [/I][/B][/COLOR] Asesoramiento, Dudas, Consultas, etc." visible="true"/>
 
         <setting label="Versión:" type="lsep"/>

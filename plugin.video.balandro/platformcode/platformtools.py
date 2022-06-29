@@ -591,15 +591,23 @@ def developer_mode_check_findvideos(itemlist, parent_item):
             txt_log_qualities += os.linesep
 
     # Guardar en ficheros de log
+    avisar = False
+
     if txt_log_servers != '':
+        avisar = True
+
         dev_log = os.path.join(config.get_data_path(), 'servers_todo.log')
         if PY3 and not isinstance(txt_log_servers, bytes): txt_log_servers = txt_log_servers.encode('utf-8')
         with open(dev_log, 'wb') as f: f.write(txt_log_servers); f.close()
 
     if txt_log_qualities != '':
+        avisar = True
+
         dev_log = os.path.join(config.get_data_path(), 'qualities_todo.log')
         if PY3 and not isinstance(txt_log_qualities, bytes): txt_log_qualities = txt_log_qualities.encode('utf-8')
         with open(dev_log, 'wb') as f: f.write(txt_log_qualities); f.close()
+
+    if avisar: dialog_notification(config.__addon_name, '[B][COLOR %s]Revisar Logs Servers y/ó Qualities[/COLOR][/B]' % color_exec)
 
     if os.path.isfile(os.path.join(config.get_runtime_path(), 'core', 'developertools.py')):
         try:

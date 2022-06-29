@@ -14,8 +14,8 @@ color_list_inactive = config.get_setting('channels_list_inactive_color', default
 color_alert = config.get_setting('notification_alert_color', default='red')
 color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
-color_avis  = config.get_setting('notification_avis_color', default='yellow')
-color_exec  = config.get_setting('notification_exec_color', default='cyan')
+color_avis = config.get_setting('notification_avis_color', default='yellow')
+color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 cfg_search_excluded_movies = 'search_excludes_movies'
 cfg_search_excluded_tvshows = 'search_excludes_tvshows'
@@ -279,6 +279,9 @@ def with_proxies(item):
                 el_memorizado = "'" + ch['id'] + "'"
                 if not el_memorizado in str(channels_proxies_memorized):
                     if not config.get_setting(cfg_proxies_channel, default=''): continue
+                else:
+                   if item.memo_proxies:
+                        if not config.get_setting(cfg_proxies_channel, default=''): continue
             else:
                 if not config.get_setting(cfg_proxies_channel, default=''): continue
 
@@ -1105,7 +1108,9 @@ def show_channels_list(item):
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
-    if item.tipo == 'all': cabecera = 'Canales [COLOR yellow]Todos[/COLOR]'
+    if item.tipo == 'all':
+        cabecera = 'Canales [COLOR yellow]Todos[/COLOR]'
+        if item.privates == True: cabecera = 'Canales [COLOR yellow]Privados[/COLOR]'
     else:
         if item.no_active == True: cabecera = 'Canales [COLOR yellow]Inactivos[/COLOR]'
         elif item.temp_no_active == True: cabecera = 'Canales [COLOR yellow]Temporalmente Inactivos[/COLOR]'

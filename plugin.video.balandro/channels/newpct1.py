@@ -12,7 +12,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://atomohd.life/'
+host = 'https://atomohd.one/'
 
 
 clon_name = 'Atomix'
@@ -54,7 +54,7 @@ def do_downloadpage(item, url, post=None, headers=None):
                  'https://maxitorrent.com/',
                  'https://atomixhq.com/', 'https://atomixhq.one/', 'https://atomixhq.net/', 'https://atomixhq.top/', 'https://atomixhq.art/', 'https://atomixhq.link/', 'https://atomixhq.club/',
                  'https://nucleohd.com/', 'https://atomixhq.tel/', 'https://atomixhq.xyz/',
-                 'https://atomohd.com/', 'https://atomohd.net/', 'https://atomohd.org/', 'https://atomohd.xyz/']
+                 'https://atomohd.com/', 'https://atomohd.net/', 'https://atomohd.org/', 'https://atomohd.xyz/', 'https://atomohd.life/', 'https://atomohd.art/', 'https://atomohd.top/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

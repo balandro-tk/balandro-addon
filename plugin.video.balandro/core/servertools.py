@@ -432,7 +432,8 @@ def corregir_servidor(servidor):
     elif servidor in ['thevideome', 'thevideo']: return 'thevideome'
     elif servidor in ['1fichier', 'onefichier']: return '1fichier'
     elif servidor in ['uploadedto', 'uploaded', 'ul', 'ul.to']: return 'uploadedto'
-    # ~ elif servidor == 'uptobox': return 'uptostream'
+    elif servidor in ['tubeload', 'mvidoo', 'ninjastream', 'videovard']: return 'various'
+
     else: return servidor
 
 

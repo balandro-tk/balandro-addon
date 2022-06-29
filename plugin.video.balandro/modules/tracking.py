@@ -12,8 +12,8 @@ from core import trackingtools, filetools
 color_alert = config.get_setting('notification_alert_color', default='red')
 color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
-color_avis  = config.get_setting('notification_avis_color', default='yellow')
-color_exec  = config.get_setting('notification_exec_color', default='cyan')
+color_avis = config.get_setting('notification_avis_color', default='yellow')
+color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 
 # Infos
@@ -124,7 +124,7 @@ def mainlist(item):
 
         itemlist.append(item.clone( title = 'Episodios (%d) recientes' % count_episodes, action = 'mainlist_episodios', thumbnail=config.get_thumb('hot') ))
 
-    itemlist.append(item.clone( title='Gestionar listas', action='mainlist_listas' )) 
+        itemlist.append(item.clone( title='Gestionar listas', action='mainlist_listas' )) 
 
     itemlist.append(item.clone( channel='actions', title= 'Ajustes categoría preferidos', action = 'open_settings',
                                 thumbnail=config.get_thumb('settings'), text_color='yellowgreen', folder=False ))

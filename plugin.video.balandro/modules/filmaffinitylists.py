@@ -51,7 +51,7 @@ def mainlist(item):
 
         itemlist.append(item.clone( title = ' - Sagas y colecciones', action = 'sagas', url = host + 'movie-groups-all.php', page = 1 ))
 
-        itemlist.append(item.clone( title = ' - Las mejores películas', action = 'list_sel', url = host + ruta_sel + '&notvse=1&nodoc=1' ))
+        itemlist.append(item.clone( title = ' - Las mejores', action = 'list_sel', url = host + ruta_sel + '&notvse=1&nodoc=1' ))
 
     presentar = True
     if item.search_type == 'movie': presentar = False
@@ -72,7 +72,7 @@ def mainlist(item):
 
         itemlist.append(item.clone( title = ' - Premios Emmy', action = 'emmy_ediciones', url = host + 'awards.php?award_id=emmy&year=' ))
 
-        itemlist.append(item.clone( title = ' - Las mejores series', action = 'list_sel', url = host + ruta_sel + '&nodoc=1', cod_genre = 'TV_SE' ))
+        itemlist.append(item.clone( title = ' - Las mejores', action = 'list_sel', url = host + ruta_sel + '&nodoc=1', cod_genre = 'TV_SE' ))
 
     presentar = True
     if item.search_type == 'movie': presentar = False
@@ -86,7 +86,7 @@ def mainlist(item):
         if config.get_setting('mnu_documentales', default=True):
             itemlist.append(item.clone( title = '[B]Documentales:[/B]', thumbnail=config.get_thumb('documentary'), action = '', text_color='cyan' ))
 
-            itemlist.append(item.clone( title = ' - Los mejores documentales', action = 'list_sel', url = host + ruta_sel + '&notvse=1', cod_genre = 'DO' ))
+            itemlist.append(item.clone( title = ' - Los mejores', action = 'list_sel', url = host + ruta_sel + '&notvse=1', cod_genre = 'DO' ))
 
     if not item.search_type:
         if config.get_setting('channels_link_main', default=True):

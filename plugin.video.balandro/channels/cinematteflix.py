@@ -86,6 +86,7 @@ def list_all(item):
     itemlist = []
 
     data = do_downloadpage(item.url)
+    data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
     matches = scrapertools.find_multiple_matches(data, "<article(.*?)</article>")
 
@@ -95,13 +96,13 @@ def list_all(item):
         if item.group == 'magazine':
             if '/sin-categoria/' in match: continue
 
-        url = scrapertools.find_single_match(match, '<h4 class="entry-title"><a href="(.*?)"')
+        url = scrapertools.find_single_match(match, '<a href="(.*?)"')
         if not url: continue
 
         if '/passionatte.com/' in url: continue
         elif '/entra-al-videoclub-online-gratuito/' in url: continue
 
-        info = scrapertools.find_single_match(match, 'rel="bookmark">(.*?)</a>')
+        info = scrapertools.find_single_match(match, '<header class="post-header">(.*?)</header>')
 
         year = scrapertools.find_single_match(info, "\d{4}")
         if not year: year = '-'
@@ -121,11 +122,7 @@ def list_all(item):
         elif 'Versión ' in info: langs = 'Vo'
         else: langs = 'Esp'
 
-        title = info.lower()
-
-        title = re.sub("(?:videoclub \| )?(?:ver )?(?:y descargar )?(?:pel.*?cula\S? de)?(?:pel.*?cula\S?)?(?:gratis)?(?:en tu videoclub )?(?:serie)?(?:online)?", "", info)
-
-        title = title.lower().strip()
+        title = scrapertools.find_single_match(info, '<h2 class="post-title">.*?">(.*?)</a>').lower()
 
         title = title.replace('ver ', '').replace('videoclub gratuito', '').replace('videoclub ', '').strip()
 
@@ -139,6 +136,9 @@ def list_all(item):
         title = title.capitalize()
 
         title = title.replace('Á', 'á').replace('É', 'é').replace('Í', 'í').replace('Ó', 'ó').replace('Ú', 'ú').replace('Ñ', 'ñ').replace('Ü', 'ú')
+
+        if not year == '-':
+            title = title.replace('(' + year + ')', '').strip()
 
         if capitulos:
             datos_cap = do_downloadpage(url)
@@ -157,20 +157,11 @@ def list_all(item):
         tmdb.set_infoLabels(itemlist)
 
     if itemlist:
-        if '>Siguientes<' in data:
-            if item.page:
-                item.page = item.page + 1
-                next_page = host + 'page/' + str(item.page) + '/'
+        next_page = scrapertools.find_single_match(data, '<div class="previous-page">.*?href="(.*?)"')
 
-                if next_page:
-                    itemlist.append(item.clone( title = 'Siguientes ...', url = next_page, group = item.group, page = item.page,
-                                                action = 'list_all', text_color='coral' ))
-
-            elif '<nav class="navigation pagination"' in data:
-                next_page = scrapertools.find_single_match(data, '<nav class="navigation pagination".*?class="page-numbers current".*?href="(.*?)"')
-
-                if next_page:
-                    itemlist.append(item.clone( title = 'Siguientes ...', url = next_page, action = 'list_all', text_color='coral' ))
+        if next_page:
+            if '/page/' in next_page:
+                itemlist.append(item.clone( title = 'Siguientes ...', url = next_page, action = 'list_all', text_color='coral' ))
 
     return itemlist
 

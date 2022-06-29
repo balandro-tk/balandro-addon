@@ -316,6 +316,8 @@ def findvideos(item):
        'castellano': 'Esp',
        'latino': 'Lat',
        'subtitulado': 'Vose',
+       'inglés sub': 'Vose',
+       'ingles sub': 'Vose',
        'inglés': 'VO',
        'ingles': 'VO'
        }
@@ -324,7 +326,11 @@ def findvideos(item):
 
     matches = scrapertools.find_multiple_matches(data, '<div class="op-srv brd1"(.*?)</div>')
 
+    ses = 0
+
     for match in matches:
+        ses += 1
+
         url = scrapertools.find_single_match(match, ' data-url="(.*?)"')
         if not url: url = scrapertools.find_single_match(match, ' data-src="(.*?)"')
         if not url: continue
@@ -340,8 +346,15 @@ def findvideos(item):
         lang = scrapertools.find_single_match(modif, '(.*?) -').lower().strip()
         qlty = scrapertools.find_single_match(modif, '- (.*?)$').strip()
 
+        if not '//' in url: server = 'directo'
+
         itemlist.append(Item( channel = item.channel, action = 'play', server = server, referer = item.url, title = '', url = url, 
                               language = IDIOMAS.get(lang, lang), quality = qlty ))
+
+    if not itemlist:
+        if not ses == 0:
+            platformtools.dialog_notification(config.__addon_name, '[COLOR tan][B]Sin enlaces Soportados[/B][/COLOR]')
+            return
 
     return itemlist
 
@@ -394,14 +407,15 @@ def play(item):
                       itemlist.append([v_lbl, v_url])
 
                 return itemlist
-				
+
+            if '/pelisplayer.xyz/' in new_url:
+                return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+
             servidor = servertools.get_server_from_url(new_url)
             servidor = servertools.corregir_servidor(servidor)
 
-            if servidor:
-               itemlist.append(item.clone(server = servidor, url = new_url))
-            else:
-               itemlist.append(item.clone(server = '', url = new_url))
+            if servidor: itemlist.append(item.clone(server = servidor, url = new_url))
+            else: itemlist.append(item.clone(server = 'directo', url = new_url))
 
         return itemlist
 
@@ -434,10 +448,13 @@ def play(item):
             if not url: url = scrapertools.find_single_match(resp.data, '"embed_url":"([^"]+)')
 
     if url:
+        if '/pelisplayer.xyz/' in url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+
         servidor = servertools.get_server_from_url(url)
         servidor = servertools.corregir_servidor(servidor)
 
-        if servidor and servidor != 'directo':
+        if servidor:
             url = servertools.normalize_url(servidor, url)
             itemlist.append(item.clone(url=url, server=servidor))
 

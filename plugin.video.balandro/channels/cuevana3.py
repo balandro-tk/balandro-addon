@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://ww3.cuevana3.me/'
+host = 'https://ww1.cuevana3.me/'
 
 
 IDIOMAS = {'Latino': 'Lat', 'Español': 'Esp', 'Subtitulado': 'Vose'}
@@ -25,7 +25,8 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, follow_redirects=True, only_headers=False):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['http://www.cuevana3.co/', 'https://cuevana3.co/', 'https://cuevana3.io/', 'https://cuevana3.me/']
+    ant_hosts = ['http://www.cuevana3.co/', 'https://cuevana3.co/', 'https://cuevana3.io/', 'https://cuevana3.me/'
+                 'https://ww3.cuevana3.me/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)

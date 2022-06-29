@@ -7,6 +7,7 @@ if sys.version_info[0] < 3:
 else:
     basestring = str
 
+
 import os, time, glob
 
 from platformcode import config, logger, platformtools
@@ -18,8 +19,8 @@ STATUS_CODES = type("StatusCode", (), {"stopped": 0, "canceled": 1, "completed":
 color_alert = config.get_setting('notification_alert_color', default='red')
 color_infor = config.get_setting('notification_infor_color', default='pink')
 color_adver = config.get_setting('notification_adver_color', default='violet')
-color_avis  = config.get_setting('notification_avis_color', default='yellow')
-color_exec  = config.get_setting('notification_exec_color', default='cyan')
+color_avis = config.get_setting('notification_avis_color', default='yellow')
+color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 
 # Ruta para las descargas
@@ -385,7 +386,7 @@ def do_download(mediaurl, file_name, parent_item, server_item):
         return False
     else:
         if down_stats['downloadStatus'] == STATUS_CODES.completed:
-            platformtools.dialog_ok(config.__addon_name, 'Descarga finalizada correctamente', file_name, config.format_bytes(down_stats['downloadSize']))
+            platformtools.dialog_ok(config.__addon_name, 'Descarga Finalizada', file_name, config.format_bytes(down_stats['downloadSize']))
 
         platformtools.itemlist_refresh()
         return True

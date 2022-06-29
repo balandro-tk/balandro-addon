@@ -3,7 +3,7 @@
   "name": "TorrentDivx",
   "thumbnail": "torrentdivx.jpg",
 
-  "active": true,
+  "active": false,
 
   "searchable": true,
   "search_types": ["movie"],
@@ -11,7 +11,7 @@
   "categories": ["movie", "torrent"],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["torrents", "news", "languages", "qualityes", "kids", "docs", "vos"],
+  "clusters": ["temporary", "torrents", "news", "languages", "qualityes", "kids", "docs", "vos"],
 
   "notes": "Canal con enlaces Torrent exclusivamente. Películas por géneros, idioma, calidad. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
 }

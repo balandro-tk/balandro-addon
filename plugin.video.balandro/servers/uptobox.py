@@ -49,6 +49,11 @@ def get_video_url(page_url, url_referer=''):
 
     if "Unfortunately, the file you want is not available." in data or "Unfortunately, the video you want to see is not available" in data or "This stream doesn" in data or "Page not found" in data or "Archivo no encontrado" in data:
         return "El archivo no existe o ha sido borrado"
+ 
+    espera = scrapertools.find_single_match(data, "data-remaining-time='(.*?)'")
+
+    if espera:
+       return "Tiempo de espera indeterminado para reproducir"
 
     if xbmc.getCondVisibility('System.HasAddon("script.module.resolveurl")'):
         try:

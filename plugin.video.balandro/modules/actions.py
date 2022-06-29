@@ -10,6 +10,7 @@ if sys.version_info[0] >= 3:
 else:
     PY3 = False
 
+    import xbmc
     translatePath = xbmc.translatePath
 
 import os, re
@@ -404,6 +405,7 @@ def last_domain_hdfull(item):
             if not item.from_action == 'mainlist':
                 platformtools.dialog_ok(config.__addon_name + ' - HdFull', '[COLOR yellow]Último dominio vigente memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
 
+
 def del_datos_hdfull(item):
     logger.info()
 
@@ -495,6 +497,10 @@ def last_domain_dontorrents(item):
     if platformtools.dialog_yesno(config.__addon_name + ' - DonTorrents', '¿ [COLOR red] ' + txt_dom + ' [/COLOR] Desea cambiarlo  ?','Memorizado:  [COLOR yellow][B]' + nom_dom + '[/B][/COLOR]', 'Vigente:           [COLOR cyan][B]' + last_domain + '[/B][/COLOR]'): 
         config.set_setting('dominio', last_domain, 'dontorrents')
 
+        if not item.desde_el_canal:
+            if not item.from_action == 'mainlist':
+                platformtools.dialog_ok(config.__addon_name + ' - DonTorrents', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+
 
 def manto_domain_hdfull(item):
     logger.info()
@@ -530,6 +536,16 @@ def manto_domain_hdfull(item):
 
     if new_domain is None: return
 
+    if not new_domain:
+        if domain:
+            if platformtools.dialog_yesno(config.__addon_name + ' - HdFull', '¿ [COLOR red] Confirma eliminar el dominio Memorizado ?[/COLOR]', '[COLOR cyan][B] ' + domain + ' [/B][/COLOR]'): 
+                config.set_setting('dominio', new_domain, 'hdfull')
+
+                if not item.desde_el_canal:
+                    if not item.from_action == 'mainlist':
+                        platformtools.dialog_ok(config.__addon_name + ' - HdFull', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+        return
+
     if new_domain:
         if not new_domain.startswith('https://'): new_domain = 'https://' + new_domain
         if not new_domain.endswith('/'): new_domain = new_domain + '/'
@@ -537,7 +553,9 @@ def manto_domain_hdfull(item):
         if platformtools.dialog_yesno(config.__addon_name + ' - HdFull', '¿ [COLOR yellow] Confirma el dominio informado ?[/COLOR]', '[COLOR cyan][B] ' + new_domain + ' [/B][/COLOR]'): 
             config.set_setting('dominio', new_domain, 'hdfull')
 
-            platformtools.dialog_ok(config.__addon_name + ' - HdFull', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+            if not item.desde_el_canal:
+                if not item.from_action == 'mainlist':
+                    platformtools.dialog_ok(config.__addon_name + ' - HdFull', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
 
     return
 
@@ -576,6 +594,16 @@ def manto_domain_dontorrents(item):
 
     if new_domain is None: return
 
+    if not new_domain:
+        if domain:
+            if platformtools.dialog_yesno(config.__addon_name + ' - DonTorrents', '¿ [COLOR red] Confirma eliminar el dominio Memorizado ?[/COLOR]', '[COLOR cyan][B] ' + domain + ' [/B][/COLOR]'): 
+                config.set_setting('dominio', new_domain, 'dontorrents')
+
+                if not item.desde_el_canal:
+                    if not item.from_action == 'mainlist':
+                        platformtools.dialog_ok(config.__addon_name + ' - DonTorrents', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+        return
+
     if new_domain:
         if not new_domain.startswith('https://'): new_domain = 'https://' + new_domain
         if not new_domain.endswith('/'): new_domain = new_domain + '/'
@@ -583,7 +611,9 @@ def manto_domain_dontorrents(item):
         if platformtools.dialog_yesno(config.__addon_name + ' - DonTorrents', '¿ [COLOR yellow] Confirma el dominio informado ?[/COLOR]', '[COLOR cyan][B] ' + new_domain + ' [/B][/COLOR]'): 
             config.set_setting('dominio', new_domain, 'dontorrents')
 
-            platformtools.dialog_ok(config.__addon_name + ' - DonTorrents', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
+            if not item.desde_el_canal:
+                if not item.from_action == 'mainlist':
+                    platformtools.dialog_ok(config.__addon_name + ' - DonTorrents', '[COLOR yellow]Dominio memorizado, pero aún NO guardado.', '[COLOR cyan][B]Recuerde, que para que el cambio surta efecto deberá abandonar la configuración/ajustes de Balandro a través de su correspondiente botón --> OK[/B][/COLOR]')
 
     return
 
@@ -622,9 +652,9 @@ def manto_params(item):
         config.set_setting('search_last_documentary', '')
         config.set_setting('search_last_person', '')
 
-        # ~ config.set_setting('downloadpath', '')  No funciona
+        config.set_setting('downloadpath', '')
 
-        config.set_setting('chrome_last_version', '102.0.5005.115')
+        config.set_setting('chrome_last_version', '102.0.5005.125')
 
         config.set_setting('debug', '0')
 
@@ -681,6 +711,59 @@ def manto_folder_cache(item):
         filetools.rmdirtree(path)
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Carpeta Caché eliminada[/B][/COLOR]' % color_infor)
 
+def manto_temporales(item):
+    logger.info()
+
+    hay_temporales = False
+
+    path = os.path.join(config.get_data_path(), 'servers_todo.log')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    path = os.path.join(config.get_data_path(), 'qualities_todo.log')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    path = os.path.join(config.get_data_path(), 'proxies.log')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    path = os.path.join(config.get_data_path(), 'info_channels.csv')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    path = os.path.join(config.get_data_path(), 'temp.torrent')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    if hay_temporales == False:
+         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay ficheros Temporales[/COLOR][/B]' % color_alert)
+         return
+
+    if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ Confirma Eliminar los ficheros Temporales ?[/COLOR]'):
+        path = os.path.join(config.get_data_path(), 'servers_todo.log')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
+        path = os.path.join(config.get_data_path(), 'qualities_todo.log')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
+        path = os.path.join(config.get_data_path(), 'proxies.log')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
+        path = os.path.join(config.get_data_path(), 'info_channels.csv')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
+        path = os.path.join(config.get_data_path(), 'temp.torrent')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
+        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Ficheros Temporales eliminados[/B][/COLOR]' % color_infor)
+
+
 def manto_tracking_dbs(item):
     logger.info()
 
@@ -729,11 +812,22 @@ def manto_folder_addon(item):
     path = config.get_data_path()
 
     existe = filetools.exists(path)
+
     if not existe == False:
         if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ ATENCION: Confirma Eliminar Todos los Datos del Addon ?[/COLOR]'):
-            # ~  deja solo settings.xml lo tiene bloqueado el sistema
             filetools.rmdirtree(path)
             platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Datos del Addon eliminados[/B][/COLOR]' % color_adver)
+
+            try:
+                # ~  a veces puede dejar solo settings.xml lo tiene bloqueado el sistema
+                path = os.path.join(config.get_data_path(), 'settings.xml')
+
+                existe = filetools.exists(path)
+                if existe:
+                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]settings.xml[/B][/COLOR]', '[COLOR red][B][I]Imposible Eliminar su fichero de Configuración/Ajustes. Está Bloqueado por su Sistema Media Center[/I][/B][/COLOR]', '[COLOR cyan][B]Por favor, Eliminelo manualmente en la ruta [/B][/COLOR][COLOR yellow][B].../.kodi/userdata/plugin.video.balandro[/B][/COLOR]')
+            except:
+                pass
+
 
 def adults_password(item):
     logger.info()

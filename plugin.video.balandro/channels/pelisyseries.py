@@ -334,6 +334,7 @@ def findvideos(item):
         elif 'goo.gl' in other: continue
         elif 'videomega' in other: continue
         elif 'streamto' in other: continue
+        elif 'drive.google' in other: continue
 
         if other == 'ok': other = 'okru'
         elif other == 'feurl': other = 'fembed'
@@ -372,6 +373,7 @@ def findvideos(item):
         elif 'goo.gl' in srv: continue
         elif 'videomega' in srv: continue
         elif 'streamto' in srv: continue
+        elif 'drive.google' in srv: continue
 
         srv = srv.lower()
         srv = srv.replace('.com', '').replace('.co', '').replace('.cc', '').replace('.ru', '').replace('.tv', '').replace('.to', '').replace('.me', '').replace('.nz', '')

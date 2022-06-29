@@ -267,7 +267,9 @@ def list_all(item):
             thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
             title = scrapertools.find_single_match(match, 'alt="(.*?)"')
             qlty = scrapertools.find_single_match(match, 'class="quality">(.*?)</span>')
+
             year = scrapertools.find_single_match(match, '</h3>.*?<span>(\d+)</span>')
+            if not year: year = '-'
 
             title = title.strip()
 
@@ -281,7 +283,9 @@ def list_all(item):
 
             thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
             title = scrapertools.find_single_match(match, 'alt="(.*?)"')
+
             year = scrapertools.find_single_match(match, '</h3>.*?<span>(\d+)</span>')
+            if not year: year = '-'
 
             title = scrapertools.find_single_match(title, '(.*?) Serie.*?nline') or title
 
@@ -370,7 +374,9 @@ def list_3d(item):
         thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
         title = scrapertools.find_single_match(match, 'alt="(.*?)"')
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
+
         year = scrapertools.find_single_match(match, '</h3>.*?<span>(\d+)</span>')
+        if not year: year = '-'
 
         title = title.strip()
 
@@ -477,6 +483,7 @@ def findvideos(item):
         url = urlparse.urljoin(item.url, url)
 
         if '/hqq.' in url or '/waaw.' in url or '/www.jplayer.' in url: continue
+        elif '.oceanplay.' in url: continue
 
         if url:
             servidor = servertools.get_server_from_url(url)

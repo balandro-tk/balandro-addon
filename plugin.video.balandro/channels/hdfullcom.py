@@ -372,6 +372,7 @@ def findvideos(item):
                         url_final = httptools.downloadpage_proxy('hdfullcom', lnk_embed, headers={'Referer': url_vid}, follow_redirects=False).headers.get('location', '')
 
                         srv_embed = srv_embed.lower().strip()
+
                         if 'hqq' in srv_embed or 'waaw' in srv_embed or 'netu' in srv_embed: url_final = ''
 
                         if url_final:
@@ -422,6 +423,9 @@ def play(item):
     itemlist = []
 
     if item.server:
+        if '.streamplusvip.' in item.url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+
         itemlist.append(item.clone( url=item.url, server=item.server))
 
         return itemlist
@@ -455,6 +459,8 @@ def play(item):
 
         if '/hqq.' in url or '/waaw.' in url or '/netu' in url:
             return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+        elif '.streamplusvip.' in url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
 
         if url:
             servidor = servertools.get_server_from_url(url)
@@ -477,6 +483,8 @@ def play(item):
 
         if '/hqq.' in hostr or '/waaw.' in hostr or '/netu.' in hostr:
             return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+        elif '.streamplusvip.' in url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
 
         url = ''
         if video:
@@ -494,6 +502,8 @@ def play(item):
         if url == 'https://streamplusvip.xyz': url = ''
 
     if '/hqq.' in url or '/waaw.' in url or '/netu' in url:
+        return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+    elif '.streamplusvip.' in url:
         return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
     elif 'peliculonhd.' in url:
         return 'Servidor [COLOR yellow]NO soportado[/COLOR]'

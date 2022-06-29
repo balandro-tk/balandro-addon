@@ -2,6 +2,19 @@
 
 [COLOR yellow][B]2022[/B][/COLOR]
 
+2.3.5  [COLOR darkorange]1 de Julio 2022[/COLOR]
+    Correcciones: Bugs de la version anterior
+
+    Generos: Re-configurados
+
+    Canales:
+       Modificados: Revision generalizada
+       Anulados: Las webs cerradas
+
+    Servidores:
+       Modificados: Revision generalizada
+       Anulados: Las webs cerradas
+
 2.3.4  [COLOR darkorange]16 de Junio 2022[/COLOR]
     Correcciones: Bugs de la version anterior
 

@@ -48,10 +48,10 @@ def mainlist(item):
     if config.get_setting('search_extra_main', default=False):
         itemlist.append(item.clone( action='', title= '[B]Búsquedas Especiales:[/B]', folder=False, text_color='limegreen' ))
 
-        itemlist.append(item.clone( channel='tmdblists', action='mainlist', title= ' - Búsquedas y listas en TMDB', thumbnail=thumb_tmdb,
+        itemlist.append(item.clone( channel='tmdblists', action='mainlist', title= ' - Búsquedas y listas en [COLOR violet]TMDB[/COLOR]', thumbnail=thumb_tmdb,
                                     plot = 'Buscar personas y ver listas de películas y series de la base de datos de The Movie Database' ))
 
-        itemlist.append(item.clone( channel='filmaffinitylists', action='mainlist', title= ' - Listas en Filmaffinity', thumbnail=thumb_filmaffinity,
+        itemlist.append(item.clone( channel='filmaffinitylists', action='mainlist', title= ' - Listas en [COLOR violet]Filmaffinity[/COLOR]', thumbnail=thumb_filmaffinity,
                                     plot = 'Ver listas de películas, series, documentales y otros de Filmaffinity' ))
 
     if config.get_setting('search_extra_proxies', default=True):
@@ -84,21 +84,21 @@ def mainlist(item):
     itemlist.append(item.clone( channel='filters', action='no_actives', title= ' - Qué canales no intervienen en las búsquedas (están desactivados)',
                                 thumbnail=config.get_thumb('stack') ))
 
-    itemlist.append(item.clone(  channel='filters', action='channels_status', title= ' - Personalizar canales (Desactivar ó Re-activar)', des_rea = True,
-                                thumbnail=config.get_thumb('stack') ))
+    itemlist.append(item.clone( channel='filters', action='channels_status', title= ' - Personalizar canales (Desactivar ó Re-activar)',
+                                des_rea = True, thumbnail=config.get_thumb('stack') ))
 
     itemlist.append(item.clone( channel='filters', action='only_prefered', title= ' - Qué canales tiene marcados como preferidos',
                                 thumbnail=config.get_thumb('stack') ))
 
-    itemlist.append(item.clone( channel='filters', action='channels_status', title= ' - Personalizar canales Preferidos (Marcar ó Des-marcar)', des_rea = False,
-                                thumbnail=config.get_thumb('stack') ))
+    itemlist.append(item.clone( channel='filters', action='channels_status', title= ' - Personalizar canales Preferidos (Marcar ó Des-marcar)',
+                                des_rea = False, thumbnail=config.get_thumb('stack') ))
 
     itemlist.append(item.clone( channel='filters', title = ' - [COLOR cyan]Excluir canales en las búsquedas[/COLOR]', action = 'mainlist',
                                 thumbnail=config.get_thumb('stack') ))
 
     itemlist.append(item.clone( action='', title= '[B]Configuración:[/B]', folder=False, text_color='goldenrod' ))
 
-    itemlist.append(item.clone( channel='actions', title= ' - Ajustes categorías [COLOR yellowgreen](proxies y buscar)[/COLOR]', action = 'open_settings',
+    itemlist.append(item.clone( channel='actions', title= ' - Ajustes categorías [COLOR yellowgreen]proxies y buscar[/COLOR]', action = 'open_settings',
                                 thumbnail=config.get_thumb('settings') ))
 
     itemlist.append(item.clone( action='show_help', title='[COLOR green][B]Información búsquedas[/B][/COLOR]', thumbnail=config.get_thumb('help') ))
@@ -111,28 +111,22 @@ def show_help_parameters(item):
     txt += '[CR][CR]'
 
     txt += ' - [B][COLOR gold]Canales[/COLOR][/B] que nunca intervienen en las busquedas:'
-    txt += '[CR]'
-    txt += '[COLOR gold]    CineDeAntes,  CineLibreOnline,  Frozenlayer,  MovidyTv,  SeoDiv,  SigloXX,  TvSeries [/COLOR]'
+    txt += '[CR][COLOR darkorange][B]    CineDeAntes,  CineLibreOnline,  Frozenlayer,  MovidyTv,  SeoDiv,  SigloXX,  TvSeries[/B][/COLOR]'
 
     if not config.get_setting('mnu_documentales', default=True):
-        txt += '[CR][CR]'
-        txt += ' - Los canales de [B][COLOR cyan]Documentales[/COLOR][/B] jamás intervendrán en las busquedas'
+        txt += '[CR][CR] - Los canales de [B][COLOR cyan]Documentales[/COLOR][/B] jamás intervendrán en las busquedas'
 
     if config.get_setting('mnu_doramas', default=True):
-        txt += '[CR][CR]'
-        txt += ' - Los canales de [B][COLOR firebrick]Doramas[/COLOR][/B] jamás intervendrán en las busquedas'
+        txt += '[CR][CR] - Los canales de [B][COLOR firebrick]Doramas[/COLOR][/B] jamás intervendrán en las busquedas'
 
     if config.get_setting('mnu_animes', default=True):
-        txt += '[CR][CR]'
-        txt += ' - Los canales de [B][COLOR springgreen]Animes[/COLOR][/B] jamás intervendrán en las busquedas'
+        txt += '[CR][CR] - Los canales de [B][COLOR springgreen]Animes[/COLOR][/B] jamás intervendrán en las busquedas'
 
     if config.get_setting('mnu_adultos', default=True):
-        txt += '[CR][CR]'
-        txt += ' - Los canales de [B][COLOR orange]Adultos[/COLOR][/B] jamás intervendrán en las busquedas'
+        txt += '[CR][CR] - Los canales de [B][COLOR orange]Adultos[/COLOR][/B] jamás intervendrán en las busquedas'
 
     if config.get_setting('search_only_prefered', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado efectuar búsquedas solo en los canales [B][COLOR gold]Preferidos[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado efectuar búsquedas solo en los canales [B][COLOR gold]Preferidos[/COLOR][/B]'
 
     if config.get_setting('search_only_suggesteds', default=False):
         txt += '[CR][CR]'
@@ -143,90 +137,82 @@ def show_help_parameters(item):
         txt += ' - Tiene activado descartar búsquedas en los canales con [B][COLOR red]Proxies informados[/COLOR][/B]'
 
     if config.get_setting('search_con_torrents', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado efectuar las búsquedas solo en los canales que pueden contener archivos [B][COLOR blue]Torrent[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado efectuar las búsquedas solo en los canales que pueden contener archivos [B][COLOR blue]Torrent[/COLOR][/B]'
 
     if config.get_setting('search_no_torrents', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado descartar en las búsquedas los canales que pueden contener archivos [B][COLOR blue]Torrent[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado descartar en las búsquedas los canales que pueden contener archivos [B][COLOR blue]Torrent[/COLOR][/B]'
 
     if config.get_setting('search_no_exclusively_torrents', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado descartar en las búsquedas los canales con enlaces exclusivamente [B][COLOR blue]Torrent[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado descartar en las búsquedas los canales con enlaces exclusivamente [B][COLOR blue]Torrent[/COLOR][/B]'
 
     if config.get_setting('search_no_inestables', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado descartar búsquedas en los canales con [B][COLOR plum]Inestables[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado descartar búsquedas en los canales con [B][COLOR plum]Inestables[/COLOR][/B]'
 
     if config.get_setting('search_no_channels', default=False):
-        txt += '[CR][CR]'
-        txt += ' - Tiene activado notificar en las búsquedas los canales [B][COLOR yellowgreen]Ignorados[/COLOR][/B]'
+        txt += '[CR][CR] - Tiene activado notificar en las búsquedas los canales [B][COLOR yellowgreen]Ignorados[/COLOR][/B]'
 
     if config.get_setting('search_excludes_movies', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR deepskyblue]Películas[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR deepskyblue]Películas[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += str(config.get_setting('search_excludes_movies'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_movies'))
 
     if config.get_setting('search_excludes_tvshows', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR hotpink]Series[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR hotpink]Series[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += '    ' + str(config.get_setting('search_excludes_tvshows'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_tvshows'))
 
     if config.get_setting('search_excludes_documentaries', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR cyan]Documentales[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR cyan]Documentales[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += '    ' + str(config.get_setting('search_excludes_documentaries'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_documentaries'))
 
     if config.get_setting('search_excludes_torrents', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR blue]Torrents[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR blue]Torrents[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += '    ' + str(config.get_setting('search_excludes_torrents'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_torrents'))
 
     if config.get_setting('search_excludes_mixed', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR yellow]Películas y/ó Series[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR yellow]Películas y/ó Series[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += '    ' + str(config.get_setting('search_excludes_mixed'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_mixed'))
 
     if config.get_setting('search_excludes_all', default=''):
-        txt += '[CR][CR]'
-        txt += ' - Canales excluidos en las búsquedas de [B][COLOR green]Todos[/COLOR][/B]:'
+        txt += '[CR][CR] - Canales excluidos en las búsquedas de [B][COLOR green]Todos[/COLOR][/B]:'
 
-        txt += '[CR]'
-        txt += '    ' + str(config.get_setting('search_excludes_all'))
+        txt += '[CR]    ' + str(config.get_setting('search_excludes_all'))
 
     if config.get_setting('search_show_last', default=True):
-        txt += '[CR][CR]'
-        txt += ' - Textos para búsquedas [B][COLOR goldenrod]Memorizados[/COLOR][/B]:'
+        txt += '[CR][CR] - Textos para búsquedas [B][COLOR goldenrod]Memorizados[/COLOR][/B]:'
+
+        hay_lastest = False
 
         if config.get_setting('search_last_all', default=''):
-            txt += '[CR]'
-            txt += '   [COLOR yellow][B]General:[/B][/COLOR]  ' + config.get_setting('search_last_all')
+            hay_lastest = True
+
+            txt += '[CR]   [COLOR yellow][B]General:[/B][/COLOR]  ' + config.get_setting('search_last_all')
 
         if config.get_setting('search_last_movie', default=''):
-            txt += '[CR]'
-            txt += '   [COLOR deepskyblue][B]Películas:[/B][/COLOR]  ' + config.get_setting('search_last_movie')
+            hay_lastest = True
+
+            txt += '[CR]   [COLOR deepskyblue][B]Películas:[/B][/COLOR]  ' + config.get_setting('search_last_movie')
 
         if config.get_setting('search_last_tvshow', default=''):
-            txt += '[CR]'
-            txt += '   [COLOR hotpink][B]Series:[/B][/COLOR]  ' + config.get_setting('search_last_tvshow')
+            hay_lastest = True
+
+            txt += '[CR]   [COLOR hotpink][B]Series:[/B][/COLOR]  ' + config.get_setting('search_last_tvshow')
 
         if config.get_setting('search_last_documentary', default=''):
-            txt += '[CR]'
-            txt += '   [COLOR cyan][B]Documentales:[/B][/COLOR]  ' + config.get_setting('search_last_documentary')
+            hay_lastest = True
+
+            txt += '[CR]   [COLOR cyan][B]Documentales:[/B][/COLOR]  ' + config.get_setting('search_last_documentary')
 
         if config.get_setting('search_last_person', default=''):
-            txt += '[CR]'
-            txt += '   [COLOR plum][B]Personas:[/B][/COLOR]  ' + config.get_setting('search_last_person')
+            hay_lastest = True
+
+            txt += '[CR]   [COLOR plum][B]Personas:[/B][/COLOR]  ' + config.get_setting('search_last_person')
+
+        if not hay_lastest:
+            txt += '[CR]   [COLOR cyan][B]Sin textos memorizados[/B][/COLOR]'
 
     platformtools.dialog_textviewer('Información sobre sus parámetros de búsquedas', txt)
     return True

@@ -347,6 +347,7 @@ def findvideos(item):
            play_other = ''
 
            if servidor == 'drive': servidor ='gvideo'
+           elif servidor == 'videovard': play_other = servidor
            elif servidor == 'player' or servidor == 'embed':
               play_other = servidor
               servidor = ''

@@ -3,7 +3,7 @@
   "name": "Various",
 
   "active": true,
-  "notes": "Alternative vía: Script.Module.ResolveUrl (Mvidoo, Ninjastream, Tubeload)",
+  "notes": "Alternative vía: Script.Module.ResolveUrl (Mvidoo, Ninjastream, Tubeload, Videovard)",
 
   "find_videos": {
     "ignore_urls": [],
@@ -26,6 +26,14 @@
       },
       {
         "pattern": "(https://ninjastream.to/watch/[A-z0-9]+)",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(https://videovard.sx/(?:e|f|)/[A-z0-9]+)",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(https://videovard.to/(?:e|f|)/[A-z0-9]+)",
         "url": "\\1"
       }
     ]

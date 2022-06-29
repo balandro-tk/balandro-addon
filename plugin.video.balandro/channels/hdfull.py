@@ -303,7 +303,7 @@ def acciones(item):
 
         if domain_memo:
             itemlist.append(item.clone( channel='actions', action='manto_domain_hdfull', title= '[B]Modificar el dominio memorizado[/B]',
-                                        folder=False, text_color='darkorange' ))
+                                        desde_el_canal = True, folder=False, text_color='darkorange' ))
 
         itemlist.append(item_configurar_dominio(item))
         itemlist.append(item_configurar_proxies(item))
@@ -776,8 +776,9 @@ def episodios(item):
 
 
 def puntuar_calidad(txt):
-    orden = ['CAM', 'TS', 'DVDSCR', 'DVDRIP', 'HDTV', 'RHDTV', 'HD720', 'HD1080']
+    orden = ['CAM', 'cam', 'TS', 'ts', 'DVDSCR', 'dvdscr', 'DVDRIP', 'dvdrip', 'HDTV', 'hdtv', 'RHDTV', 'rhdtv', 'HD720', 'hh720', 'HD1080', 'hd1080']
     if txt not in orden: return 0
+
     else: return orden.index(txt) + 1
 
 
@@ -835,7 +836,10 @@ def findvideos(item):
     except:
        return itemlist
 
+    ses = 0
+
     matches = []
+
     for match in data_decrypt:
         if match['provider'] in provs:
             # ~ 31/12/2021
@@ -844,7 +848,7 @@ def findvideos(item):
                 url = provs[match["provider"]]["d"] % match["code"]
                 matches.append([match["lang"], match["quality"], url, embed])
             except:
-                pass
+                ses += 1
 
             # ~ try:
                # ~ embed = provs[match['provider']][0]
@@ -852,8 +856,8 @@ def findvideos(item):
                # ~ matches.append([match['lang'], match['quality'], url, embed])
             # ~ except:
                # ~ pass
-
-    ses = 0
+        else:
+            ses += 1
 
     for idioma, calidad, url, embed in matches:
         ses += 1

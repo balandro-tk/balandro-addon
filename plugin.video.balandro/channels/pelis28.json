@@ -13,5 +13,5 @@
 
   "clusters": ["news", "years", "producers", "lists", "kids", "docs", "vos"],
 
-  "notes": "Películas por géneros y año."
+  "notes": "Películas por géneros y año. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
 }

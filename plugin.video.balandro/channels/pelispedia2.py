@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://www.pelispedia-v2.wtf/'
+host = 'https://www3.pelispedia.wtf/'
 
 
 def item_configurar_proxies(item):
@@ -22,7 +22,7 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://www.pelispedia-v1.wtf/']
+    ant_hosts = ['https://www.pelispedia-v1.wtf/', 'https://www.pelispedia-v2.wtf/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
@@ -70,7 +70,7 @@ def mainlist_pelis(item):
 
     itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
 
-    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'ver-pelicula-1/', search_type = 'movie' ))
+    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'ver-pelicula-2/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = 'Estrenos', action = 'list_new', url = host, search_type = 'movie' ))
 
@@ -92,7 +92,7 @@ def mainlist_series(item):
 
     itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
-    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'ver-serie-1/', search_type = 'tvshow' ))
+    itemlist.append(item.clone( title = 'Catálogo', action = 'list_all', url = host + 'ver-serie-2/', search_type = 'tvshow' ))
 
     itemlist.append(item.clone( title = 'Episodios recientes', action = 'list_epis', url = host + 'ver-episodios-online/', search_type = 'tvshow' ))
 
@@ -387,44 +387,38 @@ def findvideos(item):
 
         if not url: continue
 
-        if 'IDIOMA' in srv:
-            embed_url = url.replace('&amp;#038;', '&').replace('&#038;', '&').replace('&amp;', '&')
+        url = url.replace('&amp;#038;', '&').replace('&#038;', '&').replace('&amp;', '&')
 
-            if item.ref: headers = {'Referer': item.ref}
-            else: headers = {'Referer': item.url}
+        if not '24embed' in other and not 'idioma' in other:
+            itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = 'directo', url = url, other = other, language = idioma ))
+        else:
+            data_vid = do_downloadpage(url)
 
-            data2 = do_downloadpage(embed_url, headers=headers)
+            url_vid = scrapertools.find_single_match(data_vid, '<div class="Video">.*?src="(.*?)"')
 
-            new_url = scrapertools.find_single_match(data2, '<div class="Video">.*?src="(.*?)"')
-            if not new_url: new_url = scrapertools.find_single_match(data2, '<IFRAME.*?SRC="(.*?)"')
+            if url_vid:
+                data_embed = do_downloadpage(url_vid, headers={'Referer': host})
 
-            if not new_url: continue
+                matches_embed = scrapertools.find_multiple_matches(data_embed, "go_to_player.*?'(.*?)'.*?<span>(.*?)</span>")
 
-            if '//24embed.' in new_url:
-                data3 = do_downloadpage(new_url)
+                for url_embed, srv_embed in matches_embed:
+                    lnk_embed = url_embed.replace('/mostrarEnlace/', '/validaEnlace/')
+                    url_final = httptools.downloadpage_proxy('pelispedia', lnk_embed, headers={'Referer': url_vid}, follow_redirects=False).headers.get('location', '')
 
-                links = scrapertools.find_multiple_matches(data3, "go_to_player.*?'(.*?)'")
+                    srv_embed = srv_embed.lower().strip()
+                    if 'hqq' in srv_embed or 'waaw' in srv_embed or 'netu' in srv_embed: url_final = ''
 
-                headers = {'Referer': new_url}
-
-                for link in links:
-                    link = link.replace('/mostrarEnlace', '/validaEnlace')
-
-                    url = httptools.downloadpage(link, headers=headers, follow_redirects=False).headers.get('location', '')
-
-                    if url:
-                        if not 'streamplusvip.xyz' in url:
-                            servidor = servertools.get_server_from_url(url)
+                    if url_final:
+                        if not 'streamplusvip.xyz' in url_final:
+                            servidor = servertools.get_server_from_url(url_final)
                             servidor = servertools.corregir_servidor(servidor)
 
                             other = 'e'
 
-                            itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url, ref = item.ref,
+                            itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url_final,
                                                   other = other, language = idioma ))
-            continue
-
-        itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = 'directo', url = url, ref = item.ref,
-                              other = other, language = idioma ))
+            else:
+               itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = 'directo', url = url, other = other, language = idioma ))
 
     # ~ Download
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
