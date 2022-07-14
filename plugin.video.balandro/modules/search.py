@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+if sys.version_info[0] >= 3: PY3 = True
+else: PY3 = False
+
+
 import os, time
 
 from threading import Thread
@@ -314,6 +320,11 @@ def do_search(item, tecleado):
 
         c_item = Item( channel=ch['id'], action='search', search_type=item.search_type, title='Buscar en '+ch['name'], thumbnail=ch['thumbnail'] )
 
+        if not PY3:
+            if 'mismatched' in ch['clusters']:
+                num_canales = num_canales - 1
+                continue
+
         if con_torrents:
             if not 'torrents' in ch['clusters']:
                  num_canales = num_canales - 1
@@ -434,6 +445,11 @@ def do_search(item, tecleado):
             cfg_proxies_channel = 'channel_' + ch['id'] + '_proxies'
 
             if 'itemlist_search' in ch:
+                if not PY3:
+                    if 'mismatched' in ch['clusters']:
+                        platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
+                        continue
+
                 if len(ch['itemlist_search']) == 0:
                     if no_results:
                         titulo = ch['name'] + '[COLOR coral] sin resultados'
@@ -464,6 +480,11 @@ def do_search(item, tecleado):
                         if not ("'" + ch['id'] + "'") in str(item.only_channels_group): continue
 
                     titulo = '%s [COLOR plum]No se ha buscado' % ch['name']
+
+                    if not PY3:
+                        if 'mismatched' in ch['clusters']:
+                            platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
+                            continue
 
                     if con_torrents:
                         if not 'torrents' in ch['clusters']: continue

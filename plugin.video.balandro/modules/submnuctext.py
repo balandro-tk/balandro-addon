@@ -47,51 +47,53 @@ def submnu_developer(item):
     logger.info()
     itemlist = []
 
-    itemlist.append(item.clone( action='', title='[B]Tests Webs Canales:[/B]', thumbnail=config.get_thumb('tools'), text_color='gold' ))
+    itemlist.append(item.clone( action='', title='[B]Tests Canales:[/B]', thumbnail=config.get_thumb('tools'), text_color='gold' ))
     itemlist.append(item.clone( action='test_all_webs', title=' - Todos', thumbnail=config.get_thumb('stack') ))
     itemlist.append(item.clone( action='test_all_webs', title=' - Insatisfactorios', thumbnail=config.get_thumb('stack'), unsatisfactory = True ))
 
-    itemlist.append(item.clone( action='', title='[B]Tests Webs Servidores:[/B]', thumbnail=config.get_thumb('tools'), text_color='fuchsia' ))
+    itemlist.append(item.clone( action='', title='[B]Tests Servidores:[/B]', thumbnail=config.get_thumb('tools'), text_color='fuchsia' ))
     itemlist.append(item.clone( action='test_all_srvs', title=' - Todos', thumbnail=config.get_thumb('flame') ))
     itemlist.append(item.clone( action='test_all_srvs', title=' - Insatisfactorios', thumbnail=config.get_thumb('flame'), unsatisfactory = True ))
 
-    itemlist.append(item.clone( action='', title='[B]Ver Ficheros:[/B]', thumbnail=config.get_thumb('tools'), text_color='violet' ))
+    presentar = False
+
+    if os.path.exists(os.path.join(config.get_data_path(), 'servers_todo.log')): presentar = True
+    elif os.path.exists(os.path.join(config.get_data_path(), 'qualities_todo.log')): presentar = True
+    elif os.path.exists(os.path.join(config.get_data_path(), 'proxies.log')): presentar = True
+
+    if presentar:
+        itemlist.append(item.clone( action='', title='[B]Logs:[/B]', thumbnail=config.get_thumb('tools'), text_color='limegreen' ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'servers_todo.log')):
+            itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log de Servidores',
+                                        todo = 'servers_todo.log', thumbnail=config.get_thumb('crossroads') ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'qualities_todo.log')):
+            itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log de Calidades',
+                                        todo = 'qualities_todo.log', thumbnail=config.get_thumb('quote') ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'proxies.log')):
+            itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log de Proxies',
+                                        todo = 'proxies.log', thumbnail=config.get_thumb('dev') ))
 
     presentar = False
 
-    if os.path.exists(os.path.join(config.get_data_path(), 'servers_todo.log')):
-        presentar = True
-
-        itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log temporal de Servidores',
-                                    todo = 'servers_todo.log', thumbnail=config.get_thumb('crossroads') ))
-
-    if os.path.exists(os.path.join(config.get_data_path(), 'qualities_todo.log')):
-        presentar = True
-
-        itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log temporal de Calidades',
-                                    todo = 'qualities_todo.log', thumbnail=config.get_thumb('quote') ))
-
-    if os.path.exists(os.path.join(config.get_data_path(), 'proxies.log')):
-        presentar = True
-
-        itemlist.append(item.clone( channel='helper', action='show_todo_log', title=' - Log temporal de Proxies',
-                                    todo = 'proxies.log', thumbnail=config.get_thumb('dev') ))
-
-    itemlist.append(item.clone( channel='helper', action='show_log', title=' - Log del Sistema', thumbnail=config.get_thumb('computer') ))
-
-    itemlist.append(item.clone( channel='helper', action='show_advs', title=' - AdvancedSettings', thumbnail=config.get_thumb('quote') ))
-
-    if os.path.exists(os.path.join(config.get_data_path(), 'info_channels.csv')):
-        presentar = True
-
-        itemlist.append(item.clone( action='', title=' - Hay temporal Info channels', thumbnail=config.get_thumb('dev'), text_color='goldenrod' ))
-
-    if os.path.exists(os.path.join(config.get_data_path(), 'temp.torrent')):
-        presentar = True
-
-        itemlist.append(item.clone( action='', title=' - Hay temporal Torrent', thumbnail=config.get_thumb('dev'), text_color='yellow' ))
+    if os.path.exists(os.path.join(config.get_data_path(), 'info_channels.csv')): presentar = True
+    elif os.path.exists(os.path.join(config.get_data_path(), 'temp.torrent')): presentar = True
+    elif os.path.exists(os.path.join(config.get_data_path(), 'm3u8hls.m3u8')): presentar = True
 
     if presentar:
+        itemlist.append(item.clone( action='', title='[B]Temporales:[/B]', thumbnail=config.get_thumb('tools'), text_color='cyan' ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'info_channels.csv')):
+            itemlist.append(item.clone( action='', title=' - Hay Info channels', thumbnail=config.get_thumb('dev'), text_color='goldenrod' ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'temp.torrent')):
+            itemlist.append(item.clone( action='', title=' - Hay Torrent', thumbnail=config.get_thumb('dev'), text_color='yellow' ))
+
+        if os.path.exists(os.path.join(config.get_data_path(), 'm3u8hls.m3u8')):
+            itemlist.append(item.clone( action='', title=' - Hay M3u8hls', thumbnail=config.get_thumb('dev'), text_color='yellow' ))
+
         itemlist.append(item.clone( channel='actions', action='manto_temporales', title=' - Eliminar Temporales', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
     if os.path.exists(os.path.join(config.get_runtime_path(), 'modules', 'developer.py')) or os.path.exists(os.path.join(config.get_runtime_path(), 'modules', 'test.py')):
@@ -101,7 +103,19 @@ def submnu_developer(item):
             itemlist.append(item.clone( channel='developer', action='mainlist', title=' - Géneros', thumbnail=config.get_thumb('genres') ))
 
         if os.path.exists(os.path.join(config.get_runtime_path(), 'modules', 'test.py')):
-            itemlist.append(item.clone( channel='test', action='mainlist', title=' - Tests Canales y Servidores', thumbnail=config.get_thumb('tools') ))
+            itemlist.append(item.clone( channel='test', action='mainlist', title=' - Canales y Servidores', thumbnail=config.get_thumb('tools') ))
+
+    itemlist.append(item.clone( action='', title='[B]Sistema:[/B]', thumbnail=config.get_thumb('tools'), text_color='violet' ))
+
+    itemlist.append(item.clone( channel='helper', action='show_log', title=' - Log del Sistema', thumbnail=config.get_thumb('computer') ))
+
+    itemlist.append(item.clone( channel='helper', action='show_advs', title=' - AdvancedSettings', thumbnail=config.get_thumb('quote') ))
+
+    itemlist.append(item.clone( action='', title='[B]Addons:[/B]', thumbnail=config.get_thumb('tools'), text_color='yellowgreen' ))
+
+    itemlist.append(item.clone( channel='actions', action='manto_addons_packages', title=' - Eliminar Packages', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
+
+    itemlist.append(item.clone( channel='actions', action='manto_addons_temp', title=' - Eliminar Temp', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
     itemlist.append(item.clone( channel='actions', action = 'open_settings', title= 'Configuración', thumbnail=config.get_thumb('settings'), text_color='chocolate' ))
 
@@ -531,6 +545,11 @@ def _proxies(item):
 
     elif item.from_channel == 'newpct1':
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Configurar proxies desde el canal[/COLOR][/B]' % color_avis)
+
+    elif item.from_channel == 'pelis28':
+        from channels import pelis28
+        item.channel = 'pelis28'
+        pelis28.configurar_proxies(item)
 
     elif item.from_channel == 'pelisgratis':
         from channels import pelisgratis

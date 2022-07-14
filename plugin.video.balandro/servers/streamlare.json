@@ -16,6 +16,10 @@
         "url": "\\1"
       },
       {
+        "pattern": "(https://sltube.org/(?:v|e)/[A-z0-9]+)",
+        "url": "\\1"
+      },
+      {
         "pattern": "(https://slwatch.co/(?:v|e)/[A-z0-9]+)",
         "url": "\\1"
       }

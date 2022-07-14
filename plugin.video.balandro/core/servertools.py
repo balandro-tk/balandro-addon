@@ -398,10 +398,11 @@ def corregir_servidor(servidor):
 
     elif servidor in ['fembed', 'fembed-hd', 'fembeder', 'divload', 'ilovefembed', 'myurlshort', 'jplayer', 'feurl', 'fembedisthebest', 'femax20', 'fcdn', 'fembad', 'pelispng', 'hlshd', 'embedsito', 'mrdhan', 'dutrag', 'fplayer', 'diasfem', 'suzihaza', 'oceanplay']: return 'fembed'
     elif servidor in ['evoplay']: return 'evoload'
-    elif servidor in ['streamta.pe', 'strtapeadblock', 'streamtapeadblock', 'streamadblockplus', 'adblockstrtech', 'adblockstrtape', 'adblockstreamtape', 'playstp', 'strcloud', 'strtpe', 'stape', 'strtape', 'scloud']: return 'streamtape'
+    elif servidor in ['streamta.pe', 'strtapeadblock', 'strtapeadblocker', 'streamtapeadblock', 'streamadblockplus', 'adblockstrtech', 'adblockstrtape', 'adblockstreamtape', 'playstp', 'strcloud', 'strtpe', 'stape', 'strtape', 'scloud']: return 'streamtape'
     elif servidor in ['sbembed1', 'sbembed2', 'sbvideo', 'japopav']: return 'sbembed'
     elif servidor in ['streams1', 'streams2']: return 'streams3'
-    elif servidor in ['sbplay', 'sbplay1', 'sbplay2', 'pelistop', 'sbfast', 'sbfull', 'cloudemb', 'tubesb', 'sbembed', 'embedsb' ,'sbembed.com', 'playersb', 'sbcloud1', 'watchsb', 'viewsb']: return 'streamsb'
+    elif servidor in ['sbplay', 'sbplay1', 'sbplay2', 'pelistop', 'sbfast', 'sbfull', 'ssbstream', 'sbthe', 'cloudemb', 'tubesb', 'sbembed', 'embedsb' ,'sbembed.com', 'playersb', 'sbcloud1', 'watchsb', 'viewsb', 'watchmo']: return 'streamsb'
+    elif servidor in ['slmaxed', 'sltube', 'slwatch']: return 'streamlare'
 
     elif servidor in ['highload', 'streamon']: return 'highload'
     elif servidor in ['vupload']: return 'vup'
@@ -432,7 +433,7 @@ def corregir_servidor(servidor):
     elif servidor in ['thevideome', 'thevideo']: return 'thevideome'
     elif servidor in ['1fichier', 'onefichier']: return '1fichier'
     elif servidor in ['uploadedto', 'uploaded', 'ul', 'ul.to']: return 'uploadedto'
-    elif servidor in ['tubeload', 'mvidoo', 'ninjastream', 'videovard']: return 'various'
+    elif servidor in ['tubeload', 'mvidoo', 'ninjastream', 'rutube', 'videovard']: return 'various'
 
     else: return servidor
 

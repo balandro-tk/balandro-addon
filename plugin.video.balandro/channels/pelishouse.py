@@ -89,9 +89,9 @@ def mainlist_series(item):
 
     itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
-    itemlist.append(item.clone( title = 'Catálogo series Tv', action = 'list_all', url = host + 'tvshows/', search_type = 'tvshow' ))
+    itemlist.append(item.clone( title = 'Catálogo Series TV', action = 'list_all', url = host + 'tvshows/', search_type = 'tvshow' ))
 
-    itemlist.append(item.clone( title = 'Catálogo series Animadas', action = 'list_all', url = host + 'genre/series-animadas-gratis/', search_type = 'tvshow' ))
+    itemlist.append(item.clone( title = 'Catálogo Series Animadas', action = 'list_all', url = host + 'series-animadas-online-espanol/', search_type = 'tvshow' ))
 
     itemlist.append(item.clone( title = 'Más valoradas', action = 'list_top', url = host + 'pelislatino24-tv/', search_type = 'tvshow' ))
 
@@ -122,63 +122,63 @@ def generos(item):
     logger.info()
     itemlist = []
 
+    opciones = [
+       ('accion', 'Acción'),
+       ('action-adventure', 'Acción aventura'),
+       ('animacion', 'Animación'),
+       ('aventura', 'Aventura'),
+       ('belica', 'Bélica'),
+       ('ciencia-ficcion', 'Ciencia ficción'),
+       ('cinecalidad', 'Cinecalidad'),
+       ('cinecalidad-top', 'Cinecalidad top' ),
+       ('comedia', 'Comedia'),
+       ('crimen', 'Crimen'),
+       ('descargacineclasico-tv', 'Descargacineclasico tv'),
+       ('documental', 'Documental'),
+       ('drama', 'Drama'),
+       ('familia', 'Familia'),
+       ('fantasia', 'Fantasía'),
+       ('historia', 'Historia'),
+       ('kids', 'Kids'),
+       ('misterio', 'Misterio'),
+       ('musica', 'Música'),
+       ('pelicula-de-tv', 'Películas de tv'),
+       ('pelicula-de-la-television', 'Películas de la television'),
+       ('reality', 'Reality'),
+       ('romance', 'Romance'),
+       ('sci-fi-fantasy', 'Sci-fi fantasy'),
+       ('soap', 'Soap'),
+       ('suspense', 'Suspense'),
+       ('terror', 'Terror'),
+       ('war-politics', 'War -politics'),
+       ('western', 'Western')
+       ]
+
     descartar_xxx = config.get_setting('descartar_xxx', default=False)
 
-    data = do_downloadpage(host)
-
-    bloque = scrapertools.find_single_match(data, '>Géneros<(.*?)<ul id="menu-menu-2"')
-
-    matches = scrapertools.find_multiple_matches(bloque, '<a href="(.*?)".*?>(.*?)</a>')
-
-    for url, title in matches:
-        if title == '+18': continue
-        elif title == 'Castellano': continue
-        elif title == 'Latino': continue
-        elif title == 'MARVEL': continue
-        elif title == 'Mas Vistas': continue
-        elif title == 'Próximamente': continue
-
-        elif 'Peliculas ' in title: continue
-        elif 'Series ' in title: continue
-
-        if title == 'CINECALIDAD':
-            if item.search_type == 'tvshow': continue
-            title = 'CineCalidad'
-        elif title == 'CINECALIDAD.TOP':
-            if item.search_type == 'tvshow': continue
-            title = 'CineCalidad Top'
-        elif title == 'película de la televisión':
-            if item.search_type == 'tvshow': continue
-            title = 'Películas de Televisión'
-        elif 'descargacineclasico.tv' in title:
-            if item.search_type == 'tvshow': continue
-            title = 'DescargaCineClasico'
-
-        if '/peliculas-de-chequia/' in url: continue
-
+    for opc, tit in opciones:
         if item.search_type == 'tvshow':
-           if '/accion/' in url: continue
-           elif '/aventura/' in url: continue
-           elif '/belica/' in url: continue
-           elif '/ciencia-ficcion/' in url: continue
-           elif '/fantasia/' in url: continue
-           elif '/musica/' in url: continue
-           elif '/romance/' in url: continue
-           elif '/suspense/' in url: continue
-           elif '/pelicula-de-tv/' in url: continue
-        else:
-           if '/reality/' in url: continue
-           elif '/sci-fi-fantasy/' in url: continue
-           elif '/soap/' in url: continue
-           elif '/war-politics/' in url: continue
+           if opc == 'accion': continue
+           elif opc == 'aventura': continue
+           elif opc == 'belica': continue
+           elif opc == 'ciencia-ficcion': continue
+           elif opc == 'fantasia': continue
+           elif opc == 'musica': continue
+           elif opc == 'romance': continue
+           elif opc == 'suspense': continue
 
-        itemlist.append(item.clone( title = title, url = url, action = 'list_all' ))
+           if tit == 'Cinecalidad': continue
+           elif tit == 'Cinecalidad top': continue
+           elif tit == 'Descargacineclasico tv': continue
+           elif 'Películas' in tit: continue
+
+        itemlist.append(item.clone( title=tit, url= host + 'genre/' + opc + '/', action = 'list_all' ))
 
     if item.search_type == 'movie':
         if not descartar_xxx:
             itemlist.append(item.clone( action = 'list_all', title = 'xxx / adultos', url = host + 'genre/18/' ))
 
-    return sorted(itemlist, key=lambda it: it.title)
+    return itemlist
 
 
 def anios(item):
@@ -471,6 +471,8 @@ def findvideos(item):
 
         url = get_video_url(_type, post, nume)
 
+        if not url: continue
+
         try:
            lang, qlty = tag.strip().split(' ')
         except Exception:
@@ -483,6 +485,12 @@ def findvideos(item):
         url = urlparse.urljoin(item.url, url)
 
         if '/hqq.' in url or '/waaw.' in url or '/www.jplayer.' in url: continue
+        elif '/streamango.' in url: continue
+        elif '/streamplay.' in url: continue
+        elif '/powvideo.' in url: continue
+        elif '/openload.' in url: continue
+        elif '/vidcloud.' in url: continue
+        elif '/gounlimited.' in url: continue
         elif '.oceanplay.' in url: continue
 
         if url:
@@ -491,6 +499,7 @@ def findvideos(item):
 
             itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url, language = language, quality = qlty ))
 
+    # ~ Download
     patron = "<tr id=.*?src='.*?domain=([^']+)'.*?href='(.*?)'.*?class='quality'>(.*?)</strong></td><td>(.*?)</td><td>"
 
     matches = scrapertools.find_multiple_matches(data, patron)
@@ -505,7 +514,13 @@ def findvideos(item):
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url or '/www.jplayer.' in url: continue
 
         if url:
-            servidor = server.split('.')[0]
+            servidor = server.split('.')[0].lower()
+
+            if servidor == 'tenvoi': continue
+            elif servidor == 's5': continue
+
+            if servidor == 'utorrent': servidor = 'torrent'
+
             servidor = servertools.corregir_servidor(servidor)
 
             itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url, other = 'd',
@@ -523,11 +538,12 @@ def get_video_url(_type, post, nume):
     data = do_downloadpage(host + 'wp-json/dooplayer/v2/%s/%s/%s' % (post, _type, nume))
 
     try:
-       data = jsontools.load(data)['embed_url']
+       url = jsontools.load(data)['embed_url']
+       if not url.startswith('http'): url = ''
     except:
-       data = ''
+       url = ''
 
-    return data
+    return url
 
 
 def detectar_idiomas(tags):
@@ -539,7 +555,7 @@ def detectar_idiomas(tags):
     if idio:
        for idioma in idio:
            if idioma == 'castellano': languages.append('Esp')
-           if idioma == 'espaÑol': languages.append('Esp')
+           if idioma == 'español': languages.append('Esp')
            if idioma == 'latino': languages.append('Lat')
            if idioma == 'ingles': languages.append('Eng')
            if idioma == 'subtitulado': languages.append('Vose')
@@ -574,15 +590,37 @@ def play(item):
     logger.info()
     itemlist = []
 
-    if item.url.startswith(host):
-        if item.other == 'd':
-            data = do_downloadpage(item.url)
-            url = scrapertools.find_single_match(str(data), 'href="(.*?)"')
+    if item.server == 'torrent':
+        try:
+           url = httptools.downloadpage(item.url, follow_redirects=False).headers['location']
+        except:
+           url = ''
 
-            if url:
-                servidor = servertools.get_server_from_url(url)
-                servidor = servertools.corregir_servidor(servidor)
-                itemlist.append(item.clone( url=url, server=servidor))
+        if url:
+            itemlist.append(item.clone( url=url, server='torrent'))
+
+    elif item.url.startswith(host):
+        if item.other == 'd':
+            if '/links/' in item.url:
+                try:
+                   url = httptools.downloadpage(item.url, follow_redirects=False).headers['location']
+                except:
+                   url = ''
+
+                if url:
+                    servidor = servertools.get_server_from_url(url)
+                    servidor = servertools.corregir_servidor(servidor)
+
+                    itemlist.append(item.clone( url=url, server=servidor))
+            else:
+                data = do_downloadpage(item.url)
+                url = scrapertools.find_single_match(str(data), 'href="(.*?)"')
+
+                if url:
+                    servidor = servertools.get_server_from_url(url)
+                    servidor = servertools.corregir_servidor(servidor)
+
+                    itemlist.append(item.clone( url=url, server=servidor))
 
         else:
             data = do_downloadpage(item.url)
@@ -594,16 +632,18 @@ def play(item):
 
     elif item.url.startswith('https://peliscalidad.top/'):
         video_id = item.url.split('/')[-1]
-        data = httptools.downloadpage('https://peliscalidad.top/api/source/%s' % video_id, post={'r': '', 'd': 'peliscalidad.top'}).data
+        data = do_downloadpage('https://peliscalidad.top/api/source/%s' % video_id, post={'r': '', 'd': 'peliscalidad.top'})
+
         data = jsontools.load(data)
 
         if 'Video not found or has been removed' in str(data):
             return 'Video eliminado'
 
-        for video in data['data']:
-            url = httptools.downloadpage(video['file'], follow_redirects=False).headers['location']
+        if data:
+            for video in data['data']:
+                url = httptools.downloadpage(video['file'], follow_redirects=False).headers['location']
 
-            itemlist.append(item.clone( url=url, server='directo'))
+                itemlist.append(item.clone( url=url, server='directo'))
 
     elif item.url.startswith('https://api.cuevana3.io'):
         fid = scrapertools.find_single_match(item.url, "h=([^&]+)")
@@ -650,16 +690,31 @@ def play(item):
                 except:
                    url = ''
 
-
-            if '//damedamehoy.' in url or '//tomatomatela.' in url:
-                url = resuelve_dame_toma(url)
+            if '//damedamehoy.' in url or '//tomatomatela.' in url: url = resuelve_dame_toma(url)
 
         if url:
             itemlist.append(item.clone( url=url, server='directo'))
 
+    elif item.url.startswith('https://apialfa.tomatomatela.com'):
+        fid = scrapertools.find_single_match(item.url, "h=([^&]+)")
+
+        api_url = 'https://api.cuevana3.io/ir/redirect_ddh.php'
+        api_post = 'url=' + fid
+
+        try:
+           url = httptools.downloadpage(api_url, post=api_post, follow_redirects=False).headers['location']
+        except:
+           url = ''
+
+        if '//damedamehoy.' in url or '//tomatomatela.' in url:
+            url = resuelve_dame_toma(url)
+
+            itemlist.append(item.clone( url=url, server='directo'))
+
     elif item.url.startswith('https://g-nula.top'):
         video_id = item.url.split('/')[-1]
-        data = httptools.downloadpage('https://g-nula.top/api/source/%s' % video_id, post={'r': '', 'd': 'g-nula.top'}).data
+        data = do_downloadpage('https://g-nula.top/api/source/%s' % video_id, post={'r': '', 'd': 'g-nula.top'})
+
         data = jsontools.load(data)
 
         for video in data['data']:

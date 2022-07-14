@@ -56,6 +56,8 @@ def anios(item):
     from datetime import datetime
     current_year = int(datetime.today().year)
 
+    current_year = current_year - 10
+
     for x in range(current_year, 1954, -1):
         itemlist.append(item.clone( title = str(x), url = host + '?s=trfilter&trfilter=1&years%5B%5D=' + str(x), action = 'list_all' ))
 
@@ -101,6 +103,8 @@ def list_all(item):
             year = '-'
 
         name = title.replace('&#038;', '&')
+
+        if '/pelicula/' in url: continue
 
         itemlist.append(item.clone( action = 'temporadas', url = url, title = title, thumbnail = thumb, 
                                     contentType = 'tvshow', contentSerieName = name, infoLabels = {'year': year} ))
@@ -304,10 +308,13 @@ def findvideos(item):
 
         if not servidor or not url: continue
 
-        if 'opción' in servidor:
+        if 'opción' in servidor or 'servidor' in servidor:
             link_other = servidor
             servidor = 'directo'
         elif servidor == 'anavids':
+            link_other = servidor
+            servidor = 'directo'
+        elif servidor == 'blenditall':
             link_other = servidor
             servidor = 'directo'
         else: link_other = ''
@@ -358,6 +365,25 @@ def play(item):
                 url = scrapertools.find_single_match(str(data), 'sources.*?"(.*?)"')
             else:
                 url = scrapertools.find_single_match(data, 'src="(.*?)"')
+
+                if 'blenditall' in url:
+                    data = httptools.downloadpage(url).data
+
+                    url = scrapertools.find_single_match(data, '"file".*?"(.*?)"')
+                    url = url.replace('\\/', '/')
+
+                    if url:
+                        if url.startswith('//') == True: url = 'https:' + url
+
+                        data = httptools.downloadpage(url).data
+
+                        new_url = scrapertools.find_single_match(data, '//blenditall.com/playlist.m3u8?data=(.*?)$')
+
+                        if new_url:
+                            url = '//blenditall.com/playlist.m3u8?data=' + new_url
+
+                            itemlist.append(['m3u8', url])
+                            return itemlist
 
     if url:
         if url.startswith('//') == True: url = 'https:' + url

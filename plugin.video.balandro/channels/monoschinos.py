@@ -121,10 +121,17 @@ def list_all(item):
     data = httptools.downloadpage(item.url).data
     data = re.sub(r'\n|\r|\t|\s{2}|&nbsp;', '', data)
 
-    matches = re.compile('<div class="col-.*?href="(.*?)".*?src="(.*?)".*?<h5.*?>(.*?)</h5>').findall(data)
+    matches = re.compile('<div class="col-(.*?)</a></div>').findall(data)
 
-    for url, thumb, title in matches:
-        thumb = re.sub("image/imagen/160/224/", "assets/img/serie/imagen/", thumb)
+    for match in matches:
+        title = scrapertools.find_single_match(match, 'title="(.*?)"')
+        if not title: title = scrapertools.find_single_match(match, '<h.*?>(.*?)</h')
+
+        url = scrapertools.find_single_match(match, 'href="(.*?)"')
+
+        if not url or not title: continue
+
+        thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
 
         itemlist.append(item.clone( action='episodios', url=url, title=title, thumbnail=thumb,
                         infoLabels={'year': '-'}, contentType = 'tvshow', contentSerieName = title ))
@@ -133,6 +140,7 @@ def list_all(item):
 
     if itemlist:
         next_page = scrapertools.find_single_match(data, '"page-item active".*?</li>.*?<a class="page-link" href="([^"]+)">')
+
         if next_page:
             itemlist.append(item.clone( title = 'Siguientes ...', url = next_page, action = 'list_all', text_color = 'coral' ))
 
@@ -148,11 +156,22 @@ def list_epis(item):
 
     bloque = scrapertools.find_single_match(data, '<h1>Capítulos Recientes(.*?)</section>')
 
-    patron = '<div class="col col-md-6.*?alt="(.*?)".*?href="(.*?)".*?data-src="(.*?)".*?<h5>(.*?)</h5>.*?</div></div>'
+    matches = re.compile('<div class="col col-md-6(.*?)</a></div>', re.DOTALL).findall(bloque)
 
-    matches = re.compile(patron, re.DOTALL).findall(bloque)
+    for match in matches:
+        title = scrapertools.find_single_match(match, 'alt="(.*?)"')
+        if not title: title = scrapertools.find_single_match(match, 'title="(.*?)"')
 
-    for title, url, thumb, epis in matches:
+        url = scrapertools.find_single_match(match, 'href="(.*?)"')
+
+        if not url or not title: continue
+
+        thumb = scrapertools.find_single_match(match, 'data-src="(.*?)"')
+
+        epis = scrapertools.find_single_match(match, '<p>(.*?)</p>')
+
+        if not epis: epis = 1
+
         titulo = title + ' [COLOR springgreen]Epis. ' + epis +'[/COLOR]'
 
         itemlist.append(item.clone( action='findvideos', url = url, title = titulo, thumbnail=thumb,
@@ -224,6 +243,11 @@ def findvideos(item):
         if servidor == 'ok': servidor = 'okru'
         elif servidor == 'zeus': servidor = 'directo'
 
+        elif 'fembed' in servidor: servidor = 'fembed'
+        elif 'senvid' in servidor: servidor = 'sendvid'
+        elif 'drive' in servidor: servidor = 'gvideo'
+        elif 'anonfile' in servidor: servidor = 'anonfiles'
+              
         itemlist.append(Item( channel = item.channel, action = 'play', server = servidor, title = '', d_play = d_play, language = 'Vose' ))
 
     # download
@@ -237,6 +261,7 @@ def findvideos(item):
         srv = srv.lower().strip()
 
         if srv == '1fichier': continue
+        elif 'anonfile' in srv: srv = 'anonfiles'
 
         itemlist.append(Item( channel = item.channel, action = 'play', server = srv, title = '', url = url, language = 'Vose', other = 'D' ))
 

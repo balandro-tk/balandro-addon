@@ -281,6 +281,12 @@ def play(item):
                 url = scrapertools.find_single_match(data, '"url":"(.*?)"')
                 url = url.replace('\\/', '/')
 
+                servidor = servertools.get_server_from_url(url)
+                servidor = servertools.corregir_servidor(servidor)
+
+                itemlist.append(item.clone( url = url, server = servidor ))
+                return itemlist
+
         elif '/api/' in item.url:
            data = do_downloadpage(item.url)
 
@@ -309,7 +315,7 @@ def play(item):
                    elif '/tomatomatela.' in new_url:
                       url = resuelve_dame_toma(new_url)
 
-                      itemlist.append(item.clone( url = new_url, server = item.server ))
+                      itemlist.append(item.clone( url = url, server = item.server ))
                       return itemlist
 
            url = scrapertools.find_single_match(data, '>Ver ahora<.*?src="(.*?)"')

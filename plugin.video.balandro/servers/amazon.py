@@ -10,6 +10,9 @@ def get_video_url(page_url, url_referer=''):
 
     data = httptools.downloadpage(page_url).data
 
+    if data.code == 404:
+        return 'El archivo no existe o ha sido borrado'
+
     if 'ShareId does not exists' in data:
         return 'El archivo no existe o ha sido borrado'
 
@@ -17,7 +20,7 @@ def get_video_url(page_url, url_referer=''):
     folderid = jdata['nodeInfo']['id']
     shareId = jdata['shareId']
 
-    url = "https://www.amazon.com/drive/v1/nodes/%s/children?resourceVersion=V2&ContentType=JSON&limit=200&asset=ALL&tempLink=true&shareId=%s" %(folderid, shareId)
+    url = "https://www.amazon.com/drive/v1/nodes/%s/children?resourceVersion=V2&ContentType=JSON&limit=200&asset=ALL&tempLink=true&shareId=%s" % (folderid, shareId)
 
     serversdata = httptools.downloadpage(url).data
 

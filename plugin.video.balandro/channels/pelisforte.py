@@ -181,7 +181,35 @@ def play(item):
     url = item.url
 
     if item.other:
-        data = do_downloadpage(item.url)
+        if '/mp4.nu/' in url:
+            new_url = url.replace('/mp4.nu/', '/mp4.nu/r.php')
+
+            resp = httptools.downloadpage(new_url, headers={'Referer': host}, follow_redirects=False, only_headers=True)
+
+            if 'location' in resp.headers: url = resp.headers['location']
+            else: url = ''
+
+            if url:
+                if '/rehd.net/' in url:
+                    data = do_downloadpage(url)
+                    url = scrapertools.find_single_match(data, '"url": "(.*?)"')
+
+                if '/hqq.' in url or '/waaw.' in url or '/netu.' in url or 'gounlimited' in url:
+                    return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+                elif '/guayhd.me/' in url:
+                    return 'Servidor [COLOR plum]No Soportado[/COLOR]'
+
+                if '/wtfsb.link/' in url:
+                    url = url.replace('/wtfsb.link/', '/streamsb.net/')
+
+                servidor = servertools.get_server_from_url(url)
+                servidor = servertools.corregir_servidor(servidor)
+
+                itemlist.append(item.clone(server = servidor, url = url))
+                return itemlist
+
+        headers = {'Referer': host}
+        data = do_downloadpage(url, headers = headers)
 
         url = scrapertools.find_single_match(data, '<div class="Video">.*?src="(.*?)"')
         if not url: url = scrapertools.find_single_match(data, '<IFRAME SRC="(.*?)"')
@@ -202,14 +230,6 @@ def play(item):
                url = new_url
             except:
                pass
-
-        if '//wtfsb.' in url:
-             return 'Servidor [COLOR tan]No soportado[/COLOR]'
-
-        elif '/rehd.net/' in url:
-            data = do_downloadpage(url)
-
-            url = scrapertools.find_single_match(data, '"url": "(.*?)"')
 
         elif url.startswith(host):
             if url.endswith('&'):

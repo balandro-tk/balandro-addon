@@ -8,10 +8,10 @@
   "searchable": true,
   "search_types": ["all", "movie", "tvshow"],
 
-  "categories": ["movie", "tvshow"],
+  "categories": ["movie", "tvshow", "torrent"],
   "language": ["cast", "lat", "vose"],
 
-  "clusters": ["adults", "news", "rankings", "languages", "years", "countries", "kids", "docs", "vos", "3d"],
+  "clusters": ["adults", "torrents", "news", "rankings", "languages", "years", "countries", "kids", "docs", "vos", "3d"],
 
-  "notes": "Películas por idioma, géneros, año. Series por Géneros. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
+  "notes": "Canal con enlaces Streaming y Torrent. Películas por idioma, géneros, año. Series por Géneros. Puede requerir el uso de proxies en función del país/operadora desde el que se accede."
 }

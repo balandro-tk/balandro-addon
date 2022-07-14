@@ -178,6 +178,7 @@ def puntuar_calidad(txt):
 	'dvdrip',
 	'bluraymicrohd',
 	'blurayrip',
+	'bdremux',
 	'hdrip',
 	'hd720',
 	'hd1080',

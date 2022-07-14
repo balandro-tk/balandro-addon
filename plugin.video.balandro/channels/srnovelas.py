@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+PY3 = sys.version_info[0] >= 3
+if PY3: unicode = str
+
+
 import re
 
 from platformcode import config, logger, platformtools
@@ -239,6 +245,11 @@ def play(item):
            if 'location' in resp.headers: url = resp.headers['location']
            else:
               return 'Archivo [COLOR plum]inexistente[/COLOR]'
+
+           if not PY3: url = unicode(url, 'utf8').encode('utf8')
+           else: url = url.encode('utf-8').strip()
+
+           if "b'" in str(url): url = scrapertools.find_single_match(str(url), "'(.*?)'")
 
     if url:
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:

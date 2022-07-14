@@ -12,7 +12,7 @@ from core.item import Item
 from core import httptools, scrapertools, tmdb
 
 
-host = 'https://dontorrent.yt/'
+host = 'https://dontorrent.ch/'
 
 
 # ~ por si viene de enlaces guardados
@@ -24,9 +24,10 @@ ant_hosts = ['https://dontorrents.org/', 'https://dontorrents.net/', 'https://do
              'https://dontorrent.it/', 'https://dontorrent.red/', 'https://dontorrent.nu/', 'https://dontorrent.si/',
              'https://dontorrent.sk/', 'https://dontorrent.eu/', 'https://dontorrent.top/', 'https://dontorrent.pm/',
              'https://dontorrent.re/', 'https://dontorrent.wf/', 'https://dontorrent.run/', 'https://dontorrent.cat/'
-             'https://dontorrent.pl/', 'https://dontorrent.tel/', 'https://dontorrent.nl/', 'https://dontorrent.cx/'
-             'https://dontorrent.bet/', 'https://dontorrent.cab/', 'https://dontorrent.wtf/', 'https://dontorrent.fi/'
-             'https://dontorrent.ink/', 'https://dontorrent.kim/', 'https://dontorrent.tw/']
+             'https://dontorrent.pl/', 'https://dontorrent.tel/', 'https://dontorrent.nl/', 'https://dontorrent.cx/',
+             'https://dontorrent.bet/', 'https://dontorrent.cab/', 'https://dontorrent.wtf/', 'https://dontorrent.fi/',
+             'https://dontorrent.ink/', 'https://dontorrent.kim/', 'https://dontorrent.tw/', 'https://dontorrent.yt/',
+             'https://dontorrent.vg/']
 
 domain = config.get_setting('dominio', 'dontorrents', default='')
 

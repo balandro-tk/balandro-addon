@@ -39,9 +39,11 @@ def get_video_url(page_url, url_referer=''):
         espera = 3
 
         txt_server = ''
+
         if 'tubeload' in page_url: txt_server = 'Tubeload'
         elif 'mvidoo' in page_url: txt_server = 'Mvidoo'
         elif 'ninjastream' in page_url: txt_server = 'Ninjastream'
+        elif 'rutube' in page_url: txt_server = 'Rutube'
         elif 'videovard' in page_url: txt_server = 'Videovard'
 
         platformtools.dialog_notification('Cargando ' + '[COLOR yellow]' + txt_server + '[/COLOR]', 'Espera requerida de %s segundos' % espera)

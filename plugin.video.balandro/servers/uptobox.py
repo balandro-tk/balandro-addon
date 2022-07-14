@@ -53,7 +53,7 @@ def get_video_url(page_url, url_referer=''):
     espera = scrapertools.find_single_match(data, "data-remaining-time='(.*?)'")
 
     if espera:
-       return "Tiempo de espera indeterminado para reproducir"
+        platformtools.dialog_notification(config.__addon_name, "Tiempo de espera indeterminado")
 
     if xbmc.getCondVisibility('System.HasAddon("script.module.resolveurl")'):
         try:

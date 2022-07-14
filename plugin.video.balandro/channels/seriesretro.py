@@ -311,6 +311,9 @@ def findvideos(item):
         elif servidor == 'anavids':
             link_other = servidor
             servidor = 'directo'
+        elif servidor == 'analu':
+            link_other = servidor
+            servidor = 'directo'
         else: link_other = ''
 
         itemlist.append(Item( channel = item.channel, action = 'play', url = url, server = servidor, title = '', language = 'Lat', other = link_other ))

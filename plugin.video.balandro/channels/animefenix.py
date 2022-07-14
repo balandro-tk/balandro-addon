@@ -300,11 +300,6 @@ def play(item):
 
         url = scrapertools.find_single_match(data, '"file":"([^"]+)"')
 
-        servidor = servertools.get_server_from_url(url)
-        servidor = servertools.corregir_servidor(servidor)
-
-        url = servertools.normalize_url(servidor, url)
-
     elif '/redirect.php?' in url:
         data = httptools.downloadpage(url).data
         url = scrapertools.find_single_match(data, 'playerContainer.*?src="([^"]+)"')
@@ -325,7 +320,8 @@ def play(item):
         elif 'burstcloud' in url:
             data = httptools.downloadpage(url).data
 
-            file = scrapertools.find_single_match(data, 'data-file-id="([^"]+)"')
+            file = scrapertools.find_single_match(data, 'data-file-id="(.*?)"')
+
             if file:
                 post = {"fileId": file}
 
@@ -335,10 +331,8 @@ def play(item):
 
                 if url: url = url + '|referer=https://www.burstcloud.co/'
 
-        servidor = servertools.get_server_from_url(url)
-        servidor = servertools.corregir_servidor(servidor)
-
-        url = servertools.normalize_url(servidor, url)
+        elif '.fireload.com' in url:
+            url = scrapertools.find_single_match(url, 'v=(.*?)$')
 
     if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
         return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
@@ -346,6 +340,11 @@ def play(item):
     if url:
         if not url.startswith("http"): url = "https:" + url
         url = url.replace('&amp;', '&').replace("\\/", "/")
+
+        servidor = servertools.get_server_from_url(url)
+        servidor = servertools.corregir_servidor(servidor)
+
+        url = servertools.normalize_url(servidor, url)
 
         itemlist.append(item.clone(url = url, server = servidor))
 

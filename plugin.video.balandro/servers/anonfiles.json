@@ -10,6 +10,10 @@
       {
         "pattern": "(https://anonfiles.com/\\w+)",
         "url": "\\1"
+      },
+      {
+        "pattern": "(https://anonfile.com/\\w+)",
+        "url": "\\1"
       }
     ]
   }

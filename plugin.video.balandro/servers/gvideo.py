@@ -3,10 +3,15 @@
 import sys
 
 if sys.version_info[0] < 3:
+    PY3 = False
+
     import urllib
 else:
+    PY3 = True
+
     import urllib.parse as urllib
 
+import codecs
 
 from core import httptools, scrapertools
 from platformcode import logger
@@ -21,6 +26,8 @@ def get_video_url(page_url, url_referer=''):
     if 'googleusercontent' in page_url:
         response = httptools.downloadpage(page_url, follow_redirects = False, cookies=False, headers={"Referer": page_url})
 
+        if PY3 and isinstance(response.data, bytes): response.data = response.data.decode('utf-8')
+
         try:
            url = response.headers['location']
         except:
@@ -30,8 +37,10 @@ def get_video_url(page_url, url_referer=''):
             try:
                 cookies = ""
                 cookie = response.headers["set-cookie"].split("HttpOnly, ")
+
                 for c in cookie:
                     cookies += c.split(";", 1)[0] + "; "
+
                 data = response.data.decode('unicode-escape')
                 data = urllib.unquote_plus(urllib.unquote_plus(data))
                 headers_string = "|Cookie=" + cookies
@@ -49,6 +58,9 @@ def get_video_url(page_url, url_referer=''):
         if vid: page_url = 'http://docs.google.com/get_video_info?docid=' + vid
 
         response = httptools.downloadpage(page_url, cookies=False, headers={"Referer": page_url})
+
+        if PY3 and isinstance(response.data, bytes): response.data = response.data.decode('utf-8')
+
         if response.code == 429:
             return "Demasiadas conexiones al servidor, inténtelo después"
 
@@ -65,16 +77,20 @@ def get_video_url(page_url, url_referer=''):
 
         cookies = ""
         cookie = response.headers["set-cookie"].split("HttpOnly, ")
+
         for c in cookie:
             cookies += c.split(";", 1)[0] + "; "
 
-        data = response.data.decode('unicode-escape')
+        #data = response.data.decode('unicode-escape')
+        data = codecs.decode(response.data, 'unicode-escape')
         data = urllib.unquote_plus(urllib.unquote_plus(data))
+
         headers_string = "|Cookie=" + cookies
         url_streams = scrapertools.find_single_match(data, 'url_encoded_fmt_stream_map=(.*)')
         streams = scrapertools.find_multiple_matches(url_streams, 'itag=(\d+)&url=(.*?)(?:;.*?quality=.*?(?:,|&)|&quality=.*?(?:,|&))')
 
     itags = {'18': '360p', '22': '720p', '34': '360p', '35': '480p', '37': '1080p', '43': '360p', '59': '480p'}
+
     for itag, video_url in streams:
         if not video_url in urls:
             video_url += headers_string

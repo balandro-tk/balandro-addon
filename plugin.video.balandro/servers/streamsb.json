@@ -9,7 +9,7 @@
     "ignore_urls": [],
     "patterns": [
       {
-        "pattern": "(?:streamsb.net|sbembed.com|sbembed1.com|sbplay.org|sbplay.one|sbplay1.com|sbplay2.com|sbplay2.xyz|pelistop.co|sbfast.com|sbfull.com)/(?:embed-|d/|e/)([A-z0-9]+)",
+        "pattern": "(?:streamsb.net|sbembed.com|sbembed1.com|sbplay.org|sbplay.one|sbplay1.com|sbplay2.com|sbplay2.xyz|pelistop.co|sbfast.com|sbfull.com|ssbstream.net|sbthe.com)/(?:embed-|d/|e/)([A-z0-9]+)",
         "url": "https://streamsb.net/play/\\1"
       },
       {
@@ -82,6 +82,14 @@
       },
       {
         "pattern": "(?:viewsb.com)/([A-z0-9]+).html",
+        "url": "https://streamsb.net/play/\\1"
+      },
+      {
+        "pattern": "(?:watchmo.icu)/(?:embed-|d/|e/)([A-z0-9]+)",
+        "url": "https://streamsb.net/play/\\1"
+      },
+      {
+        "pattern": "(?:watchmo.icu)/([A-z0-9]+).html",
         "url": "https://streamsb.net/play/\\1"
       }
     ]

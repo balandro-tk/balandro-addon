@@ -309,7 +309,7 @@ def mainlist(item):
     itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar ...', action = 'search', search_type = 'all', text_color = 'yellow' ))
 
@@ -330,7 +330,7 @@ def mainlist_pelis(item):
     itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
 
@@ -357,7 +357,7 @@ def mainlist_series(item):
     itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
@@ -388,7 +388,7 @@ def mainlist_animes(item):
     itemlist.append(item.clone( action='acciones', title=titulo, text_color='goldenrod' ))
 
     if config.get_setting('playdede_login', 'playdede', default=False):
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar anime ...', action = 'search', search_type = 'tvshow', text_color = 'springgreen' ))
 

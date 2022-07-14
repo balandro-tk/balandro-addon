@@ -198,6 +198,18 @@ def findvideos(item):
     return itemlist
 
 
+def resuelve_dame_toma(dame_url):
+    data = do_downloadpage(dame_url)
+
+    url = scrapertools.find_single_match(data, 'file:\s*"([^"]+)')
+    if not url:
+        checkUrl = dame_url.replace('embed.html#', 'details.php?v=')
+        data = do_downloadpage(checkUrl, headers={'Referer': dame_url})
+        url = scrapertools.find_single_match(data, '"file":\s*"([^"]+)').replace('\\/', '/')
+
+    return url
+
+
 def play(item):
     logger.info()
     itemlist = []
@@ -208,25 +220,28 @@ def play(item):
     url = item.url
 
     if item.other == 'Pelistop':
-        if 'url=' in item.url:
-            fid = scrapertools.find_single_match(item.url, "url=(.*?)$")
-            api_url = 'https://api.cuevana3.me/ir/redirect_ddh.php'
-            api_post = 'url=' + fid
+        data = do_downloadpage(item.url, headers={'Referer': host})
 
-            resp = httptools.downloadpage(api_url, post=api_post, headers={'Referer': item.url}, follow_redirects=False, only_headers=True)
+        url = scrapertools.find_single_match(data, '>Ver ahora<.*?src="(.*?)"')
+        if not url: url = scrapertools.find_single_match(data, '<iframe.*?src="(.*?)"')
 
-            url = ''
+        url = url.replace('//pelistop.co/', '//streamsb.net/')
 
-            if 'location' in resp.headers: 
-                url = resp.headers['location']
+        if '//damedamehoy.' in url or '//tomatomatela.' in url: url = resuelve_dame_toma(url)
+
+        if not url:
+            if 'url=' in item.url:
+                fid = scrapertools.find_single_match(item.url, "url=(.*?)$")
+                api_url = 'https://api.cuevana3.me/ir/redirect_ddh.php'
+                api_post = 'url=' + fid
+
+                url = ''
+
+                resp = httptools.downloadpage(api_url, post=api_post, headers={'Referer': item.url}, follow_redirects=False, only_headers=True)
+
+                if 'location' in resp.headers: url = resp.headers['location']
 
                 if url.startswith('//'): url = 'https:' + url
-
-        else:
-            data = do_downloadpage(item.url)
-
-            url = scrapertools.find_single_match(data, '>Ver ahora<.*?src="(.*?)"')
-            url = url.replace('//pelistop.co/', '//streamsb.net/')
 
     elif item.other == 'Fembed':
         hash = scrapertools.find_single_match(item.url, "h=(.*?)$")

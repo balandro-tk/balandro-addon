@@ -14,21 +14,21 @@ from core import httptools, scrapertools, jsontools, servertools, tmdb
 from lib import balandroresolver
 
 # ~ webs para comprobar dominio vigente en actions pero pueden requerir proxies
-# ~ webs 1) 'https://hdfull.vip/'  2) 'https://new.hdfull.one/'  3) 'https://hdfullcdn.cc/'
+# ~ webs  1)-'https://hdfullcdn.cc/'  2)-'https://new.hdfull.one/'  3)-'https://dominioshdfull.com/'  4)-'https://hdfull.vip/'
 
 dominios = [
          'https://new.hdfull.one/',
-         'https://hdfullcdn.cc/',
+         'https://hdfull.cloud/',
          'https://hdfull.wtf/',
          'https://hdfull.vip/',
          'https://hdfull.top/',
          'https://hdfull.fun/',
          'https://hdfull.lol/',
+         'https://hdfull.one/',
+         'https://hdfull.org/',
          'https://hdfull.link/',
          'https://hdfull.click/',
-         'https://hdfull.one/',
-         'https://hdfull.stream/',
-         'https://hdfull.org/'
+         'https://hdfull.stream/'
          ]
 
 host = config.get_setting('dominio', 'hdfull', default=dominios[0])
@@ -336,7 +336,7 @@ def mainlist(item):
     if config.get_setting('hdfull_login', 'hdfull', default=False):
         itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'all' ))
 
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar ...', action = 'search', search_type = 'all', text_color = 'yellow' ))
 
@@ -373,7 +373,7 @@ def mainlist_pelis(item):
 
         itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'movie' ))
 
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar película ...', action = 'search', search_type = 'movie', text_color = 'deepskyblue' ))
 
@@ -407,7 +407,7 @@ def mainlist_series(item):
 
         itemlist.append(item.clone( title = '[COLOR teal][B]Menú usuario[/B][/COLOR]', action = 'mainlist_user', search_type = 'tvshow' ))
 
-        itemlist.append(item.clone( title = 'Listas populares', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
+        itemlist.append(item.clone( title = '[B]Listas populares[/B]', action = 'list_listas', target_action = 'top', search_type = 'all', text_color = 'cyan' ))
 
         itemlist.append(item.clone( title = 'Buscar serie ...', action = 'search', search_type = 'tvshow', text_color = 'hotpink' ))
 
@@ -776,7 +776,7 @@ def episodios(item):
 
 
 def puntuar_calidad(txt):
-    orden = ['CAM', 'cam', 'TS', 'ts', 'DVDSCR', 'dvdscr', 'DVDRIP', 'dvdrip', 'HDTV', 'hdtv', 'RHDTV', 'rhdtv', 'HD720', 'hh720', 'HD1080', 'hd1080']
+    orden = ['CAM', 'cam', 'TS', 'ts', 'DVDSCR', 'dvdscr', 'DVDRIP', 'dvdrip', 'HDTV', 'hdtv', 'RHDTV', 'rhdtv', 'HD720', 'hd720', 'HD1080', 'hd1080']
     if txt not in orden: return 0
 
     else: return orden.index(txt) + 1
@@ -899,11 +899,19 @@ def list_user_subsections(item):
     logger.info()
     itemlist = []
 
+    if not item.page: item.page = 1
+
+    perpage = 28
+
     domain = config.get_setting('dominio', 'hdfull', default=dominios[0])
 
     if not config.get_setting('dominio', 'hdfull'): config.set_setting('dominio', dominio, 'hdfull')
 
-    post = "target=%s&action=%s&start=0&limit=28" % (item.tipo_list, item.target_action)
+    if item.post:
+        post = item.post
+    else:
+        post = "target=%s&action=%s&start=0&limit=28" % (item.tipo_list, item.target_action)
+
     url = "%sa/my" % domain
 
     data = do_downloadpage(url, post=post)
@@ -929,6 +937,15 @@ def list_user_subsections(item):
                                         contentType = 'tvshow', contentSerieName = title, infoLabels = {'year': '-'} ))
 
     tmdb.set_infoLabels(itemlist)
+
+    if itemlist:
+        if len(itemlist) > 1:
+            next_start = (item.page * perpage)
+            next_page = item.page + 1
+
+            next_post = 'target=%s&action=%s&start=%s&limit=28' % (item.tipo_list, item.target_action, next_start)
+
+            itemlist.append(item.clone( title = 'Siguientes ...', post = next_post, page = next_page, pageaction = 'list_listas', text_color = 'coral' ))
 
     return itemlist
 
@@ -962,7 +979,7 @@ def list_listas(item):
 
     if itemlist:
         if len(itemlist) > 1:
-            if not '&search=' in item.post:
+            if not '&search=' in post:
                 next_start = (item.page * perpage)
                 next_page = item.page + 1
 

@@ -58,10 +58,15 @@ def do_downloadpage(url, post=None, headers=None):
 def mainlist(item):
     return mainlist_pelis(item)
 
+    # ~ logger.info()
+    # ~ itemlist = []
+
     # ~ itemlist.append(item.clone( title = 'Buscar ...', action = 'search', search_type = 'all', text_color = 'yellow' ))
 
     # ~ itemlist.append(item.clone( title = 'Películas', action = 'mainlist_pelis', text_color = 'deepskyblue' ))
     # ~ itemlist.append(item.clone( title = 'Series', action = 'mainlist_series', text_color = 'hotpink' ))
+
+    # ~ return itemlist
 
 
 def mainlist_pelis(item):
@@ -229,9 +234,11 @@ def puntuar_calidad(txt):
           '720p',
           'hd720p',
           '1080p',
+          'fullhd',
           'hd1080p',
           'hd2160p',
           '2160p',
+          '4khd2160p',
           '4k']
 
     if txt not in orden: return 0
@@ -291,6 +298,14 @@ def findvideos(item):
 def play(item):
     logger.info()
     itemlist = []
+
+    if '&urlb64=' in item.url:
+        import base64
+
+        url = scrapertools.find_single_match(item.url, '&urlb64=(.*?)$')
+        url = base64.b64decode(url)
+
+        if url: item.url = url
 
     if item.url.startswith(host) and '/links/' in item.url:
         data = do_downloadpage(item.url)

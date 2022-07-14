@@ -56,16 +56,19 @@ def list_all(item):
 
     for match in matches[desde:hasta]:
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
-        if url == '#': continue
+
+        if not url: continue
+        elif url == '#': continue
 
         title = scrapertools.find_single_match(match, 'title="(.*?)"').strip()
+
         if title.lower() == 'promo': continue
         elif title.lower() == 'proximamente': continue
         elif title == '#': continue
 
         elif 'class="radius-3"' in match: continue
 
-        url = host[:-1] + url
+        if not host in url: url = host[:-1] + url
 
         thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
 
@@ -105,9 +108,11 @@ def list_alfa(item):
             continue
 
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
-        if url == '#': continue
 
-        url = host[:-1] + url
+        if not url: continue
+        elif url == '#': continue
+
+        if not host in url: url = host[:-1] + url
 
         thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
 
@@ -138,10 +143,18 @@ def episodios(item):
     if not item.page: item.page = 0
     if not item.perpage: item.perpage = 50
 
-    data = httptools.downloadpage(item.url).data
-    data = re.sub(r'\n|\r|\t|&nbsp;|<br>|\s{2,}', "", data)
+    if not item.url: data = ''
+    elif item.url == '#': data = ''
+    else:
+        data = httptools.downloadpage(item.url).data
+        data = re.sub(r'\n|\r|\t|&nbsp;|<br>|\s{2,}', "", data)
 
-    matches = scrapertools.find_multiple_matches(data, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
+    bloque = scrapertools.find_single_match(data, '<div class="shortstoddry-news radius-3">(.*?)</div><div class="clearfix"></div>')
+
+    if bloque:
+        matches = scrapertools.find_multiple_matches(bloque, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
+    else:
+        matches = scrapertools.find_multiple_matches(data, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
 
     cargar_todas = False
 
@@ -155,7 +168,7 @@ def episodios(item):
                 lnks = scrapertools.find_multiple_matches(blok, '<a href="(.*?)"')
                 tot_pages = (len(lnks) + 1)
 
-        if tot_pages > 1:
+        if str(tot_pages) > '1':
             if platformtools.dialog_yesno(item.contentSerieName.replace('&#038;', '&').replace('&#8217;', "'"), '¿ Hay [COLOR yellow][B]' + str(tot_pages) + '[/B][/COLOR] páginas disponibles, desea cargar Todas las páginas de una sola vez ?'):
                 item.perpage = 1000
                 cargar_todas = True
@@ -168,29 +181,44 @@ def episodios(item):
                 while sgte_page:
                    platformtools.dialog_notification('SeoDiv', '[COLOR cyan]Cargando página ' + str(i) + '[/COLOR]')
 
-                   data = httptools.downloadpage(sgte_page).data
-                   data = re.sub(r'\n|\r|\t|&nbsp;|<br>|\s{2,}', "", data)
+                   if not sgte_page: pass
+                   elif sgte_page == '#': pass
+                   else:
+                       data = httptools.downloadpage(sgte_page).data
+                       data = re.sub(r'\n|\r|\t|&nbsp;|<br>|\s{2,}', "", data)
 
-                   matches_page = matches_page + scrapertools.find_multiple_matches(data, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
+                       bloque_page = scrapertools.find_single_match(data, '<div class="shortstoddry-news radius-3">(.*?)</div><div class="clearfix"></div>')
 
-                   sgte_page = scrapertools.find_single_match(data, '<div class="col-lg-1 col-sm-2 col-xs-2 pages-next">.*?<a href="(.*?)"')
+                       if bloque_page:
+                           matches_page = matches_page + scrapertools.find_multiple_matches(bloque_page, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
+                       else:
+                           matches_page = matches_page + scrapertools.find_multiple_matches(data, '<div class="col-sm-4 col-xs-12">(.*?)</div></div>')
+
+                       sgte_page = scrapertools.find_single_match(data, '<div class="col-lg-1 col-sm-2 col-xs-2 pages-next">.*?<a href="(.*?)"')
 
                    i += 1
 
+                   if i > int(tot_pages):
+                       break
+
                 matches = matches + matches_page
+
 
     i = 0
 
     for match in matches[item.page * item.perpage:]:
         title = scrapertools.find_single_match(match, 'title="(.*?)"')
-        if 'onyx equinox' in title: continue
+        if 'onyx equinox' in title: title = title.replace('onyx equinox' ,'').strip()
 
         url = scrapertools.find_single_match(match, 'href="(.*?)"')
-        if not '-capitulo-' in url: continue
+        if not '-capitulo-' in url:
+            if not '-temporada-' in url: continue
 
         i += 1
 
         titulo = title.lower().replace(item.contentSerieName.lower(), '')
+
+        if not 'capitulo' in titulo: continue
 
         thumb = scrapertools.find_single_match(match, '<img src="(.*?)"')
 
@@ -210,8 +238,11 @@ def episodios(item):
                 itemlist.append(item.clone( title="Siguientes ...", action="episodios", page = item.page + 1, perpage = item.perpage, text_color='coral' ))
             else:
                 next_page = scrapertools.find_single_match(data, '<div class="col-lg-1 col-sm-2 col-xs-2 pages-next">.*?<a href="(.*?)"')
-                itemlist.append(item.clone( title="Siguientes ...", action="episodios", url = next_page,
-                                            dialog = True, page = 0, perpage = item.perpage, text_color='coral' ))
+
+                if next_page:
+                    if not next_page == '#':
+                        itemlist.append(item.clone( title="Siguientes ...", action="episodios", url = next_page,
+                                                    dialog = True, page = 0, perpage = item.perpage, text_color='coral' ))
 
     return itemlist
 
@@ -255,9 +286,11 @@ def list_search(item):
         if not busqueda in titulo: continue
 
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
-        if url == '#': continue
 
-        url = host[:-1] + url
+        if not url: continue
+        elif url == '#': continue
+
+        if not host in url: url = host[:-1] + url
 
         thumb = scrapertools.find_single_match(match, 'src="(.*?)"')
 

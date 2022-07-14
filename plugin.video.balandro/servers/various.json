@@ -3,7 +3,7 @@
   "name": "Various",
 
   "active": true,
-  "notes": "Alternative vía: Script.Module.ResolveUrl (Mvidoo, Ninjastream, Tubeload, Videovard)",
+  "notes": "Alternative vía: Script.Module.ResolveUrl (Mvidoo, Ninjastream, Rutube, Tubeload, Videovard)",
 
   "find_videos": {
     "ignore_urls": [],
@@ -26,6 +26,10 @@
       },
       {
         "pattern": "(https://ninjastream.to/watch/[A-z0-9]+)",
+        "url": "\\1"
+      },
+      {
+        "pattern": "(https://rutube.ru/play/embed/[A-z0-9]+)",
         "url": "\\1"
       },
       {

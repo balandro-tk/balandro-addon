@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
+if sys.version_info[0] >= 3: PY3 = True
+else: PY3 = False
+
+
 import os
 
 from datetime import datetime
@@ -865,6 +871,9 @@ def channels(item):
                        if not config.get_setting(cfg_dominio_channel, default=''): presentar = False
 
                    if presentar: titulo += '[I][COLOR teal] (sesion)[/COLOR][/I]'
+
+        if not PY3:
+            if 'mismatched' in ch['clusters']: titulo += '[I][COLOR coral] (Incompatible)[/COLOR][/I]'
 
         if 'inestable' in ch['clusters']: titulo += '[I][COLOR plum] (inestable)[/COLOR][/I]'
 

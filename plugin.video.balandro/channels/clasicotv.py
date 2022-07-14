@@ -103,7 +103,7 @@ def generos(item):
        ('terror', 'Terror'),
        ('war-politics', 'War & Politics'),
        ('western', 'Western')
-    ]
+       ]
 
     for opc, tit in opciones:
         if item.search_type == 'tvshow':

@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://pelis28.app/'
+host = 'https://ww3.pelis28.app/'
 
 
 def item_configurar_proxies(item):
@@ -23,12 +23,15 @@ def configurar_proxies(item):
 
 def do_downloadpage(url, post=None, headers=None, raise_weberror=True):
     # ~ por si viene de enlaces guardados
-    ant_hosts = ['https://pelis28.vip/', 'https://pelis28.lol/']
+    ant_hosts = ['https://pelis28.vip/', 'https://pelis28.lol/', 'https://pelis28.app/']
 
     for ant in ant_hosts:
         url = url.replace(ant, host)
 
+    if '/?s=' in url: headers = {'Referer': host}
+
     if '/fecha-estreno/' in url: raise_weberror = False
+    elif '/etiqueta/' in url: raise_weberror = False
 
     # ~ data = httptools.downloadpage(url, post=post, headers=headers, raise_weberror=raise_weberror).data
     data = httptools.downloadpage_proxy('pelis28', url, post=post, headers=headers, raise_weberror=raise_weberror).data
@@ -142,6 +145,7 @@ def list_all(item):
     data = do_downloadpage(item.url)
 
     matches = scrapertools.find_multiple_matches(data, 'id="mt-(.*?)</div><div')
+    if not matches: matches = scrapertools.find_multiple_matches(data, 'id="mt-(.*?)</div>')
 
     for match in matches:
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
@@ -185,6 +189,18 @@ def findvideos(item):
 
     if not _id: return itemlist
 
+    if _id.startswith('//'):
+        _id = 'https:' + _id
+
+        servidor = servertools.get_server_from_url(_id)
+        servidor = servertools.corregir_servidor(servidor)
+
+        _id = servertools.normalize_url(servidor, _id)
+
+        if not servidor == 'directo':
+            itemlist.append(Item( channel = item.channel, action = 'play', url = _id, server = servidor, title = '', language = '?' ))
+            return itemlist
+
     headers = {'Referer': host}
 
     data = do_downloadpage(_id, headers = headers)
@@ -199,6 +215,8 @@ def findvideos(item):
         url = scrapertools.find_single_match(match, "'(.*?)'")
         if not url: continue
 
+        if url.startswith('//'): url = 'https:' + url
+
         lang = scrapertools.find_single_match(match, '<p>(.*?)</p>').strip()
 
         if 'latino' in lang.lower(): lang = 'Lat'
@@ -208,12 +226,20 @@ def findvideos(item):
 
         servidor = scrapertools.find_single_match(match, '<span>(.*?)</span>').lower()
 
-        if servidor == 'pouvideo': continue
+        if 'hqq' in servidor or 'waaw' in servidor or 'netu' in servidor: continue
+        elif servidor == 'powvideo': continue
+        elif servidor == 'pouvideo': continue
+        elif servidor == 'powvibeo': continue
         elif servidor == 'stemplay': continue
+        elif servidor == 'streamango': continue
         elif servidor == 'servidor vip': continue
+        elif servidor == 'pelis': continue
 
         if servidor == 'dood': servidor = 'doodstream'
         elif servidor == 'suzihaza': servidor = 'fembed'
+        elif servidor == 'ok': servidor = 'okru'
+
+        elif 'damedamehoy' in servidor or 'tomatomatela' in servidor: servidor = 'directo'
 
         itemlist.append(Item( channel = item.channel, action = 'play', url = url, server = servidor, title = '', language = lang ))
 
@@ -223,6 +249,18 @@ def findvideos(item):
             return
 
     return itemlist
+
+
+def resuelve_dame_toma(dame_url):
+    data = do_downloadpage(dame_url)
+
+    url = scrapertools.find_single_match(data, 'file:\s*"([^"]+)')
+    if not url:
+        checkUrl = dame_url.replace('embed.html#', 'details.php?v=')
+        data = do_downloadpage(checkUrl, headers={'Referer': dame_url})
+        url = scrapertools.find_single_match(data, '"file":\s*"([^"]+)').replace('\\/', '/')
+
+    return url
 
 
 def play(item):
@@ -239,6 +277,8 @@ def play(item):
 
         try: url = resp.headers['location']
         except: url = ''
+
+    if '//damedamehoy.' in url or '//tomatomatela.' in url: url = resuelve_dame_toma(url)
 
     if url:
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:

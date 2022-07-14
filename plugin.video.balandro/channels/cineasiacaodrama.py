@@ -26,40 +26,7 @@ def mainlist_series(item):
 
     itemlist.append(item.clone ( title = 'Buscar dorama ...', action = 'search', search_type = 'tvshow', text_color = 'firebrick' ))
 
-    itemlist.append(item.clone ( title = 'Catálogo', action = 'list_all', url = host + 'archivos/peliculas/', search_type = 'tvshow' ))
-
-    itemlist.append(item.clone ( title = 'Estrenos', action = 'list_all', url = host + 'archivos/estrenos/', search_type = 'tvshow' ))
-
-    itemlist.append(item.clone ( title = 'Por idioma', action = 'idiomas', search_type = 'tvshow' ))
-
-    itemlist.append(item.clone ( title = 'Por año', action = 'anios', search_type = 'tvshow' ))
-
-    return itemlist
-
-
-def idiomas(item):
-    logger.info()
-    itemlist = []
-
-    itemlist.append(item.clone ( title = 'En latino', action = 'list_all', url = host + 'lenguaje/latino/' ))
-    itemlist.append(item.clone ( title = 'Subtituladas', action = 'list_all', url = host + 'lenguaje/subtitulado/' ))
-
-    return itemlist
-
-
-def anios(item):
-    logger.info()
-    itemlist = []
-
-    data = do_downloadpage(host)
-
-    bloque = scrapertools.find_single_match(data, '>Series por Año<(.*?)</div>')
-    matches = scrapertools.find_multiple_matches(bloque, '<option value="(.*?)"')
-
-    for anio in matches:
-        url = host + 'fecha-estreno/' + anio + '/'
-
-        itemlist.append(item.clone( title = anio, url = url, action = 'list_all' ))
+    itemlist.append(item.clone ( title = 'Catálogo', action = 'list_all', url = host + 'tvshows/', search_type = 'tvshow' ))
 
     return itemlist
 
@@ -70,19 +37,17 @@ def list_all(item):
 
     data = do_downloadpage(item.url)
 
-    patron = '<h3><a href="([^"]+)">([^<]+)<.*?src="([^"]+)".*?<a rel="tag">(.*?)<.*?<a rel="tag">(.*?)<'
+    bloque = scrapertools.find_single_match(data, '<h2>Añadido recientemente(.*?)>CAO DRAMA<')
 
-    matches = scrapertools.find_multiple_matches(data, patron)
+    matches = scrapertools.find_multiple_matches(bloque, '<h3><a href="(.*?)">(.*?)<.*?src="(.*?)"')
 
-    for url, title, thumb, year, qlty in matches:
-        title = title.replace('audio latino', '').strip()
+    for url, title, thumb in matches:
+        title = title.replace('audio latino', '').replace('Audio latino', '').strip()
 
         title = re.sub(r' \((\d{4})\)$', '', title)
 
-        if not year: year = '-'
-
-        itemlist.append(item.clone( action='temporadas', url=url, title=title, thumbnail=thumb, qualities=qlty, 
-                                    contentType='tvshow', contentSerieName=title, infoLabels={'year': year} ))
+        itemlist.append(item.clone( action='temporadas', url=url, title=title, thumbnail=thumb, 
+                                    contentType='tvshow', contentSerieName=title, infoLabels={'year': '-'} ))
 
     tmdb.set_infoLabels(itemlist)
 
@@ -122,10 +87,10 @@ def episodios(item):
 
     data = do_downloadpage(item.url)
 
-    if item.page == 0: episode = 1
+    if item.page == 0: episode = 0
     else: episode = (item.page * item.perpage) + 1
 
-    matches = re.compile('<p><a href="(.*?)"', re.DOTALL).findall(data)
+    matches = re.compile("<li class='mark-.*?<a href='(.*?)'", re.DOTALL).findall(data)
 
     if item.page == 0:
         sum_parts = len(matches)
@@ -139,7 +104,7 @@ def episodios(item):
 
         title = str(item.contentSeason) + 'x' + str(episode) + ' ' + item.contentSerieName
 
-        itemlist.append(item.clone( action='findvideos', url = item.url, title = title, link = url, orden = episode,
+        itemlist.append(item.clone( action='findvideos', url = url, title = title, orden = episode,
                                     contentType = 'episode', contentSeason = item.contentSeason, contentEpisodeNumber=episode ))
 
         if len(itemlist) >= item.perpage:
@@ -152,7 +117,7 @@ def episodios(item):
     if url:
         title = str(item.contentSeason) + 'x1 ' + item.contentSerieName
 
-        itemlist.append(item.clone( action='findvideos', url = item.url, title = title, link = url, orden = 1,
+        itemlist.append(item.clone( action='findvideos', url = url, title = title, orden = 1,
                                     contentType = 'episode', contentSeason = item.contentSeason, contentEpisodeNumber = 1 ))
 
     tmdb.set_infoLabels(itemlist)
@@ -169,15 +134,20 @@ def findvideos(item):
     logger.info()
     itemlist = []
 
-    IDIOMAS = {'Castellano': 'Esp', 'Latino': 'Lat', 'Subtitulado': 'Vose', 'Subitulado': 'Vose'}
+    IDIOMAS = {'Castellano': 'Esp', 'Spanish': 'Vose', 'Latino': 'Lat', 'Subtitulado': 'Vose', 'Subitulado': 'Vose'}
 
     data = do_downloadpage(item.url)
 
-    lang = scrapertools.find_single_match(data, '<p>Idioma.*?href=.*?rel="tag">(.*?)</a>').capitalize()
+    lang = scrapertools.find_single_match(data, "target='_blank'>Ver en línea<.*?<td>(.*?)</td>")
 
+    matches = scrapertools.find_multiple_matches(data, "'" + host + "links/(.*?)'")
 
-    if item.link:
-        url = item.link
+    ses = 0
+
+    for match in matches:
+        ses += 1
+
+        url = host + 'links/' + match
 
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url: url = ''
         elif '/gounlimited' in url: url = ''
@@ -194,6 +164,36 @@ def findvideos(item):
             url = servertools.normalize_url(servidor, url)
 
             itemlist.append(Item( channel = item.channel, action = 'play', title = '', server = servidor, url = url, language = idioma ))
+
+    if not itemlist:
+        if not ses == 0:
+            platformtools.dialog_notification(config.__addon_name, '[COLOR tan][B]Sin enlaces Soportados[/B][/COLOR]')
+            return
+
+    return itemlist
+
+
+def play(item):
+    logger.info()
+    itemlist = []
+
+    url = item.url
+
+    if '/links/' in url:
+        data = do_downloadpage(url)
+
+        url = scrapertools.find_single_match(data, '<a id="link".*?href="(.*?)"')
+
+    if url:
+        if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:
+            return 'Requiere verificación [COLOR red]reCAPTCHA[/COLOR]'
+
+        servidor = servertools.get_server_from_url(url)
+        servidor = servertools.corregir_servidor(servidor)
+
+        url = servertools.normalize_url(servidor, url)
+
+        itemlist.append(item.clone(server = servidor, url = url))
 
     return itemlist
 

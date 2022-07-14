@@ -310,26 +310,32 @@ def last_domain_hdfull(item):
         platformtools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
         return
 
-    try:
-       host_domain = 'https://hdfull.vip/'
+    # ~ webs para comprobar dominio vigente en actions pero pueden requerir proxies
+    # ~ webs  1)-'https://hdfullcdn.cc/'  2)-'https://new.hdfull.one/'  3)-'https://dominioshdfull.com/'  4)-'https://hdfull.vip/'
 
-       try:
-          last_domain = httptools.downloadpage(host_domain, follow_redirects=False).headers.get('location', '')
-       except:
-          last_domain = ''
-          
+    try:
+       host_domain = 'https://hdfullcdn.cc/login'
+
+       if item.desde_el_canal:
+           if item.dominios_ret: host_domain = item.dominios_ret + 'login'
+
+       data = httptools.downloadpage(host_domain).data
+
+       last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
+       if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
+
        if not last_domain:
            if config.get_setting('channel_hdfull_proxies', default=''):
-               try:
-                  last_domain = httptools.downloadpage_proxy('hdfull', host_domain, follow_redirects=False).headers.get('location', '')
-               except:
-                  last_domain = ''
+               data = httptools.downloadpage_proxy('hdfull', host_domain).data
+               last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
+               if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
 
        if last_domain:
            last_domain = last_domain.replace('login', '')
            if not last_domain.endswith('/'): last_domain = last_domain + '/'
     except:
        last_domain = ''
+
 
     if not last_domain:
         try:
@@ -355,29 +361,44 @@ def last_domain_hdfull(item):
         except:
            last_domain = ''
 
+
     if not last_domain:
         try:
-           host_domain = 'https://hdfullcdn.cc/login'
-
-           if item.desde_el_canal:
-               if item.dominios_ret: host_domain = item.dominios_ret + 'login'
+           host_domain = 'https://dominioshdfull.com/'
 
            data = httptools.downloadpage(host_domain).data
 
-           last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
-           if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
-
-           if not last_domain:
-               if config.get_setting('channel_hdfull_proxies', default=''):
-                   data = httptools.downloadpage_proxy('hdfull', host_domain).data
-                   last_domain = scrapertools.find_single_match(data, 'location.replace.*?"(.*?)"')
-                   if not last_domain: last_domain = scrapertools.find_single_match(data, '<link rel="canonical".*?href="(.*?)"')
+           last_domain = scrapertools.find_single_match(data, 'onclick="location.href.*?' + "'(.*?)'")
 
            if last_domain:
                last_domain = last_domain.replace('login', '')
                if not last_domain.endswith('/'): last_domain = last_domain + '/'
         except:
            last_domain = ''
+
+
+    if not last_domain:
+        try:
+           host_domain = 'https://hdfull.vip/'
+
+           try:
+              last_domain = httptools.downloadpage(host_domain, follow_redirects=False).headers.get('location', '')
+           except:
+              last_domain = ''
+          
+           if not last_domain:
+               if config.get_setting('channel_hdfull_proxies', default=''):
+                   try:
+                      last_domain = httptools.downloadpage_proxy('hdfull', host_domain, follow_redirects=False).headers.get('location', '')
+                   except:
+                      last_domain = ''
+
+           if last_domain:
+               last_domain = last_domain.replace('login', '')
+               if not last_domain.endswith('/'): last_domain = last_domain + '/'
+        except:
+           last_domain = ''
+
 
     if not last_domain:
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo comprobar[/B][/COLOR]' % color_alert)
@@ -654,7 +675,7 @@ def manto_params(item):
 
         config.set_setting('downloadpath', '')
 
-        config.set_setting('chrome_last_version', '102.0.5005.125')
+        config.set_setting('chrome_last_version', '103.0.5060.70')
 
         config.set_setting('debug', '0')
 
@@ -736,6 +757,14 @@ def manto_temporales(item):
     existe = filetools.exists(path)
     if existe: hay_temporales = True
 
+    path = os.path.join(config.get_data_path(), 'temp.torrent')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    path = os.path.join(config.get_data_path(), 'm3u8hls.m3u8')
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
     if hay_temporales == False:
          platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay ficheros Temporales[/COLOR][/B]' % color_alert)
          return
@@ -761,7 +790,51 @@ def manto_temporales(item):
         existe = filetools.exists(path)
         if existe: filetools.remove(path)
 
+        path = os.path.join(config.get_data_path(), 'm3u8hls.m3u8')
+        existe = filetools.exists(path)
+        if existe: filetools.remove(path)
+
         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Ficheros Temporales eliminados[/B][/COLOR]' % color_infor)
+
+
+def manto_addons_packages(item):
+    logger.info()
+
+    path = translatePath(os.path.join('special://home/addons/packages', ''))
+
+    hay_temporales = False
+
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    if hay_temporales == False:
+         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay ficheros en Addons/Packages[/COLOR][/B]' % color_alert)
+         return
+
+    if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ Confirma Eliminar los ficheros de Addons/Packages ?[/COLOR]'):
+        filetools.rmdirtree(path)
+
+        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Ficheros Addons/Packages eliminados[/B][/COLOR]' % color_infor)
+
+
+def manto_addons_temp(item):
+    logger.info()
+
+    path = translatePath(os.path.join('special://home/addons/temp', ''))
+
+    hay_temporales = False
+
+    existe = filetools.exists(path)
+    if existe: hay_temporales = True
+
+    if hay_temporales == False:
+         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay ficheros en Addons/Temp[/COLOR][/B]' % color_alert)
+         return
+
+    if platformtools.dialog_yesno(config.__addon_name, '[COLOR red]¿ Confirma Eliminar los ficheros de Addons/Temp ?[/COLOR]'):
+        filetools.rmdirtree(path)
+
+        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Ficheros Addons/Temp eliminados[/B][/COLOR]' % color_infor)
 
 
 def manto_tracking_dbs(item):

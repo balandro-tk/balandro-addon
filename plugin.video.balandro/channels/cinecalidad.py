@@ -7,7 +7,7 @@ from core.item import Item
 from core import httptools, scrapertools, servertools, tmdb
 
 
-host = 'https://www.cinecalidad.lat/'
+host = 'https://cinecalidad.dev/'
 
 
 # ~ 04/2022 la web da error en temporadas de series y animes 
@@ -70,7 +70,7 @@ def mainlist_pelis(item):
     itemlist.append(item.clone( title = ' - Estrenos', action = 'list_all', url = host + 'estrenos/', search_type = 'movie' ))
     itemlist.append(item.clone( title = ' - Más destacadas', action = 'destacadas', url = host, search_type = 'movie' ))
     itemlist.append(item.clone( title = ' - Más populares', action = 'list_all', url = host + 'peliculas-populares/', search_type = 'movie' ))
-    itemlist.append(item.clone( title = ' - En 4K', action = 'list_all', url = host + 'genero/4k/', search_type = 'movie' ))
+    itemlist.append(item.clone( title = ' - En 4K', action = 'list_all', url = host + '4k/', search_type = 'movie' ))
 
     itemlist.append(item.clone( title = ' - Por género', action='generos', search_type = 'movie' ))
 
@@ -127,8 +127,10 @@ def generos(item):
         ('western','Western')
     ]
 
+    url_gen = host + 'categoria/'
+
     for opc, tit in opciones:
-        itemlist.append(item.clone( title = tit, url = host + opc + '/', action = 'list_all' ))
+        itemlist.append(item.clone( title = tit, url = url_gen + opc + '/', action = 'list_all' ))
 
     return itemlist
 

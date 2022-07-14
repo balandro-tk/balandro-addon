@@ -338,7 +338,6 @@ def findvideos(item):
             srv = srv.lower()
 
             if srv == '1fichier': continue
-            elif srv == 'solidfiles': continue
             elif srv == 'mediafire': continue
             elif srv == 'fireload': continue
 
@@ -375,8 +374,6 @@ def play(item):
         url = item.url.replace(host + 'reproductor?url=', '')
         if '//videa.' in url:
             return 'Servidor [COLOR tan]Videa[/COLOR] NO Soportado'
-        elif 'solidfiles' in url:
-            return 'Servidor [COLOR tan]Solidfiles[/COLOR] NO Soportado'
 
     if url:
         if '/hqq.' in url or '/waaw.' in url or '/netu.' in url:

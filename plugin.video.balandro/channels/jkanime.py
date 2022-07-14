@@ -260,6 +260,8 @@ def findvideos(item):
     for url in matches:
         if 'jkanime.net/um2.php' in url:
            url = url.replace('jkanime.net/um2.php', 'jkanime.net/um.php')
+        elif '/um2.php' in url:
+           url = url.replace('/um2.php', '/um.php')
 
         other = ''
         if "/um.php" in url: other = 'um'
@@ -280,10 +282,14 @@ def play(item):
     logger.info()
     itemlist = []
 
+    if not item.url.startswith(host): item.url = host[:-1] + item.url
+
     servidor = item.server
     url_play = item.url
 
-    if "/um.php" in item.url:
+    if "/um.php" in item.url or "/um2.php" in item.url:
+        item.url = item.url.replace('/um2.php', '/um.php')
+
         data = httptools.downloadpage(item.url).data
         url_play = scrapertools.find_single_match(data, "swarmId: \'([^\']+)\'")
 

@@ -7,7 +7,7 @@ if sys.version_info[0] >= 3: PY3 = True
 
 import re, base64
 
-from platformcode import config, logger, platformtools
+from platformcode import config, logger
 from core.item import Item
 from core import httptools, scrapertools, tmdb
 
@@ -29,7 +29,7 @@ def configurar_proxies(item):
     return proxytools.configurar_proxies_canal(item.channel, host)
 
 
-def do_downloadpage(url, post=None):
+def do_downloadpage(url, post=None, headers=None):
     # ~ por si viene de enlaces guardados
     ant_hosts = ['http://grantorrent.net/', 'https://grantorrent1.com/', 'https://grantorrent.one/',
                  'https://grantorrent.tv/', 'https://grantorrent.la/', 'https://grantorrent.io/', 'https://grantorrent.eu/',
@@ -40,8 +40,16 @@ def do_downloadpage(url, post=None):
     for ant in ant_hosts:
         url = url.replace(ant, host)
 
-    # ~ data = httptools.downloadpage(url, post=post).data
-    data = httptools.downloadpage_proxy('grantorrent', url, post=post).data
+    # ~ timeout 13/7/2022
+    timeout = 15
+
+    if '/?query' in url: timeout = 30
+    elif '/categoria/' in url: timeout = 30
+
+    headers = {'Referer': host}
+   
+    # ~ data = httptools.downloadpage(url, post=post, headers=headers, timeout=timeout).data
+    data = httptools.downloadpage_proxy('grantorrent', url, post=post, headers=headers, timeout=timeout).data
 
     if '<title>You are being redirected...</title>' in data:
         try:
@@ -49,8 +57,8 @@ def do_downloadpage(url, post=None):
             ck_name, ck_value = balandroresolver.get_sucuri_cookie(data)
             if ck_name and ck_value:
                 httptools.save_cookie(ck_name, ck_value, host.replace('https://', '')[:-1])
-                # ~ data = httptools.downloadpage(url, post=post).data
-                data = httptools.downloadpage_proxy('grantorrent', url, post=post).data
+                # ~ data = httptools.downloadpage(url, post=post, headers=headers, timeout=timeout).data
+                data = httptools.downloadpage_proxy('grantorrent', url, post=post, headers=headers, timeout=timeout).data
         except:
             pass
 
@@ -114,7 +122,7 @@ def calidades(item):
     logger.info()
     itemlist = []
 
-    data = do_downloadpage(host)
+    data = do_downloadpage(host + 'peliculas/')
 
     patron = '<select\s*id="quality"\s*name="quality"[^>]*>(.*?)<\/select><\/div>'
 
@@ -147,7 +155,7 @@ def list_all(item):
 
     for match in matches:
         url = scrapertools.find_single_match(match, '<a href="(.*?)"')
-        title = scrapertools.find_single_match(match, ' alt="([^"]+)')
+        title = scrapertools.find_single_match(match, ' alt="(.*?)"')
 
         if not url or not title: continue
 
@@ -211,18 +219,12 @@ def findvideos(item):
 
     matches = re.compile('>Download<.*?href="(.*?)"', re.DOTALL).findall(data)
 
-    ses = 0
-
     for url in matches:
-        ses += 1
+        if not url.endswith('.torrent'):
+            if not '/s.php' in url: continue
 
         itemlist.append(Item( channel = item.channel, action = 'play', title = '', url = url, server = 'directo',
                               language = item.languages, quality = item.qualities, quality_num = puntuar_calidad(item.qualities) ))
-
-    if not itemlist:
-        if not ses == 0:
-            platformtools.dialog_notification(config.__addon_name, '[COLOR tan][B]Sin enlaces Soportados[/B][/COLOR]')
-            return
 
     return itemlist
 
